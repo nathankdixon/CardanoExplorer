@@ -1,6 +1,5 @@
 
 body, html{
-    margin:0;
     background-color: #8ef6e4; 
     font-size: large;
     font-family: Arial, Helvetica, sans-serif;
@@ -29,6 +28,17 @@ body, html{
     background-color:honeydew;
 }
 
+.adaBalance{
+    border-style: solid;
+    background-color: #edb1f1;
+    border-color: #9896f1;
+    text-align: center;
+    margin: 10px 500px 10px 500px;
+    border-width: 5px;
+    
+    padding: 10px 10px 10px 10px;
+}
+
 .contentButton{
     font-size: large;
     background-color:#edb1f1;
@@ -39,33 +49,33 @@ body, html{
     margin: 10px 10px 10px 10px;
 }
 
+.ftbutton{
+    color:white;
+    font-size: large;
+    background-color:#dc2f2f;
+    height: 100px;
+    width: 100px;
+    border-color: #ff894c; 
+    border-width: 5px;
+    margin: 10px 10px 10px 10px;
+}
+
 .contentButton:hover{
     background-color:burlywood;
 }
 
-.nftContent{
-
-    text-align: center;
-    display: grid;
-    padding: 100px 20px;
-    grid-template-rows: repeat(60,1fr);
-    grid-template-columns: repeat(auto-fill ,minmax(300px, 1fr));
-    grid-gap: 200px;
-    justify-content: center;
-
-    background-color:  #8ef6e4; 
+.ftbutton:hover{
+    background-color:burlywood;
 }
 
-.ftContent{
-
+.tokens{
+    height: 100vh;
     text-align: center;
     display: grid;
     padding: 100px 20px;
     grid-template-rows: repeat(60,1fr);
     grid-template-columns: repeat(auto-fill ,minmax(300px, 1fr));
     grid-gap: 200px;
-    justify-content: center;
-
     background-color:  #8ef6e4; 
 }
 
