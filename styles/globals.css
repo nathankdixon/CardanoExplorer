@@ -1,0 +1,92 @@
+
+body, html{
+    margin:0;
+    background-color: #8ef6e4; 
+    font-size: large;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.title{
+    border-color: #9896f1;
+    border-width: 10px;
+}
+.header{
+    text-align: center;
+    background-color: #8ef6e4; 
+    color:  #9896f1;
+    border-color: #9896f1;
+    border-width: 10px;
+}
+.walletButton{
+    background-color: #8ef6e4; 
+    height: 100px;
+    width: 100px;
+    border-color: #9896f1;
+    border-width: 5px;
+    margin: 10px 10px 10px 10px;
+}
+
+.walletButton:hover{
+    background-color:honeydew;
+}
+
+.contentButton{
+    font-size: large;
+    background-color:#edb1f1;
+    height: 100px;
+    width: 100px;
+    border-color: #9896f1;
+    border-width: 5px;
+    margin: 10px 10px 10px 10px;
+}
+
+.contentButton:hover{
+    background-color:burlywood;
+}
+
+.nftContent{
+
+    text-align: center;
+    display: grid;
+    padding: 100px 20px;
+    grid-template-rows: repeat(60,1fr);
+    grid-template-columns: repeat(auto-fill ,minmax(300px, 1fr));
+    grid-gap: 200px;
+    justify-content: center;
+
+    background-color:  #8ef6e4; 
+}
+
+.ftContent{
+
+    text-align: center;
+    display: grid;
+    padding: 100px 20px;
+    grid-template-rows: repeat(60,1fr);
+    grid-template-columns: repeat(auto-fill ,minmax(300px, 1fr));
+    grid-gap: 200px;
+    justify-content: center;
+
+    background-color:  #8ef6e4; 
+}
+
+.NFT{
+    padding: 10px 10px 10px 10px;
+    border-color:  #9896f1; 
+    border-style: solid;
+    border-width: 10px;
+    margin: 10px 10px 10px 10px;
+    display: inline-grid;
+    background-color:#edb1f1; 
+}
+
+.FT{
+    padding: 10px 10px 10px 10px;
+    border-color:  #ff894c; 
+    border-style: solid;
+    border-width: 10px;
+    margin: 10px 10px 10px 10px;
+    display: inline-grid;
+    background-color:#dc2f2f;
+}
+
+
