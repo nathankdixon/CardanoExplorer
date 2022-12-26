@@ -49,6 +49,11 @@ body, html{
     margin: 10px 10px 10px 10px;
 }
 
+img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
 .ftbutton{
     color:white;
     font-size: large;
@@ -72,14 +77,15 @@ body, html{
     height: 100vh;
     text-align: center;
     display: grid;
-    padding: 100px 20px;
+    padding: 20px 50px;
     grid-template-rows: repeat(60,1fr);
-    grid-template-columns: repeat(auto-fill ,minmax(300px, 1fr));
-    grid-gap: 200px;
+    grid-template-columns: repeat(auto-fill ,minmax(400px, 1fr));
+    grid-gap: 50px;
     background-color:  #8ef6e4; 
 }
 
 .NFT{
+
     padding: 10px 10px 10px 10px;
     border-color:  #9896f1; 
     border-style: solid;

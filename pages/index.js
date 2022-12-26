@@ -16,15 +16,15 @@ const Home = () => {
     for(let i =0;i<tokens.length;i++){
       if(tokens[i].quantity == 1){
         let child = 
-        <div key={i} className="NFT">{(JSON.stringify(tokens[i].name))}
+        <div key={i} className="NFT">{tokens[i].name}
         <br></br>
-        <img src={+JSON.stringify(tokens[i].ipfs)+'.ipfs.dweb.link'} alt='no image'></img>
+        <div className="image"><img src={tokens[i].ipfs} alt ="no image"></img></div>
         </div>;
       nftTagged.push(child);
       }
       if(tokens[i].quantity != 1){
         let child = 
-        <div key={i} className="FT">{(JSON.stringify(tokens[i].name))}
+        <div key={i} className="FT">{tokens[i].name}
         <br></br>
         {JSON.stringify(tokens[i].quantity)}
         </div>;
@@ -76,8 +76,9 @@ const Home = () => {
       else{
         ipfsLink = ('null');
       }
-      myToken.ipfs = ipfsLink;
-      console.log('token ' +element.assetName +', ' +myToken.ipfs);
+      ipfsLink = ipfsLink.slice(7);
+      myToken.ipfs = 'https://dweb.link/ipfs/'+ipfsLink;
+      console.log('token ' +element.assetName +', https://dweb.link/ipfs/' +myToken.ipfs);
     }
     return _tokens;
 
