@@ -22,7 +22,7 @@ body, html{
 
 .walletButton{
     margin: 10px 10px 10px 10px;
-    background-color: #8ef6e4; 
+    background-color: #a6e49e; 
     border-color: #9896f1;
     border-width: 5px;
 
@@ -40,7 +40,7 @@ body, html{
 .nftbutton{
     margin: auto;
     font-size: large;
-    background-color:#edb1f1;
+    background-color:#82bca2;
     border-color: #9896f1;
     border-width: 5px;
 }
@@ -76,7 +76,10 @@ img{
     grid-template-columns: repeat(auto-fill ,minmax(400px, 1fr));
     grid-gap: 50px;
 }
-
+.box-title{
+    display: flex;
+    text-align: center;
+}
 .grid-item{
     padding: 10px 10px 10px 10px;
     border-color:  #9896f1; 
@@ -84,6 +87,6 @@ img{
     border-width: 10px;
     margin: 10px 10px 10px 10px;
     display: inline-grid;
-    background-color:#edb1f1; 
-    color:white;
+    background-color:#008080; 
+    color:black;
 }

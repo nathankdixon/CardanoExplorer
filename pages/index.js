@@ -1,6 +1,7 @@
 import { useState} from "react";
 import { NextPage } from "next";
 import { ReactDOM } from "react";
+import Image from "next/image";
 import { BrowserWallet } from "@meshsdk/core";
 import Token from "./token";
 
@@ -168,26 +169,38 @@ const Home = () => {
     for(let i = 0; i<keys.length;i++){
       if(tokenType == 'nft'){
         if(policyList[keys[i]][0].quantity == 1){
-          boxes.push(<div key={i} className="grid-item"><div>{policyList[keys[i]][0].name}</div><img src={policyList[keys[i]][0].ipfs} alt = 'failed to load image'></img></div>)
+          let link = policyList[keys[i]][0].ipfs;
+          if(link != null && link != ""){
+            boxes.push(<div key={i} className="grid-item"><div className="box-title">{policyList[keys[i]][0].name}<button className="nftbutton" onClick={() => displayCollection(policyList[keys[i]])}>Expand</button></div>
+            <img src={policyList[keys[i]][0].ipfs} cache ='true'  alt = 'failed to load image'></img></div>)
+          }
+
         }
       }
       if(tokenType == 'ft'){
         if(policyList[keys[i]][0].quantity != 1){
-          boxes.push(<div key={i} className="grid-item"><div>{policyList[keys[i]][0].name}</div><img src={policyList[keys[i]][0].ipfs} alt = 'failed to load image'></img></div>)
+          boxes.push(<div key={i} className="grid-item"><div className="box-title">{policyList[keys[i]][0].name}</div><img src={policyList[keys[i]][0].ipfs} alt = 'failed to load image'></img></div>)
         }
       }
     }
     setItem(boxes);
   }
 
+  function displayCollection(tokenList){
+    let collection = [];
+    for(let i = 0; i<tokenList.length;i++){
+      collection.push(<div key={i} className="grid-item"><div>{tokenList[i].name}</div><img src={tokenList[i].ipfs} alt = 'failed to load image'></img></div>)
+    }
+    setItem(collection);
+  }
 
   return (
     <div className="app">
       <div className="header">
         <h1 className="title">Cardano Explorer</h1>
-        <div className="adaBalance">Balance : {balance} Ada</div>
+        <div className="adaBalance">ADA Balance : {balance}</div>
         <button className= "nftbutton" onClick = {() => displayNfts('nft', policies)}>NFTs</button>
-        <button className= "ftbutton" onClick = {() => displayNfts('ft', policies)}>FTs</button>
+        <button className= "ftbutton" onClick = {() => displayNfts('ft', policies)}>Coins</button>
         <button className="walletButton" onClick={() => connect('eternl')}><img height="90%" width = "90%" src= "https://play-lh.googleusercontent.com/BzpWa8LHTBzJq3bxOUjl-Bp7ixh2VOV_5zk6hZjrk57wRp7sc_kvrf3HCrjdKHL_BtbG=w240-h480-rw"></img></button>
         <button className="walletButton" onClick={() => connect('Nami')}><img height="90%" width = "90%" src= "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0ODYuMTcgNDk5Ljg2Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzM0OWVhMzt9PC9zdHlsZT48L2RlZnM+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzEtMiIgZGF0YS1uYW1lPSJMYXllciAxIj48cGF0aCBpZD0icGF0aDE2IiBjbGFzcz0iY2xzLTEiIGQ9Ik03My44Nyw1Mi4xNSw2Mi4xMSw0MC4wN0EyMy45MywyMy45MywwLDAsMSw0MS45LDYxLjg3TDU0LDczLjA5LDQ4Ni4xNyw0NzZaTTEwMi40LDE2OC45M1Y0MDkuNDdhMjMuNzYsMjMuNzYsMCwwLDEsMzIuMTMtMi4xNFYyNDUuOTRMMzk1LDQ5OS44Nmg0NC44N1ptMzAzLjM2LTU1LjU4YTIzLjg0LDIzLjg0LDAsMCwxLTE2LjY0LTYuNjh2MTYyLjhMMTMzLjQ2LDE1LjU3SDg0TDQyMS4yOCwzNDUuNzlWMTA3LjZBMjMuNzIsMjMuNzIsMCwwLDEsNDA1Ljc2LDExMy4zNVoiLz48cGF0aCBpZD0icGF0aDE4IiBjbGFzcz0iY2xzLTEiIGQ9Ik0zOC4yNywwQTM4LjI1LDM4LjI1LDAsMSwwLDc2LjQ5LDM4LjI3djBBMzguMjgsMzguMjgsMCwwLDAsMzguMjcsMFpNNDEuOSw2MS44YTIyLDIyLDAsMCwxLTMuNjMuMjhBMjMuOTQsMjMuOTQsMCwxLDEsNjIuMTgsMzguMTNWNDBBMjMuOTQsMjMuOTQsMCwwLDEsNDEuOSw2MS44WiIvPjxwYXRoIGlkPSJwYXRoMjAiIGNsYXNzPSJjbHMtMSIgZD0iTTQwNS43Niw1MS4yYTM4LjI0LDM4LjI0LDAsMCwwLDAsNzYuNDYsMzcuNTcsMzcuNTcsMCwwLDAsMTUuNTItMy4zQTM4LjIyLDM4LjIyLDAsMCwwLDQwNS43Niw1MS4yWm0xNS41Miw1Ni40YTIzLjkxLDIzLjkxLDAsMSwxLDguMzktMTguMThBMjMuOTEsMjMuOTEsMCwwLDEsNDIxLjI4LDEwNy42WiIvPjxwYXRoIGlkPSJwYXRoMjIiIGNsYXNzPSJjbHMtMSIgZD0iTTEzNC41OCwzOTAuODFBMzguMjUsMzguMjUsMCwxLDAsMTU3LjkyLDQyNmEzOC4yNCwzOC4yNCwwLDAsMC0yMy4zNC0zNS4yMlptLTE1LDU5LjEzQTIzLjkxLDIzLjkxLDAsMSwxLDE0My41NCw0MjZhMjMuOSwyMy45LDAsMCwxLTIzLjk0LDIzLjkxWiIvPjwvZz48L2c+PC9zdmc+"></img></button>
         <button className="walletButton" onClick={() => connect('Typhon Wallet')}><img height="90%" width = "90%" src= "chrome-extension://kfdniefadaanbjodldohaedphafoffoh/assets/typhon.png"></img></button>
