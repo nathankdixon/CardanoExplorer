@@ -1,92 +1,210 @@
-
-body, html{
-    background-color: black; 
-    font-size: large;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #00ff00;
-    margin: 10px 10px 10px 10px;
-}
-.title{
-    border-color: #00ff00;
-    border-width: 10px;
-    margin: 20px 20px 20px 20px;
-    text-align: center;
-}
-.header{
+/* Set the font and color scheme for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #afdc99;
+  }
+  
+  /* Style the header */
+header {
     display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
 }
 
+main{
+    display: flex;
+    background-color: rgb(162, 156, 156);
+    color: #fff;
+    padding: 20px;
+}
+/* Style the search bar in the header */
+header input[type="text"] {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+label{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px 0px 0px 10px;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.searchForm{
+    margin: 0 0 0 50px;
+    width: 55%;
+    align-items: center;
+}
+
+.wallet-info{
+    display: flex;
+    background-color: rgb(166, 187, 3);
+    text-align: center;
+    color: white;
+}
+
+.token-info{
+    padding: 30px 30px 30px 30px;
+    width: 50%;
+    background-color: rgb(117, 115, 115);
+    text-align: center;
+    color: white;
+}
+.inner{
+    font-weight: bold;
+    font-size: large;
+    padding: 10px 10px 10px 10px;
+    border-color:  #8280cae0; 
+    border-style: solid;
+    border-width: 5px;
+    justify-self: center;
+    align-items: center;
+    background-color:#a8e3b8db; 
+    color:rgb(71, 68, 68);
+}
+.ada-info{
+    background-color: rgb(151, 135, 135);
+    padding: 30px 30px 30px 30px;
+    width: 50%;
+}
+/* Style the sorting bar */
+.sorting-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+}
+
+
+/* Style the sort buttons */
+.sort-button {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  background-color: rgb(180, 225, 183);
+  font-size: 14px;
+  color: rgb(47, 62, 64);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Add a hover effect for the sort buttons */
+.sort-button:hover {
+  background-color: #f4f4f4;
+}
+.wallets{
+}
 .walletButton{
+    width: 15%;
     margin: 10px 10px 10px 10px;
     background-color: #a6e49e; 
-    border-color: #9896f1;
-    border-width: 5px;
-
+    color:rgb(63, 0, 60);
 }
 
 .walletButton:hover{
     background-color:honeydew;
 }
 
-.adaBalance{
-    margin: auto;
-    text-align: center;
+.token-img{
+    width: 15%;
+    object-fit: cover;
 }
 
-.nftbutton{
-    margin: auto;
-    font-size: large;
-    background-color:#82bca2;
-    border-color: #9896f1;
-    border-width: 5px;
+.wallet-img{
+    width: 90%;
+    object-fit: cover;
 }
 
-img{
-    max-height: 100%;
-    max-width: 100%;
-}
-
-.ftbutton{
-    margin: auto;
-    color:white;
-    font-size: large;
-    background-color:#dc2f2f;
-    border-color: #ff894c; 
-    border-width: 5px;
-}
-
-.nftbutton:hover{
-    background-color:burlywood;
-}
-
-.ftbutton:hover{
-    background-color:burlywood;
-}
-
-.grid-container{
-    height: 100vh;
-    text-align: center;
-    display: grid;
-    padding: 20px 50px;
-    grid-template-rows: repeat(60,1fr);
-    grid-template-columns: repeat(auto-fill ,minmax(400px, 1fr));
-    grid-gap: 50px;
-}
 .box-title{
     display: flex;
     text-align: center;
 }
-.grid-item{
+
+.projects{
     padding: 10px 10px 10px 10px;
-    border-color:  #9896f1; 
+    border-color:  #18167644; 
     border-style: solid;
-    border-width: 10px;
-    margin: 10px 10px 10px 10px;
-    display: inline-grid;
-    background-color:#008080; 
-    color:black;
+    display: flex;
+    border-width: 5px;
+    justify-content: center;
+    align-items: center;
+    background-color:#67adbcdb; 
+    color:rgb(71, 68, 68);
 }
+
+.grid-item-nft{
+    margin: 5px 0px 0px 20%;
+    padding: 10px 10px 10px 10px;
+    border-color:  #3c3ace; 
+    border-style: solid;
+    border-width: 5px;
+    display: flex;
+    align-items: center;
+    background-color:#50c4599d; 
+    color:white;
+    width: 60%;
+}
+
+.grid-item-coin{
+    margin: 5px 0px 0px 20%;
+    padding: 10px 10px 10px 10px;
+    border-color:  #c685c5; 
+    border-style: solid;
+    border-width: 5px;
+    display: flex;
+    align-items: center;
+    background-color:#ddadd1; 
+    color:white;
+    width: 60%;
+}
+
+.token-list{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.token-metadata {
+    margin-left: 16px;
+}
+
+.loading-symbol {
+    position: absolute;
+    top: 7%;
+    left: 72%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 5px solid #ccc;
+    border-radius: 50%;
+    border-top-color: #333;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+}
+}
+footer {
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+  }
+
+
+  #list {
+    list-style-type: none;
+  }

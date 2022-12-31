@@ -17,8 +17,16 @@ export default class Token{
           {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
                     'cache-control': 'max-age=31536000'}});
         let res = await data.text();
-        this.metadata = JSON.parse(res);
-        return this.metadata;
+        this.metadata = (JSON.parse(res));
+        if(this.metadata.onchain_metadata != null){
+          return this.metadata.onchain_metadata;
+        }
+        else if(this.metadata.metadata != null){
+          return this.metadata.metadata;
+        }
+        else{
+          return 'no metadata found';
+        }
       }catch(error){
         console.log(error);
       }

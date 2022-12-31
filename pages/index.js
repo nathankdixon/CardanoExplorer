@@ -1,23 +1,28 @@
-import { useState} from "react";
-import { NextPage } from "next";
-import { ReactDOM } from "react";
+import { useEffect, useState} from "react";
 import Image from "next/image";
 import { BrowserWallet } from "@meshsdk/core";
 import Token from "./token";
+import React from "react";
+import Head from "next/head";
+import { userAgentFromString } from "next/server";
 
 
 const Home = () => {
-  const [tokens, setTokens] = useState([]);
-  const [tokenContent, setTokenContent] = useState([]);
-  const [balance, setBalance] = useState();
-  const [policies, setPolicies] = useState([[]]);
-  const [item, setItem] = useState();
 
+  const [tokens, setTokens] = useState([]);
+  const [balance, setBalance] = useState();
+  const [policies, setPolicies] = useState([]);
+  const [coins, setCoins] = useState([]);
+  const [projectsNumber, setProjectsNumber] = useState();
+  const [isVisible, setIsVisible] = useState(false);
+  const [nfts, setNfts] = useState([]);
+  const [display, setDisplay] = useState();
 
   function groupTokensByPolicyId(tokenList){
     const policyList = {};
     for(const token in tokenList){
       const policyId = tokenList[token].policyId;
+      
       if(policyId in policyList){
         policyList[policyId].push(tokenList[token]);
       }else {
@@ -30,18 +35,23 @@ const Home = () => {
   }
 
   async function connect (walletname){
+      setIsVisible(true);
       const wallet = await BrowserWallet.enable(walletname);
       const _assetsJson = await wallet.getAssets();
       const _balance = await wallet.getLovelace();
+      
       setBalance(_balance/1000000);
 
       const _tokens = await createTokens(_assetsJson);
+      setTokens(_tokens);
       const _policies = groupTokensByPolicyId(_tokens);
       const _sortedPolicyList = sortPolicies(_policies);
 
       setPolicies(_sortedPolicyList);
-      setTokens(_tokens);
-      displayNfts('nft', _sortedPolicyList);
+      let nftList = sortFungibilities(_sortedPolicyList);
+      displayNfts(nftList);
+      setIsVisible(false);
+
   }
 
   function sortPolicies(policiesList){
@@ -58,158 +68,194 @@ const Home = () => {
     return _sorted;
   }
 
+  function sortFungibilities(policyList){
+
+    const nfts = [];
+    const fts = [];
+    let policies = Object.keys(policyList);
+    let tokens = Object.values(policyList);
+
+    for(const element of policies){
+      let firstToken = policyList[element][0];
+      if(firstToken.quantity == 1){
+        nfts.push(policyList[element]);
+      }else{
+        fts.push(policyList[element]);
+      }
+    }
+
+    setNfts(nfts);
+    setCoins(fts);
+    return nfts;
+  }
+
   async function createTokens(assets){
     const _tokens = [];
     for(const element of assets){
+
       let token = new Token(element.assetName, element.fingerprint, element.policyId, element.quantity, element.unit);
-
       token.metadata = await token.getMetadata();
-
-      let ipfs = getIpfsFromMetadata(token);
-      if(ipfs == null){
-        console.log('error with' +token.name + " metadata: "+JSON.stringify(token.metadata));
+      if(token.metadata != null){
+        //console.log(token.metadata);
+        let ipfs = getIpfsFromMetadata(token);
+        token.ipfs = ipfs;
+        _tokens.push(token);
       }
-      token.ipfs = ipfs;
-      _tokens.push(token);
-
     }
     return _tokens;
 
   }
 
-  function displayNftsInTreeMap(){
-    let keys = Object.keys(policies);
-    let boxes = [];
-
-    for(let i = 0; i<keys.length;i++){
-      if(policies[keys[i]][0].quantity == 1){
-        //small box
-        if(policies[keys[i]].length == 1){
-          boxes.push(<div key={i} className="tree-map__item--small"><div className="tree-map__label"><img src={policies[keys[i]][0].ipfs} alt={policies[keys[i]][0].ipfs}></img></div></div>)
- 
-        }
-
-        //mid box
-        if(policies[keys[i]].length == 2){
-          boxes.push(<div key={i} className="tree-map__item--medium"><div className="tree-map__label"><img src={policies[keys[i]][0].ipfs} alt={policies[keys[i]][0].ipfs}></img></div></div>)
-        }
-
-        //large box
-        else if (policies[keys[i]].length >2){
-          boxes.push(<div key={i}className="tree-map__item--large"><div className="tree-map__label"><img src={policies[keys[i]][0].ipfs} alt={policies[keys[i]][0].ipfs}></img></div></div>)
-        }
-      }
-      
-    }
-
-    setItem(boxes);
-  }
 
   function getIpfsFromMetadata(token){
     const keys = Object.keys(token.metadata);
     const values = Object.values(token.metadata);
     let ipfs = "";
     for(let i=0;i<keys.length;i++){
-
-      if(keys[i] == 'onchain_metadata'){
-        let onchainMeta = (values[i]);
-        try{
-          ipfs= (onchainMeta.image);
-        }catch{
-          try{
-            ipfs = onchainMeta.files[0];
-          }catch{
-            try{
-              ipfs = onchainMeta.files.logo;
-            }catch{
-              if(keys[i] == 'metadata'){
-                let meta = (values[i]);
-                try{
-                  ipfs= (meta.image);
-                }catch{
-                  try{
-                    ipfs = meta.files[0];
-                  }catch{
-                    try{
-                      ipfs = meta.files.logo;
-                    }catch{
-                      console.log('error');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+      if(keys[i] == "image"){
+        ipfs = values[i];
       }
 
-      
+      if(keys[i] == "logo"){
+        //console.log(token.metadata);
+        ipfs = "data:image/png;base64,"+values[i]
+      }
     }
     try{
-      if(ipfs.search('ipfs://') != -1){
+      if(Array.isArray(ipfs)){
+        let newipfs = "";
+        for(let i=0; i<ipfs.length;i++){
+          newipfs = newipfs + ipfs[i];
+        }
+        if(newipfs.startsWith('ba')){
+          newipfs = "http://dweb.link/ipfs/"+ipfs;
+          newipfs = newipfs.replace(/,/g, '');
+        }
+        return newipfs;
+      }
+      if(ipfs.startsWith('ipfs://')){
         ipfs = ipfs.slice(7);
+        if(ipfs.startsWith('ipfs/')){
+          ipfs = ipfs.slice(5);
+        }
         ipfs = "http://dweb.link/ipfs/"+ipfs;
       }
-      else if(ipfs.search('ipfs/') != -1){
+      if(ipfs.startsWith('ipfs/')){
         ipfs = ipfs.slice(5);
         ipfs = "http://dweb.link/ipfs/"+ipfs;
       }
-      else if(ipfs.search('Qm') != -1){
+      if(ipfs.startsWith('Qm')){
         ipfs = "http://dweb.link/ipfs/"+ipfs;
       }
-    }catch(error){return null}
+    }catch{
+      return null;
+    }
 
     return ipfs;
 
   }
 
-  function displayNfts(tokenType, policyList){
-    let keys = Object.keys(policyList);
-    let boxes = [];
+  function Metadata({ metadata }) {
+    return (
+      <div>
+        {Object.entries(metadata).map(([key, value]) => (
+                  <React.Fragment key={key}>
+                    {typeof value === 'object' ? (
+                      <tr>
+                        <td colSpan={2}>{key}</td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td>{key}</td>
+                        <td>{value}</td>
+                      </tr>
+                    )}
+                    {typeof value === 'object' ? (
+                      <tr>
+                        <td colSpan={2}>
+                          <Metadata metadata={value} />
+                        </td>
+                      </tr>
+                    ) : null}
+                  </React.Fragment>
+                ))}
+      </div>
+    );
+  }
+
+
+  function displayNfts(nftList){
+    let display = [];
+    let keys = Object.keys(nftList);
+    setProjectsNumber(keys.length);
     for(let i = 0; i<keys.length;i++){
-      if(tokenType == 'nft'){
-        if(policyList[keys[i]][0].quantity == 1){
-          let link = policyList[keys[i]][0].ipfs;
-          if(link != null && link != ""){
-            boxes.push(<div key={i} className="grid-item"><div className="box-title">{policyList[keys[i]][0].name}<button className="nftbutton" onClick={() => displayCollection(policyList[keys[i]])}>Expand</button></div>
-            <img src={policyList[keys[i]][0].ipfs} cache ='true'  alt = 'failed to load image'></img></div>)
-          }
-
-        }
-      }
-      if(tokenType == 'ft'){
-        if(policyList[keys[i]][0].quantity != 1){
-          boxes.push(<div key={i} className="grid-item"><div className="box-title">{policyList[keys[i]][0].name}</div><img src={policyList[keys[i]][0].ipfs} alt = 'failed to load image'></img></div>)
-        }
-      }
+      display.push(<div key={i} className="grid-item-nft"><img className = "token-img" src={nftList[keys[i]][0].ipfs} alt = 'failed to load image'></img></div>);
     }
-    setItem(boxes);
+    setDisplay(display);
+    return display;
   }
 
-  function displayCollection(tokenList){
-    let collection = [];
-    for(let i = 0; i<tokenList.length;i++){
-      collection.push(<div key={i} className="grid-item"><div>{tokenList[i].name}</div><img src={tokenList[i].ipfs} alt = 'failed to load image'></img></div>)
+  function displayCoins(coinList){
+    let display = [];
+    let keys = Object.keys(coinList);
+    for(let i = 0; i<keys.length;i++){
+      display.push(<div key={i} className="grid-item-coin"><img className = "token-img" src={coinList[keys[i]][0].ipfs} alt = 'failed to load image'></img></div>);
     }
-    setItem(collection);
+    setDisplay(display);
+    return display;
   }
+
 
   return (
     <div className="app">
-      <div className="header">
-        <h1 className="title">Cardano Explorer</h1>
-        <div className="adaBalance">ADA Balance : {balance}</div>
-        <button className= "nftbutton" onClick = {() => displayNfts('nft', policies)}>NFTs</button>
-        <button className= "ftbutton" onClick = {() => displayNfts('ft', policies)}>Coins</button>
-        <button className="walletButton" onClick={() => connect('eternl')}><img height="90%" width = "90%" src= "https://play-lh.googleusercontent.com/BzpWa8LHTBzJq3bxOUjl-Bp7ixh2VOV_5zk6hZjrk57wRp7sc_kvrf3HCrjdKHL_BtbG=w240-h480-rw"></img></button>
-        <button className="walletButton" onClick={() => connect('Nami')}><img height="90%" width = "90%" src= "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0ODYuMTcgNDk5Ljg2Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzM0OWVhMzt9PC9zdHlsZT48L2RlZnM+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzEtMiIgZGF0YS1uYW1lPSJMYXllciAxIj48cGF0aCBpZD0icGF0aDE2IiBjbGFzcz0iY2xzLTEiIGQ9Ik03My44Nyw1Mi4xNSw2Mi4xMSw0MC4wN0EyMy45MywyMy45MywwLDAsMSw0MS45LDYxLjg3TDU0LDczLjA5LDQ4Ni4xNyw0NzZaTTEwMi40LDE2OC45M1Y0MDkuNDdhMjMuNzYsMjMuNzYsMCwwLDEsMzIuMTMtMi4xNFYyNDUuOTRMMzk1LDQ5OS44Nmg0NC44N1ptMzAzLjM2LTU1LjU4YTIzLjg0LDIzLjg0LDAsMCwxLTE2LjY0LTYuNjh2MTYyLjhMMTMzLjQ2LDE1LjU3SDg0TDQyMS4yOCwzNDUuNzlWMTA3LjZBMjMuNzIsMjMuNzIsMCwwLDEsNDA1Ljc2LDExMy4zNVoiLz48cGF0aCBpZD0icGF0aDE4IiBjbGFzcz0iY2xzLTEiIGQ9Ik0zOC4yNywwQTM4LjI1LDM4LjI1LDAsMSwwLDc2LjQ5LDM4LjI3djBBMzguMjgsMzguMjgsMCwwLDAsMzguMjcsMFpNNDEuOSw2MS44YTIyLDIyLDAsMCwxLTMuNjMuMjhBMjMuOTQsMjMuOTQsMCwxLDEsNjIuMTgsMzguMTNWNDBBMjMuOTQsMjMuOTQsMCwwLDEsNDEuOSw2MS44WiIvPjxwYXRoIGlkPSJwYXRoMjAiIGNsYXNzPSJjbHMtMSIgZD0iTTQwNS43Niw1MS4yYTM4LjI0LDM4LjI0LDAsMCwwLDAsNzYuNDYsMzcuNTcsMzcuNTcsMCwwLDAsMTUuNTItMy4zQTM4LjIyLDM4LjIyLDAsMCwwLDQwNS43Niw1MS4yWm0xNS41Miw1Ni40YTIzLjkxLDIzLjkxLDAsMSwxLDguMzktMTguMThBMjMuOTEsMjMuOTEsMCwwLDEsNDIxLjI4LDEwNy42WiIvPjxwYXRoIGlkPSJwYXRoMjIiIGNsYXNzPSJjbHMtMSIgZD0iTTEzNC41OCwzOTAuODFBMzguMjUsMzguMjUsMCwxLDAsMTU3LjkyLDQyNmEzOC4yNCwzOC4yNCwwLDAsMC0yMy4zNC0zNS4yMlptLTE1LDU5LjEzQTIzLjkxLDIzLjkxLDAsMSwxLDE0My41NCw0MjZhMjMuOSwyMy45LDAsMCwxLTIzLjk0LDIzLjkxWiIvPjwvZz48L2c+PC9zdmc+"></img></button>
-        <button className="walletButton" onClick={() => connect('Typhon Wallet')}><img height="90%" width = "90%" src= "chrome-extension://kfdniefadaanbjodldohaedphafoffoh/assets/typhon.png"></img></button>
-        <button className="walletButton" onClick={() => connect('Flint Wallet')}><img height="90%" width = "90%" src= "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkwIiBoZWlnaHQ9IjE5MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBmaWxsPSJub25lIj4KIDxnPgogIDx0aXRsZT5MYXllciAxPC90aXRsZT4KICA8cGF0aCBkPSJtNTYuMDExLDU5LjM4NWw0My40NjIyLC00NC4wODMzYzIuOTcwOCwtMy4yNTM0IDQuMDMxOCwtMi45MzY1IDUuMDQ0OCwwLjc4NzJsMC4zODgsMzEuNDg4MWMtMC4xMDgsNC45MTM2IC0wLjQ2NSw3LjAzMjYgLTEuOTQsOS4wNTI4bC0yNi4zODgxLDI3LjE1ODVjLTMuNDUwNCw0LjI2NjcgLTIuOTc2OSw1Ljk2OTggLTMuMTA0NCw3Ljg3MmMtMC4xMjc2LDEuOTAyMiAzLjM1NzQsNy40NDg0IDkuMzEzMyw3Ljg3MjFjMCwwIDE2LjE1MDUsMC4wMDMzIDE3Ljg1MDIsMGMxLjcsLTAuMDAzNCAyLjg5MSwyLjczNDYgMCw1LjUxMDZsLTM2LjQ3NjksMzYuNjA1Yy00LjUxNDMsNC4yNTIgLTcuMDY4LDQuMjQgLTExLjY0MTYsMi43NTVjLTcuMDE5NiwtMy45MzUgLTcuMTQ1LC03LjU2NyAtNy4zNjM4LC0xMy45MDFsLTAuMDA5MywtMC4yNjlsMCwtNDAuMTQ3MWMtMC4yNDMxLC0xMi43OTgzIDEuNTg2NiwtMTkuNjE4MSAxMC44NjU2LC0zMC43MDA5eiIgZmlsbD0iI0ZGNjEwMCIgaWQ9InN2Z18xIi8+CiAgPHBhdGggZD0ibTEzNC43MSwxMzEuNTlsLTQ0Ljc3ODgsNDQuMDgzYy0zLjA2MTEsMy4yNTQgLTQuMTU0LDIuOTM3IC01LjE5NzYsLTAuNzg3bC0wLjM5OTgsLTMxLjQ4OGMwLjExMDcsLTQuOTEzIC0wLjA3NTMsLTIuOTk4NTcgNi4zNTAyNiwtMTAuOTI0MjRsMjIuODM1OTQsLTI1LjI4Njc2YzMuNTU1LC00LjI2NyAzLjA2NywtNS45NyAzLjE5OSwtNy44NzIyYzAuMTMxLC0xLjkwMjIgLTMuNDU5LC03LjQ0ODQgLTkuNTk2LC03Ljg3MjFjMCwwIC0xNi42Mzk3LC0wLjAwMzMgLTE4LjM5MTMsMGMtMS43NTE1LDAuMDAzNCAtMi45Nzg3LC0yLjczNSAwLC01LjUxMDRsMzcuNTgyMywtMzYuNjA1YzQuNjUxLC00LjI1MjMgNy4yODMsLTQuMjQwNSAxMS45OTUsLTIuNzU1MmM3LjIzMiwzLjkzNSA3LjM2MSw3LjU2NzQgNy41ODcsMTMuOTAxM2wwLjAwOSwwLjI2ODRsMCw0MC4xNDcyYzAuMjUxLDEyLjc5OSAtMS42MzQsMTkuNjE4IC0xMS4xOTUsMzAuNzAxeiIgZmlsbD0iI0ZGNjEwMCIgaWQ9InN2Z18yIi8+CiA8L2c+Cgo8L3N2Zz4="></img></button>
-
+        <Head>
+        <title>Cardano Token Explorer</title>
+      </Head>
+      <header>
+        <label>tokenExplr.io</label>
+        <form className="searchForm">
+          <input type="text" placeholder="Search for a token..." />
+        </form>
+        <label>Connect Wallet:</label>
+        <div className="wallets">
+          <button className="walletButton" onClick={() => connect('Typhon Wallet')}><img className="wallet-img" src="https://typhonwallet.io/assets/typhon.svg"></img></button>
+          <button className="walletButton" onClick={() => connect('eternl')}>Eternl</button>
+          <button className="walletButton" onClick={() => connect('Nami')}>Nami</button>
+          <button className="walletButton" onClick={() => connect('Flint Wallet')}>Flint</button>
+          <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
+        </div>
+      </header>
+      <nav className="sorting-bar">
+        <button className="sort-button" onClick={() => displayNfts(nfts)}>NFT</button>
+        <button className="sort-button" onClick={() => displayCoins(coins)}>Coins</button>
+        <button className="sort-button">Sort By</button>
+        <button className="sort-button">Display Mode</button>
+      </nav>
+        <div className="wallet-info">
+          <div className="token-info">
+            <div className="inner">
+              Total Number of Tokens: {tokens.length}<br/>
+              Number of Projects: {projectsNumber}<br />
+              Coin Value: <br/>
+              NFT Floor Value <br />
+            </div>
+          </div>
+          <div className="ada-info">
+            <div className="inner">
+              Ada Balance: {balance}<br/>
+              Staking Rewards: <br/>
+              Epoch Number: <br/>
+              Next Rewards: <br/>
+            </div>
+          </div>
       </div>
-      <div className="grid-container">{item}</div>
+      <div className="projects">
+        <div className="tokenList">{display}</div>
+      </div>
+
     </div>
+
   );
-};
+}
 
 export default Home;
