@@ -16,7 +16,6 @@ export default class Token{
         const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.unit,
           {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
                     'cache-control': 'max-age=31536000'}});
-        console.log(this.unit);
         this.metadata = await data.json();
         if(this.metadata.onchain_metadata != null){
           return this.metadata.onchain_metadata;

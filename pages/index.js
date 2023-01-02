@@ -14,6 +14,7 @@ const Home = () => {
   const [policies, setPolicies] = useState([]);
   const [projectsNumber, setProjectsNumber] = useState();
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleGrid, setIsVisibleGrid] = useState(false);
   const [display, setDisplay] = useState();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -33,21 +34,26 @@ const Home = () => {
 
   }
 
-  async function connect (walletname){
-      setIsVisible(true);
-      const wallet = await BrowserWallet.enable(walletname);
-      const _assetsJson = await wallet.getAssets();
-      const _balance = await wallet.getLovelace();
-      
-      setBalance(_balance/1000000);
-      const _tokens = await createTokens(_assetsJson);
-      setTokens(_tokens);
-      const _policies = groupTokensByPolicyId(_tokens);
-      const _sortedPolicyList = sortPolicies(_policies);
 
-      setPolicies(_sortedPolicyList);
-      displayTokens(_policies, 'ALL');
-      setIsVisible(false);
+
+  async function connect (walletname){
+    setIsVisible(true);
+    const wallet = await BrowserWallet.enable(walletname);
+    const _assetsJson = await wallet.getAssets();
+    const _balance = await wallet.getLovelace();
+    setBalance(_balance/1000000);
+    const _tokens = await createTokens(_assetsJson);
+    setTokens(_tokens);
+    const _policies = groupTokensByPolicyId(_tokens);
+
+    const _sortedPolicyList = sortPolicies(_policies);
+    console.log(_sortedPolicyList);
+    setPolicies(_sortedPolicyList);
+    sessionStorage.setItem('wallet', JSON.stringify(_sortedPolicyList));
+    displayTokens(_sortedPolicyList, 'ALL');
+    setIsVisible(false);
+    setIsVisibleGrid(true);
+
 
   }
 
@@ -72,12 +78,13 @@ const Home = () => {
     for(const element of assets){
 
       let token = new Token(element.assetName, element.fingerprint, element.policyId, element.quantity, element.unit);
-      console.log(token.unit +" "+token.name);
+
+      
       token.metadata = await token.getMetadata();
       if(token.metadata != null){
         let ipfs = token.getIpfsFromMetadata();
         token.ipfs = ipfs;
-        _tokens.push(token);
+       _tokens.push(token);
       }
     }
     return _tokens;
@@ -86,6 +93,11 @@ const Home = () => {
 
 
   function displayTokens(tokenList, type){
+    
+
+    if(sessionStorage.getItem('wallet')){
+      tokenList = JSON.parse(sessionStorage.getItem('wallet'));
+    }
     let display = [];
     let keys = Object.keys(tokenList);
     setProjectsNumber(keys.length);
@@ -110,6 +122,7 @@ const Home = () => {
 
     }
     setDisplay(display);
+    setIsVisibleGrid(true);
     return display;
   }
 
@@ -125,6 +138,8 @@ const Home = () => {
   const handleButtonPress = (tokenId) => {
     router.push({pathname : `/tokens/${tokenId}`});
   };
+
+
 
   return (
     <div className="app">
@@ -149,7 +164,7 @@ const Home = () => {
       <nav className="sorting-bar">
         <button className="sort-button" onClick={() => displayTokens(policies, 'nft')}>NFT</button>
         <button className="sort-button" onClick={() => displayTokens(policies, 'ft')}>Coins</button>
-        <button className="sort-button" onClick={() => handleButtonPress('0e14267a8020229adc0184dd25fa3174c3f7d6caadcb4425c70e7c04756e7369673135353830')}>Number</button>
+        <button className="sort-button" onClick={() => handleButtonPress('0e14267a8020229adc0184dd25fa3174c3f7d6caadcb4425c70e7c04756e7369673135353830')}>Unsig</button>
         <button className="sort-button">Sort By</button>
         <button className="sort-button">Display Mode</button>
       </nav>
@@ -159,21 +174,24 @@ const Home = () => {
               Total Number of Tokens: {tokens.length}<br/>
               Number of Projects: {projectsNumber}<br />
               Coin Value: <br/>
-              NFT Floor Value <br />
+              NFT Floor Value: <br />
+              Last NFT Sold <br />
+              Newest NFT: <br />
             </div>
           </div>
           <div className="ada-info">
             <div className="inner">
               Ada Balance: {balance}<br/>
-              Staking Rewards: <br/>
+              Stake Pool: <br/>
+              Last Staking Rewards: <br/>
               Epoch Number: <br/>
-              Next Rewards: <br/>
+              Last 5 Transactions: <br/>
             </div>
           </div>
       </div>
 
       <div className="projects">
-        <div className="tokenList">{display}</div>
+        <div className="tokenList" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>{display}</div>
       </div>
 
 

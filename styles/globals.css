@@ -141,7 +141,7 @@ label{
 }
 
 .projects{
-        background-color: rgb(51, 51, 51);
+    background-color: rgb(54, 58, 55);
     padding: 10px 10px 10px 10px;
     display: grid;
     border-width: 5px;
@@ -197,7 +197,7 @@ label{
 }
 
 .main-img{
-    width: 40%;
+    width: 60%;
 }
 .img-div{
     text-align: center;

@@ -9,6 +9,7 @@ function TokenPage({info}) {
 
     return (
       <div>
+        <a href="/">Home</a>
         <h1 className="main-title">Token :  {tokenId}</h1>
         <div className="img-div"><img src={info} className = "main-img"></img></div>
       </div>
