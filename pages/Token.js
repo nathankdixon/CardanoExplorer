@@ -1,5 +1,3 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
 export default class Token{
 
     constructor(name, fingerprint, policyId, quantity, unit){
@@ -37,6 +35,8 @@ export default class Token{
       const values = Object.values(this.metadata);
       let ipfs = "";
       for(let i=0;i<keys.length;i++){
+
+
         if(keys[i] == "image"){
           ipfs = values[i];
         }

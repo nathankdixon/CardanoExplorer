@@ -6,6 +6,7 @@ import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import DropdownBox from "./dropdownBox";
 
 const Home = () => {
 
@@ -17,6 +18,7 @@ const Home = () => {
   const [isVisibleGrid, setIsVisibleGrid] = useState(false);
   const [display, setDisplay] = useState();
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   function groupTokensByPolicyId(tokenList){
     const policyList = {};
@@ -103,20 +105,29 @@ const Home = () => {
     setProjectsNumber(keys.length);
     for(const element of keys){
       let token = tokenList[element][0];
+      let tokenArr = tokenList[element];
+      let tokenDisplay = [];
+      for(const element of tokenArr){
+        tokenDisplay.push(<div className = "dropdown-content" key = {element.name}><img className = "token-sub-img" src = {element.ipfs}></img><div className="item-info">Name:&nbsp;{element.name}</div><div className="item-info"><Link href={"/token/"+element.unit}>Open</Link></div></div>)
+      }
+      
+
       if(type == 'ALL'){
-        display.push(<div key={token.policyId} className="grid-item nft"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-        <div className="item-info">{token.policyId}<div><Link href={"/tokens/"+token.unit}>Open</Link></div></div></div>);
+        display.push(<div key={token.policyId} className="grid-item"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
+        <div className="item-info">Policy ID: &nbsp;{token.policyId}<br /></div><div className="item-info">Quantity:&nbsp;{tokenList[element].length}</div></div>);
+        display.push(<div><DropdownBox content = {tokenDisplay}/></div>);
       }
       if(type == 'nft'){
         if(token.quantity == 1){
           display.push(<div key={token.policyId} className="grid-item nft"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-          <div className="item-info">{token.policyId}</div><div><Link href={"/tokens/"+token.unit}>Open</Link></div><div className="item-info">{tokenList[element].length}</div></div>);
+          <div className="item-info">Policy ID: &nbsp;{token.policyId}<br /></div><div className="item-info">Quantity:&nbsp;{tokenList[element].length}</div></div>);
+          display.push(<div><DropdownBox content = {tokenDisplay}/></div>);
         }
       }
       if(type == 'ft'){
         if(token.quantity != 1){
           display.push(<div key={token.policyId} className=" grid-item coin"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-          <div className="item-info">{token.policyId}</div><div><Link href={"/tokens/"+token.unit}>Open</Link></div><div className="item-info">{token.quantity}</div></div>);
+          <div className="item-info">{token.policyId}</div><div><Link href={"/token/"+token.unit}>Open</Link></div><div className="item-info">Quantity:&nbsp;{token.quantity}</div></div>);
         }
       } 
 
@@ -127,19 +138,16 @@ const Home = () => {
   }
 
 
-  const router = useRouter();
 
   const handleSearch = (event) => {
     event.preventDefault();
     // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
-    router.push(`/tokens/${searchQuery}`);
+    router.push(`/token/${searchQuery}`);
   };
 
   const handleButtonPress = (tokenId) => {
-    router.push({pathname : `/tokens/${tokenId}`});
+    router.push({pathname : `/token/${tokenId}`});
   };
-
-
 
   return (
     <div className="app">
@@ -147,26 +155,26 @@ const Home = () => {
         <title>Cardano Token Explorer</title>
       </Head>
       <header>
-        <label>tokenExplr.io</label>
+        <label className="main-label">tokenExplr.io</label>
         <form className="searchForm" onSubmit={handleSearch}>
-          <input type="text" placeholder="Search for a token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
-          <button type="submit" className="walletButton">Search</button>
+          <input type="text" className = "search-input" placeholder="Search for a token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
+          <button type="submit" className="search-button">Search</button>
         </form>
         <label>Connect Wallet:</label>
+        <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
         <div className="wallets">
           <button className="walletButton" onClick={() => connect('Typhon Wallet')}><img className="wallet-img" src="https://typhonwallet.io/assets/typhon.svg"></img></button>
-          <button className="walletButton" onClick={() => connect('eternl')}>Eternl</button>
-          <button className="walletButton" onClick={() => connect('Nami')}>Nami</button>
-          <button className="walletButton" onClick={() => connect('Flint Wallet')}>Flint</button>
-          <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
+          <button className="walletButton" onClick={() => connect('eternl')}><img className="wallet-img" src="https://play-lh.googleusercontent.com/BzpWa8LHTBzJq3bxOUjl-Bp7ixh2VOV_5zk6hZjrk57wRp7sc_kvrf3HCrjdKHL_BtbG"></img></button>
+          <button className="walletButton" onClick={() => connect('Nami')}><img className="wallet-img" src="https://lh3.googleusercontent.com/xpxFzm6RFpD4fIUFumHeuXE_sl17mTVACXCxT24NeXsum5KnLHZB0i8Am6Hn8BR8kzU7t9gC3VGjDjYagPJEwMNXwA=w128-h128-e365-rj-sc0x00ffffff"></img></button>
+          <button className="walletButton" onClick={() => connect('Flint Wallet')}><img className="wallet-img" src="https://play-lh.googleusercontent.com/ZBRe6rVx5Y2g9u5sWJMxrt2kQga1bmiJX7wg-ZjJbgiBC_MzUFwQCk9JO5yfbzRH40_9=w240-h480-rw"></img></button>
         </div>
       </header>
       <nav className="sorting-bar">
         <button className="sort-button" onClick={() => displayTokens(policies, 'nft')}>NFT</button>
         <button className="sort-button" onClick={() => displayTokens(policies, 'ft')}>Coins</button>
+        <button className="sort-button" onClick={() => displayTokens(policies, 'ALL')}>All</button>
         <button className="sort-button" onClick={() => handleButtonPress('0e14267a8020229adc0184dd25fa3174c3f7d6caadcb4425c70e7c04756e7369673135353830')}>Unsig</button>
         <button className="sort-button">Sort By</button>
-        <button className="sort-button">Display Mode</button>
       </nav>
         <div className="wallet-info">
           <div className="token-info">
@@ -190,7 +198,7 @@ const Home = () => {
           </div>
       </div>
 
-      <div className="projects">
+      <div className="projects"><label className="main-label">Assets</label>
         <div className="tokenList" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>{display}</div>
       </div>
 
