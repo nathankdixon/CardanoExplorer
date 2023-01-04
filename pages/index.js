@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useCallback, useContext, useEffect, useState} from "react";
 import Image from "next/image";
 import { BrowserWallet } from "@meshsdk/core";
 import Token from "./token";
@@ -9,7 +9,6 @@ import Link from "next/link";
 import DropdownBox from "./dropdownBox";
 
 const Home = () => {
-
   const [tokens, setTokens] = useState([]);
   const [balance, setBalance] = useState();
   const [policies, setPolicies] = useState([]);
@@ -138,7 +137,6 @@ const Home = () => {
   }
 
 
-
   const handleSearch = (event) => {
     event.preventDefault();
     // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
@@ -197,7 +195,6 @@ const Home = () => {
             </div>
           </div>
       </div>
-
       <div className="projects"><label className="main-label">Assets</label>
         <div className="tokenList" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>{display}</div>
       </div>

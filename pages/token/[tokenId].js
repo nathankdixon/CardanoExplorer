@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Token from "../token";
 
 
-function TokenPage({ipfs, meta}) {
+function TokenPage({ipfs, meta, policyOut}) {
 
     const router = useRouter();
     const { tokenId } = router.query;
@@ -11,14 +11,23 @@ function TokenPage({ipfs, meta}) {
       <div>
         <a href="/">Home</a>
         <h1 className="main-title">Token :  {tokenId}</h1>
+        <h3>Policy Info : <br />{policyOut}</h3>
+
         <h3>Metadata : <br />{meta}</h3>
         <div className="img-div"><img src={ipfs} className = "main-img"></img></div>
       </div>
     );
   }
 
-export async function loadTokenData(unit){
+async function loadTokenData(unit){
   const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+unit,
+  {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+  const res = await data.json();
+  return res;
+}
+
+async function loadPolicyData(policy){
+  const data = await fetch('https://api.opencnft.io/1/policy/'+policy,
   {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
   const res = await data.json();
   return res;
@@ -42,10 +51,12 @@ export async function getStaticProps({ params }) {
     const tokenId = params.tokenId;
 
     const tokenData = await loadTokenData(tokenId);
+    const policyData = await loadPolicyData(tokenData.policy_id);
 
     const token = new Token(tokenData.asset_name, tokenData.fingerprint, tokenData.policy_id, tokenData.quantity, tokenId);
-    
     token.metadata = await token.getMetadata();
+
+    const policyOut = JSON.stringify(policyData);
 
     const keys= Object.keys(token.metadata);
     const values = Object.values(token.metadata);
@@ -58,7 +69,8 @@ export async function getStaticProps({ params }) {
       props: {
         tokenId,
         ipfs,
-        meta
+        meta,
+        policyOut
       }
     }
   }
