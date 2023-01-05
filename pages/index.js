@@ -14,8 +14,9 @@ const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleGrid, setIsVisibleGrid] = useState(false);
   const [type, setType] = useState();
-  const [display, setDisplay] = useState();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedWallet, setSelectedWallet] = useState("Connect Wallet")
+  const [showModal, setShowModal] = useState(false)
   const router = useRouter();
 
   function groupTokensByPolicyId(tokenList){
@@ -94,6 +95,8 @@ const Home = () => {
   }
 
 
+  
+
   function displayTokens(tokenList, type){
 
     if(sessionStorage.getItem('wallet')){
@@ -121,6 +124,21 @@ const Home = () => {
     router.push({pathname : `/token/${tokenId}`});
   };
 
+  const handleClick = () => {
+    setShowModal(true);
+  }
+
+  const handleClose = () => {
+    setShowModal(false);
+  }
+
+  const handleSelect = (wallet) => {
+    setSelectedWallet(wallet);
+    connect(wallet);
+    setShowModal(false);
+  }
+
+
   return (
     <div className="app">
         <Head>
@@ -132,15 +150,27 @@ const Home = () => {
           <input type="text" className = "search-input" placeholder="Search for a token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
-        <label>Connect Wallet:</label>
         <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
-        <div className="wallets">
-          <button className="walletButton" onClick={() => connect('Typhon Wallet')}><img className="wallet-img" src="https://typhonwallet.io/assets/typhon.svg"></img></button>
-          <button className="walletButton" onClick={() => connect('eternl')}><img className="wallet-img" src="https://play-lh.googleusercontent.com/BzpWa8LHTBzJq3bxOUjl-Bp7ixh2VOV_5zk6hZjrk57wRp7sc_kvrf3HCrjdKHL_BtbG"></img></button>
-          <button className="walletButton" onClick={() => connect('Nami')}><img className="wallet-img" src="https://lh3.googleusercontent.com/xpxFzm6RFpD4fIUFumHeuXE_sl17mTVACXCxT24NeXsum5KnLHZB0i8Am6Hn8BR8kzU7t9gC3VGjDjYagPJEwMNXwA=w128-h128-e365-rj-sc0x00ffffff"></img></button>
-          <button className="walletButton" onClick={() => connect('Flint Wallet')}><img className="wallet-img" src="https://play-lh.googleusercontent.com/ZBRe6rVx5Y2g9u5sWJMxrt2kQga1bmiJX7wg-ZjJbgiBC_MzUFwQCk9JO5yfbzRH40_9=w240-h480-rw"></img></button>
-        </div>
+        <div className="connect-wallet">
+        <button className="connect-wallet-button" onClick={handleClick}>{selectedWallet}</button>
+        { showModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Select Wallet</h2>
+              <div>
+                <button className="walletButton" onClick={() => handleSelect('Typhon Wallet')}>Typhon</button>
+                <button className="walletButton" onClick={() => handleSelect('eternl')}>Eternl</button>
+                <button className="walletButton" onClick={() => handleSelect('Nami')}>Nami</button>
+                <button className="walletButton" onClick={() => handleSelect('Flint Wallet')}>Flint</button><br/>
+                <input className="search-input" placeholder="Enter wallet address"></input>
+              </div>
+              <button className="walletButton" onClick={handleClose}>Cancel</button>
+            </div>
+          </div>
+        )}
+      </div>
       </header>
+
       <nav className="sorting-bar">
         <button className="sort-button" onClick={() => displayTokens(policies, 'ALL')}>My Wallet</button>
         <button className="sort-button" onClick={() => displayTokens(policies, 'nft')}>NFT</button>
@@ -169,7 +199,7 @@ const Home = () => {
             </div>
           </div>
       </div>
-      <div className="projects"><label className="main-label">Assets</label>
+      <div className="projects"><label className="main-label">Assets:</label>
         <div className="tokenList" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}><Wallet list = {policies} type = {type}/></div>
       </div>
 
