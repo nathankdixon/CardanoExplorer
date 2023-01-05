@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Token from "../token";
 
 
-function TokenPage({ipfs, meta, policyOut}) {
+function TokenPage({ipfs, meta, policyData}) {
 
     const router = useRouter();
     const { tokenId } = router.query;
@@ -11,9 +11,14 @@ function TokenPage({ipfs, meta, policyOut}) {
       <div>
         <a href="/">Home</a>
         <h1 className="main-title">Token :  {tokenId}</h1>
-        <h3>Policy Info : <br />{policyOut}</h3>
+        <div className="policyInfo">        <h3>Policy Info : <br /></h3>
+        <p>Floor Price: {(policyData.floor_price)/1000000} ADA</p>
+        <p>Total Volume: {(policyData.total_volume)/1000000} ADA</p>
+        <p>Number of Holders: {(policyData.asset_holders)}</p></div>
 
-        <h3>Metadata : <br />{meta}</h3>
+
+        <h3>Metadata : <br /></h3>
+        <p>{meta}</p>
         <div className="img-div"><img src={ipfs} className = "main-img"></img></div>
       </div>
     );
@@ -56,8 +61,6 @@ export async function getStaticProps({ params }) {
     const token = new Token(tokenData.asset_name, tokenData.fingerprint, tokenData.policy_id, tokenData.quantity, tokenId);
     token.metadata = await token.getMetadata();
 
-    const policyOut = JSON.stringify(policyData);
-
     const keys= Object.keys(token.metadata);
     const values = Object.values(token.metadata);
 
@@ -70,7 +73,7 @@ export async function getStaticProps({ params }) {
         tokenId,
         ipfs,
         meta,
-        policyOut
+        policyData
       }
     }
   }

@@ -1,12 +1,10 @@
-import { useCallback, useContext, useEffect, useState} from "react";
-import Image from "next/image";
+import { useState} from "react";
 import { BrowserWallet } from "@meshsdk/core";
 import Token from "./token";
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import DropdownBox from "./dropdownBox";
+import Wallet from "./wallet";
 
 const Home = () => {
   const [tokens, setTokens] = useState([]);
@@ -15,6 +13,7 @@ const Home = () => {
   const [projectsNumber, setProjectsNumber] = useState();
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleGrid, setIsVisibleGrid] = useState(false);
+  const [type, setType] = useState();
   const [display, setDisplay] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
@@ -48,10 +47,12 @@ const Home = () => {
     const _policies = groupTokensByPolicyId(_tokens);
 
     const _sortedPolicyList = sortPolicies(_policies);
-    console.log(_sortedPolicyList);
+
     setPolicies(_sortedPolicyList);
     sessionStorage.setItem('wallet', JSON.stringify(_sortedPolicyList));
     displayTokens(_sortedPolicyList, 'ALL');
+    let keys = Object.keys(_sortedPolicyList);
+    setProjectsNumber(keys.length);
     setIsVisible(false);
     setIsVisibleGrid(true);
 
@@ -94,46 +95,19 @@ const Home = () => {
 
 
   function displayTokens(tokenList, type){
-    
 
     if(sessionStorage.getItem('wallet')){
       tokenList = JSON.parse(sessionStorage.getItem('wallet'));
     }
-    let display = [];
-    let keys = Object.keys(tokenList);
-    setProjectsNumber(keys.length);
-    for(const element of keys){
-      let token = tokenList[element][0];
-      let tokenArr = tokenList[element];
-      let tokenDisplay = [];
-      for(const element of tokenArr){
-        tokenDisplay.push(<div className = "dropdown-content" key = {element.name}><img className = "token-sub-img" src = {element.ipfs}></img><div className="item-info">Name:&nbsp;{element.name}</div><div className="item-info"><Link href={"/token/"+element.unit}>Open</Link></div></div>)
-      }
-      
-
-      if(type == 'ALL'){
-        display.push(<div key={token.policyId} className="grid-item"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-        <div className="item-info">Policy ID: &nbsp;{token.policyId}<br /></div><div className="item-info">Quantity:&nbsp;{tokenList[element].length}</div></div>);
-        display.push(<div><DropdownBox content = {tokenDisplay}/></div>);
-      }
-      if(type == 'nft'){
-        if(token.quantity == 1){
-          display.push(<div key={token.policyId} className="grid-item nft"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-          <div className="item-info">Policy ID: &nbsp;{token.policyId}<br /></div><div className="item-info">Quantity:&nbsp;{tokenList[element].length}</div></div>);
-          display.push(<div><DropdownBox content = {tokenDisplay}/></div>);
-        }
-      }
-      if(type == 'ft'){
-        if(token.quantity != 1){
-          display.push(<div key={token.policyId} className=" grid-item coin"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-          <div className="item-info">{token.policyId}</div><div><Link href={"/token/"+token.unit}>Open</Link></div><div className="item-info">Quantity:&nbsp;{token.quantity}</div></div>);
-        }
-      } 
-
-    }
-    setDisplay(display);
+    setPolicies(tokenList);
+    setType(type);
     setIsVisibleGrid(true);
-    return display;
+  }
+
+  function reverseList(policyList){
+    const values = Object.values(policyList);
+    values.sort((a,b) => a.length - b.length);
+    setPolicies(policyList)
   }
 
 
@@ -168,11 +142,11 @@ const Home = () => {
         </div>
       </header>
       <nav className="sorting-bar">
+        <button className="sort-button" onClick={() => displayTokens(policies, 'ALL')}>My Wallet</button>
         <button className="sort-button" onClick={() => displayTokens(policies, 'nft')}>NFT</button>
         <button className="sort-button" onClick={() => displayTokens(policies, 'ft')}>Coins</button>
-        <button className="sort-button" onClick={() => displayTokens(policies, 'ALL')}>All</button>
         <button className="sort-button" onClick={() => handleButtonPress('0e14267a8020229adc0184dd25fa3174c3f7d6caadcb4425c70e7c04756e7369673135353830')}>Unsig</button>
-        <button className="sort-button">Sort By</button>
+        <button className="sort-button" onClick={() => reverseList(policies)}>Sort By</button>
       </nav>
         <div className="wallet-info">
           <div className="token-info">
@@ -196,7 +170,7 @@ const Home = () => {
           </div>
       </div>
       <div className="projects"><label className="main-label">Assets</label>
-        <div className="tokenList" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>{display}</div>
+        <div className="tokenList" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}><Wallet list = {policies} type = {type}/></div>
       </div>
 
 
