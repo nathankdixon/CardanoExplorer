@@ -1,7 +1,7 @@
 /* Set the font and color scheme for the entire page */
 body {
     font-family: Arial, sans-serif;
-    color: #333;
+    color: rgb(255, 255, 255);
     background-color: #333;
   }
   
@@ -214,7 +214,11 @@ label{
     width: 7%;
     object-fit: cover;
 }
-
+.home-link{
+    color:rgb(176, 245, 176);
+    font-size: larger;
+    font-weight: bolder;
+}
 
 .box-title{
     display: flex;
@@ -243,7 +247,7 @@ label{
     border-style: solid;
     border-width: 5px;
     border-color:  #6d6ac9e0; 
-    background-color: #a6e49e; 
+    background-color: rgb(133, 188, 137);
     display: flex;
     align-items: center;
 

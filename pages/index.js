@@ -17,7 +17,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedWallet, setSelectedWallet] = useState("Connect Wallet")
   const [showModal, setShowModal] = useState(false)
-  const [walletLogo, setWalletLogo] = useState();
+  const [walletLogo, setWalletLogo] = useState('Connect Wallet');
   const router = useRouter();
 
 
@@ -41,8 +41,8 @@ const Home = () => {
 
   async function connect (walletname){
     try{
-      setIsVisible(true);
       const wallet = await BrowserWallet.enable(walletname);
+      setIsVisible(true);
       const _assetsJson = await wallet.getAssets();
       const _balance = await wallet.getLovelace();
       setBalance(_balance/1000000);
@@ -62,6 +62,7 @@ const Home = () => {
     }catch(error){
       console.log(error);
     }
+
 
 
 
@@ -173,7 +174,7 @@ const Home = () => {
         </form>
         <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
         <div className="connect-wallet">
-        <button className="connect-wallet-button" onClick={handleClick}>{selectedWallet}{walletLogo}</button>
+        <button className="connect-wallet-button" onClick={handleClick}>{balance}₳ {walletLogo}</button>
         { showModal && (
           <div className="modal">
             <div className="modal-content">
@@ -204,15 +205,15 @@ const Home = () => {
             <div className="inner">
               Total Number of Tokens: {tokens.length}<br/>
               Number of Projects: {projectsNumber}<br />
-              Coin Value: <br/>
-              NFT Floor Value: <br />
+              Coin Value: ₳<br/>
+              NFT Floor Value: ₳<br />
               Last NFT Sold <br />
               Newest NFT: <br />
             </div>
           </div>
           <div className="ada-info">
             <div className="inner">
-              Ada Balance: {balance}<br/>
+              Balance: {balance}₳<br/>
               Stake Pool: <br/>
               Last Staking Rewards: <br/>
               Epoch Number: <br/>

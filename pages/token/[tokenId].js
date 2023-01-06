@@ -9,7 +9,7 @@ function TokenPage({ipfs, meta, policyData}) {
 
     return (
       <div>
-        <a href="/">Home</a>
+        <a href="/" className="home-link">Home</a>
         <h1 className="main-title">Token :  {tokenId}</h1>
         <div className="policyInfo">        <h3>Policy Info : <br /></h3>
         <p>Floor Price: {(policyData.floor_price)/1000000} ADA</p>
