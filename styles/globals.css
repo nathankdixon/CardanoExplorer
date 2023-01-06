@@ -44,9 +44,10 @@ label{
 }
 
 .modal {
-    border-color: black;
+    border-color: rgb(11, 11, 11);
     border-width: 5px;
     border-style: solid;
+    border-radius: 5%;
     display:  flex;
     text-align: center;
     padding: 10px 10px 10px 10px;
@@ -70,6 +71,9 @@ label{
 }
 .search-input{
     height: 70%;
+    width: 60%;
+    margin: 10px 10px 10px 10px;
+
 }
 .wallet-info{
     display: flex;
@@ -155,13 +159,37 @@ label{
     text-align: center;
 }
 .walletButton{
-    border: 2px solid rgb(108, 108, 224);
+    border: 2px solid #61ff89;
     border-radius: 10%;
     margin: 10px 10px 10px 10px;
-    background-color: #a6e49e; 
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: #c89df1;
+    background-position: center;
+    background-size: cover;
+    padding: 10px 10px 10px 10px;
+    font-weight: bold;
+    color: rgb(40, 42, 40);
+}
+
+.cancel-button{
+    background-color: rgb(231, 81, 81);
+    border-color: azure;
+    border-width: 5px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5%;
+    color: white;
+}
+
+.logo-img{
+    padding: 0px 0px 10px 10px;
+    width: 25px;
 }
 
 .connect-wallet-button{
+    display: flex;
+    padding: 10px 10px 10px 10px;
     margin: 18px 10px 10px 10px;
     width: 100%;
     height: 55%;
@@ -171,6 +199,7 @@ label{
     border-radius: 10%;
     border-color: white;
     border-width: 4px;
+    object-fit: contain;
 }
 .connect-wallet{
     display: flex;
@@ -178,7 +207,7 @@ label{
     justify-content: center;
 }
 .walletButton:hover{
-    background-color:honeydew;
+    background-color:rgb(169, 225, 169);
 }
 
 .token-img{

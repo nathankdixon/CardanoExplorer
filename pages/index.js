@@ -17,7 +17,9 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedWallet, setSelectedWallet] = useState("Connect Wallet")
   const [showModal, setShowModal] = useState(false)
+  const [walletLogo, setWalletLogo] = useState();
   const router = useRouter();
+
 
   function groupTokensByPolicyId(tokenList){
     const policyList = {};
@@ -38,24 +40,29 @@ const Home = () => {
 
 
   async function connect (walletname){
-    setIsVisible(true);
-    const wallet = await BrowserWallet.enable(walletname);
-    const _assetsJson = await wallet.getAssets();
-    const _balance = await wallet.getLovelace();
-    setBalance(_balance/1000000);
-    const _tokens = await createTokens(_assetsJson);
-    setTokens(_tokens);
-    const _policies = groupTokensByPolicyId(_tokens);
+    try{
+      setIsVisible(true);
+      const wallet = await BrowserWallet.enable(walletname);
+      const _assetsJson = await wallet.getAssets();
+      const _balance = await wallet.getLovelace();
+      setBalance(_balance/1000000);
+      const _tokens = await createTokens(_assetsJson);
+      setTokens(_tokens);
+      const _policies = groupTokensByPolicyId(_tokens);
+  
+      const _sortedPolicyList = sortPolicies(_policies);
+  
+      setPolicies(_sortedPolicyList);
+      sessionStorage.setItem('wallet', JSON.stringify(_sortedPolicyList));
+      displayTokens(_sortedPolicyList, 'ALL');
+      let keys = Object.keys(_sortedPolicyList);
+      setProjectsNumber(keys.length);
+      setIsVisible(false);
+      setIsVisibleGrid(true);
+    }catch(error){
+      console.log(error);
+    }
 
-    const _sortedPolicyList = sortPolicies(_policies);
-
-    setPolicies(_sortedPolicyList);
-    sessionStorage.setItem('wallet', JSON.stringify(_sortedPolicyList));
-    displayTokens(_sortedPolicyList, 'ALL');
-    let keys = Object.keys(_sortedPolicyList);
-    setProjectsNumber(keys.length);
-    setIsVisible(false);
-    setIsVisibleGrid(true);
 
 
   }
@@ -134,6 +141,20 @@ const Home = () => {
 
   const handleSelect = (wallet) => {
     setSelectedWallet(wallet);
+    let logo = '';
+    if(wallet == 'Typhon Wallet'){
+      logo = <img className="logo-img" src="/typhon.svg"></img>
+    }
+    if(wallet == 'eternl'){
+      logo = <img className="logo-img" src="/eternl.png"></img>
+    }
+    if(wallet == 'Nami'){
+      logo = <img className="logo-img" src="/nami.svg"></img>
+    }
+    if(wallet == 'Flint Wallet'){
+      logo = <img className="logo-img" src="/flint.png"></img>
+    }
+    setWalletLogo(logo);
     connect(wallet);
     setShowModal(false);
   }
@@ -152,19 +173,19 @@ const Home = () => {
         </form>
         <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
         <div className="connect-wallet">
-        <button className="connect-wallet-button" onClick={handleClick}>{selectedWallet}</button>
+        <button className="connect-wallet-button" onClick={handleClick}>{selectedWallet}{walletLogo}</button>
         { showModal && (
           <div className="modal">
             <div className="modal-content">
               <h2>Select Wallet</h2>
               <div>
-                <button className="walletButton" onClick={() => handleSelect('Typhon Wallet')}>Typhon</button>
-                <button className="walletButton" onClick={() => handleSelect('eternl')}>Eternl</button>
-                <button className="walletButton" onClick={() => handleSelect('Nami')}>Nami</button>
-                <button className="walletButton" onClick={() => handleSelect('Flint Wallet')}>Flint</button><br/>
+                <button className="walletButton" onClick={() => handleSelect('Typhon Wallet')} style={{backgroundImage:`url(${'/typhon.svg'})`}}>Typhon</button>
+                <button className="walletButton" onClick={() => handleSelect('eternl')} style={{backgroundImage:`url(${'/eternl.png'})`}}>Eternl</button>
+                <button className="walletButton" onClick={() => handleSelect('Nami')} style={{backgroundImage:`url(${'/nami.svg'})`}}>Nami</button>
+                <button className="walletButton" onClick={() => handleSelect('Flint Wallet')} style={{backgroundImage:`url(${'/flint.png'})`}}>Flint</button><br/>
                 <input className="search-input" placeholder="Enter wallet address"></input>
               </div>
-              <button className="walletButton" onClick={handleClose}>Cancel</button>
+              <button className="cancel-button" onClick={handleClose}>Cancel</button>
             </div>
           </div>
         )}
