@@ -5,7 +5,7 @@ import Token from "./token";
 
 
 function Wallet ({address}) {
-
+  const [isVisibleGrid, setIsVisibleGrid] = useState(false);
   const [tokens, setTokens] = useState();
   const [policies, setPolicies] = useState();
   const [tokensNumber, setTokensNumber] = useState();
@@ -28,6 +28,7 @@ function Wallet ({address}) {
         sessionStorage.setItem(address, _policies);
         setPolicies(_policies);
         setTokens(out);
+        setIsVisibleGrid(true);
       }
 
 
@@ -136,7 +137,7 @@ function Wallet ({address}) {
   }
 
   return(
-    <div>
+    <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }} >
       <div className="wallet-info">
         <div className="token-info">
           <div className="inner">
@@ -155,6 +156,7 @@ function Wallet ({address}) {
             Last Staking Rewards: <br/>
             Epoch Number: <br/>
             Last 5 Transactions: <br/>
+            UTXOs: <br/>
           </div>
         </div>
       </div>

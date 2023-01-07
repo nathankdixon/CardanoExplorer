@@ -8,42 +8,14 @@ import Wallet from "./wallet";
 import { getRouteMatcher } from "next/dist/shared/lib/router/utils/route-matcher";
 
 const Home = () => {
-  const [tokens, setTokens] = useState([]);
-  const [balance, setBalance] = useState();
-  const [policies, setPolicies] = useState([]);
-  const [projectsNumber, setProjectsNumber] = useState();
   const [isVisible, setIsVisible] = useState(false);
-  const [isVisibleGrid, setIsVisibleGrid] = useState(false);
   const [address, setAddress] = useState(null);
-  const [type, setType] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedWallet, setSelectedWallet] = useState();
   const [addressQuery, setAddressQuery] = useState('');
   const [showModal, setShowModal] = useState(false)
   const [walletLogo, setWalletLogo] = useState('Connect Wallet');
   const router = useRouter();
-
-
-  function groupTokensByPolicyId(tokenList){
-    const policyList = {};
-    for(const token in tokenList){
-      const policyId = tokenList[token].policyId;
-      
-      if(policyId in policyList){
-        policyList[policyId].push(tokenList[token]);
-      }else {
-        policyList[policyId] = [tokenList[token]];
-      }
-
-    }
-    ;
-    return sortPolicies(policyList);
-
-  }
-
-
-
-
 
   const handleCustomAddress = async (event) =>{
     event.preventDefault();
@@ -52,13 +24,8 @@ const Home = () => {
     setWalletLogo('');
     setAddress(addressQuery);
     setIsVisible(false);
-    setIsVisibleGrid(true);
   }
-
-
-
-
-
+  
   const handleSearch = (event) => {
     event.preventDefault();
     // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
@@ -110,7 +77,6 @@ const Home = () => {
     }
     setWalletLogo(logo);
     setIsVisible(false);
-    setIsVisibleGrid(true);
   }
 
 
@@ -127,7 +93,7 @@ const Home = () => {
         </form>
         <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
         <div className="connect-wallet">
-        <button className="connect-wallet-button" onClick={handleClick}>{balance}₳ {walletLogo}</button>
+        <button className="connect-wallet-button" onClick={handleClick}>{walletLogo}</button>
         { showModal && (
           <div className="modal">
             <div className="modal-content">
@@ -141,7 +107,6 @@ const Home = () => {
                   <input className="search-input" placeholder="Enter wallet address" value={addressQuery} onChange={(event) => setAddressQuery(event.target.value)}></input>
                   <button type="submit" className="search-button">Search</button>
                 </form>
-
               </div>
               <button className="cancel-button" onClick={handleClose}>Cancel</button>
             </div>
@@ -149,11 +114,7 @@ const Home = () => {
         )}
       </div>
       </header>
-
-      <nav className="sorting-bar">
-        <button className="sort-button" onClick={() => handleButtonPress('0e14267a8020229adc0184dd25fa3174c3f7d6caadcb4425c70e7c04756e7369673135353830')}>Unsig</button>
-      </nav>
-      <div className="projects" style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }} ><label className="main-label">Assets:</label>
+      <div className="projects">
         <div className="tokenList" ><Wallet address = {address}/></div>
       </div>
 

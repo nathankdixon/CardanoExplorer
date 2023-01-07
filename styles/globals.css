@@ -8,7 +8,7 @@ body {
   /* Style the header */
 header {
     display: flex;
-    background-color: rgb(66, 66, 66);
+    background-color: #333;
     color: #fff;
     padding: 5px 5px 5px 5px;
 }
@@ -226,7 +226,7 @@ label{
 }
 
 .projects{
-    background-color: rgb(54, 58, 55);
+    background-color: #333;
     padding: 10px 10px 10px 10px;
     display: grid;
     border-width: 5px;
