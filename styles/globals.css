@@ -184,7 +184,7 @@ label{
 
 .logo-img{
     padding: 0px 0px 10px 10px;
-    width: 25px;
+    width: 40px;
 }
 
 .connect-wallet-button{
@@ -211,7 +211,7 @@ label{
 }
 
 .token-img{
-    width: 7%;
+    width: 9%;
     object-fit: cover;
 }
 .home-link{
@@ -285,6 +285,7 @@ label{
 
 .token-list{
     display: flex;
+    color:white;
 }
 
 .item-info{
