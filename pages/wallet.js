@@ -5,12 +5,16 @@ import Token from "./token";
 
 
 function Wallet ({address}) {
-  const [isVisibleGrid, setIsVisibleGrid] = useState(false);
+  const [isVisibleGrid, setIsVisibleGrid] = useState();
   const [tokens, setTokens] = useState();
   const [policies, setPolicies] = useState();
   const [tokensNumber, setTokensNumber] = useState();
   const [projectsNumber, setProjectNumber] = useState();
   const [balance, setBalance] = useState();
+  const [isLoading, setisLoading] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [loadedTokens, setLoadedTokens] = useState();
+
 
   useEffect(() => {
     const getTokens = async () =>{
@@ -18,24 +22,68 @@ function Wallet ({address}) {
         console.log('address was undefined');
       }
       else{
-        const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
-        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-        const _tokenJson = await req.json();
+        if(sessionStorage.getItem(address)){
+          try{
+            let _cachedData = JSON.parse(sessionStorage.getItem(address));
+            setPolicies(_cachedData);
+            const out = displayTokens(_cachedData, 'ALL');
+            setTokens(out);
+            setisLoading('done');
+            setIsVisible(false);
+            setIsVisibleGrid(true);
+          }catch{
+            setisLoading('fetching');
+            setIsVisibleGrid(false);
+            setIsVisible(true);
+            const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
+            {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+            const _tokenJson = await req.json();
+    
+            const _tokens = await createTokens(_tokenJson.amount);
+            const _policies = groupTokensByPolicyId(_tokens);
+            const out = displayTokens(_policies, 'ALL');
+            sessionStorage.setItem(address, JSON.stringify(_policies));
+            setPolicies(_policies);
+            setTokens(out);
+            setisLoading('done');
+            setIsVisible(false);
+            setIsVisibleGrid(true);
+          }
 
-        const _tokens = await createTokens(_tokenJson.amount);
-        const _policies = groupTokensByPolicyId(_tokens);
-        const out = displayTokens(_policies, 'ALL');
-        sessionStorage.setItem(address, _policies);
-        setPolicies(_policies);
-        setTokens(out);
-        setIsVisibleGrid(true);
+        }
+        else{
+          setisLoading('fetching');
+          setIsVisibleGrid(false);
+          setIsVisible(true);
+          const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
+          {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+          const _tokenJson = await req.json();
+  
+          const _tokens = await createTokens(_tokenJson.amount);
+          const _policies = groupTokensByPolicyId(_tokens);
+          const out = displayTokens(_policies, 'ALL');
+          sessionStorage.setItem(address, JSON.stringify(_policies));
+          setPolicies(_policies);
+          setTokens(out);
+          setisLoading('done');
+          setIsVisible(false);
+          setIsVisibleGrid(true);
+        }
+
       }
 
 
     }
     getTokens();
-  
-  }, [address]) 
+  }, [address]);
+
+  if(isLoading == 'fetching'){
+    return <div>
+      <label>{loadedTokens}</label>
+      <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
+    </div>
+  }
+
 
   function groupTokensByPolicyId(tokenList){
     const policyList = {};
@@ -72,9 +120,10 @@ function Wallet ({address}) {
   async function createTokens(assets){
 
     const _tokens = [];
-    for(const element of assets){
-      if(element.unit != 'lovelace'){
-        let token = new Token(null, null, null, element.quantity, element.unit);
+    for(let i =0; i<assets.length;i++){
+      if(assets[i].unit != 'lovelace'){
+        setLoadedTokens('Loading token: '+i + ' of ' +assets.length)
+        let token = new Token(null, null, null, assets[i].quantity, assets[i].unit);
         token.metadata = await token.getMetadata();
         if(token.metadata != null){
           let ipfs = token.getIpfsFromMetadata();
@@ -83,7 +132,7 @@ function Wallet ({address}) {
         }
       }
       else{
-        setBalance((element.quantity)/1000000);
+        setBalance((assets[i].quantity)/1000000);
       }
 
     }

@@ -8,7 +8,6 @@ import Wallet from "./wallet";
 import { getRouteMatcher } from "next/dist/shared/lib/router/utils/route-matcher";
 
 const Home = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [address, setAddress] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedWallet, setSelectedWallet] = useState();
@@ -58,7 +57,6 @@ const Home = () => {
   const handleSelect = async (wallet) => {
     setSelectedWallet(wallet);
     setShowModal(false);
-    setIsVisible(true);
     const _wallet = await BrowserWallet.enable(wallet);
     const _address = await _wallet.getChangeAddress();
     setAddress(_address);
@@ -76,7 +74,6 @@ const Home = () => {
       logo = <img className="logo-img" src="/flint.png"></img>
     }
     setWalletLogo(logo);
-    setIsVisible(false);
   }
 
 
@@ -91,7 +88,6 @@ const Home = () => {
           <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
-        <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
         <div className="connect-wallet">
         <button className="connect-wallet-button" onClick={handleClick}>{walletLogo}</button>
         { showModal && (
@@ -114,9 +110,7 @@ const Home = () => {
         )}
       </div>
       </header>
-      <div className="projects">
-        <div className="tokenList" ><Wallet address = {address}/></div>
-      </div>
+      <div className="tokenList" ><Wallet address = {address}/></div>
 
 
     </div>

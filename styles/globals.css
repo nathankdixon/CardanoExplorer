@@ -183,7 +183,7 @@ label{
 }
 
 .logo-img{
-    padding: 0px 0px 10px 10px;
+    padding: 10px 10px 10px 10px;
     width: 40px;
 }
 
@@ -197,9 +197,10 @@ label{
     font-size: medium;
     background-color: rgb(238, 238, 110);
     border-radius: 10%;
+    align-items: center;
     border-color: white;
     border-width: 4px;
-    object-fit: contain;
+    object-fit: cover;
 }
 .connect-wallet{
     display: flex;
@@ -298,8 +299,8 @@ label{
 
 .loading-symbol {
     position: absolute;
-    top: 6%;
-    left: 85%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 30px;
     height: 30px;
