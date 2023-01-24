@@ -222,7 +222,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	!function() {
-/******/ 		__webpack_require__.h = function() { return "3fc50949f0939d01"; }
+/******/ 		__webpack_require__.h = function() { return "01876180a4178ab9"; }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -235,21 +235,6 @@
 /******/ 				if (typeof window === 'object') return window;
 /******/ 			}
 /******/ 		})();
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/harmony module decorator */
-/******/ 	!function() {
-/******/ 		__webpack_require__.hmd = function(module) {
-/******/ 			module = Object.create(module);
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'exports', {
-/******/ 				enumerable: true,
-/******/ 				set: function() {
-/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
-/******/ 				}
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -369,21 +354,6 @@
 /******/ 	/* webpack/runtime/trusted types script url */
 /******/ 	!function() {
 /******/ 		__webpack_require__.tu = function(url) { return __webpack_require__.tt().createScriptURL(url); };
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/wasm loading */
-/******/ 	!function() {
-/******/ 		__webpack_require__.v = function(exports, wasmModuleId, wasmModuleHash, importsObj) {
-/******/ 			var req = fetch(__webpack_require__.p + "static/wasm/" + wasmModuleHash + ".wasm");
-/******/ 			if (typeof WebAssembly.instantiateStreaming === 'function') {
-/******/ 				return WebAssembly.instantiateStreaming(req, importsObj)
-/******/ 					.then(function(res) { return Object.assign(exports, res.instance.exports); });
-/******/ 			}
-/******/ 			return req
-/******/ 				.then(function(x) { return x.arrayBuffer(); })
-/******/ 				.then(function(bytes) { return WebAssembly.instantiate(bytes, importsObj); })
-/******/ 				.then(function(res) { return Object.assign(exports, res.instance.exports); });
-/******/ 		};
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hot module replacement */
