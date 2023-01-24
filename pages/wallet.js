@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import DropdownBox from "./dropdownBox";
 import Token from "./token";
+import { Lucid, Kupmios, Blockfrost } from "lucid-cardano";
 
 
 function Wallet ({address}) {
@@ -35,6 +36,9 @@ function Wallet ({address}) {
             setisLoading('fetching');
             setIsVisibleGrid(false);
             setIsVisible(true);
+            if(address[0] != 'a'){
+              address = await getWalletAddress(address);
+            }
             const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
             {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
             const _tokenJson = await req.json();
@@ -55,6 +59,9 @@ function Wallet ({address}) {
           setisLoading('fetching');
           setIsVisibleGrid(false);
           setIsVisible(true);
+          if(address[0] != 'a'){
+            address = await getWalletAddress(address);
+          }
           const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
           {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
           const _tokenJson = await req.json();
@@ -84,6 +91,34 @@ function Wallet ({address}) {
     </div>
   }
 
+  async function getWalletAddress(wallet){
+    const lucid = await Lucid.new(
+      new Blockfrost(
+        "https://cardano-mainnet.blockfrost.io/api/v0",
+        "mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh",
+      ),
+    );
+
+    var api = '';
+
+    if(wallet == 'Typhon Wallet'){
+      api = await window.cardano.typhoncip30.enable();
+    }
+    if(wallet == 'eternl'){
+      api = await window.cardano.eternl.enable();
+    }
+    if(wallet == 'Nami'){
+      api = await window.cardano.nami.enable();
+    }
+    if(wallet == 'Flint Wallet'){
+      api = await window.cardano.flint.enable();
+    }
+    
+    lucid.selectWallet(api);
+    const _address = await lucid.wallet.address();
+    return _address;
+
+  }
 
   function groupTokensByPolicyId(tokenList){
     const policyList = {};
@@ -119,11 +154,12 @@ function Wallet ({address}) {
 
   async function createTokens(assets){
 
+
     const _tokens = [];
     for(let i =0; i<assets.length;i++){
       if(assets[i].unit != 'lovelace'){
-        setLoadedTokens('Loading token: '+i + ' of ' +assets.length)
-        let token = new Token(null, null, null, assets[i].quantity, assets[i].unit);
+        setLoadedTokens('Loading tokens: '+i + ' of ' +assets.length)
+        let token = new Token(assets[i].unit, assets[i].quantity);
         token.metadata = await token.getMetadata();
         if(token.metadata != null){
           let ipfs = token.getIpfsFromMetadata();

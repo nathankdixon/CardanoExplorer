@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
-import Token from "../token";
+import { useEffect } from "react";
+import TokenData from "../tokenData";
 
 
-function TokenPage({ipfs, meta, policyData}) {
+function TokenPage() {
 
     const router = useRouter();
     const { tokenId } = router.query;
@@ -10,33 +11,14 @@ function TokenPage({ipfs, meta, policyData}) {
     return (
       <div>
         <a href="/" className="home-link">Home</a>
-        <h1 className="main-title">Token :  {tokenId}</h1>
-        <div className="policyInfo">        <h3>Policy Info : <br /></h3>
-        <p>Floor Price: {(policyData.floor_price)/1000000} ADA</p>
-        <p>Total Volume: {(policyData.total_volume)/1000000} ADA</p>
-        <p>Number of Holders: {(policyData.asset_holders)}</p></div>
-
-
-        <h3>Metadata : <br /></h3>
-        <p>{meta}</p>
-        <div className="img-div"><img src={ipfs} className = "main-img"></img></div>
+        <h1>
+          <TokenData tokenId = {tokenId}/>
+        </h1>
       </div>
     );
   }
 
-async function loadTokenData(unit){
-  const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+unit,
-  {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-  const res = await data.json();
-  return res;
-}
 
-async function loadPolicyData(policy){
-  const data = await fetch('https://api.opencnft.io/1/policy/'+policy,
-  {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-  const res = await data.json();
-  return res;
-}
 
 
 
@@ -55,25 +37,9 @@ export async function getStaticProps({ params }) {
     // In this case, we don't need to fetch any data because the number is already available in the params object.
     const tokenId = params.tokenId;
 
-    const tokenData = await loadTokenData(tokenId);
-    const policyData = await loadPolicyData(tokenData.policy_id);
-
-    const token = new Token(tokenData.asset_name, tokenData.fingerprint, tokenData.policy_id, tokenData.quantity, tokenId);
-    token.metadata = await token.getMetadata();
-
-    const keys= Object.keys(token.metadata);
-    const values = Object.values(token.metadata);
-
-    const meta = JSON.stringify(token.metadata);
-
-    const ipfs = token.getIpfsFromMetadata();
-
     return {
       props: {
-        tokenId,
-        ipfs,
-        meta,
-        policyData
+        tokenId
       }
     }
   }

@@ -1,9 +1,6 @@
 export default class Token{
 
-    constructor(name, fingerprint, policyId, quantity, unit){
-        this.name = name;
-        this.fingerprint = fingerprint;
-        this.policyId = policyId;
+    constructor(unit, quantity){
         this.quantity = quantity; 
         this.unit = unit;
         
@@ -18,12 +15,12 @@ export default class Token{
         this.metadata = await data.json();
         this.policyId = this.metadata.policy_id;
         this.fingerprint = this.metadata.fingerprint;
-        this.name = this.metadata.asset;
-        if(this.metadata.onchain_metadata != null){
-          return this.metadata.onchain_metadata;
-        }
-        else if(this.metadata.metadata != null){
+        this.asset = this.metadata.asset;
+        if(this.metadata.metadata != null){
           return this.metadata.metadata;
+        }
+        else if(this.metadata.onchain_metadata != null){
+          return this.metadata.onchain_metadata;
         }
         else{
           return 'no metadata found';

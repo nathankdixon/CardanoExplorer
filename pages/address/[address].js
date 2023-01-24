@@ -4,7 +4,7 @@ import Token from "../token";
 import Wallet from "../wallet";
 
 
-function AddressPage({data}) {
+function AddressPage() {
 
     const router = useRouter();
     const { address } = router.query;

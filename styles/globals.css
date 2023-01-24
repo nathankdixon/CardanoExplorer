@@ -13,11 +13,6 @@ header {
     padding: 5px 5px 5px 5px;
 }
 
-main{
-    display: flex;
-    color: #fff;
-    padding: 20px;
-}
 /* Style the search bar in the header */
 header input[type="text"] {
     width: 80%;
@@ -28,16 +23,16 @@ header input[type="text"] {
     border-radius: 4px;
 }
 
-.main-title{
-    text-align: center;
-}
+
 .main-label{
     font-size: xx-large;
 }
+
 label{
     padding: 10px 10px 10px 10px;
     display: flex;
     align-items: center;
+    text-align: center;
     font-weight: bold;
     font-size: large;
     color: white;
@@ -69,6 +64,7 @@ label{
     width: 75%;
     text-align: center;
 }
+
 .search-input{
     height: 70%;
     width: 60%;
@@ -112,24 +108,13 @@ label{
     color:rgb(71, 68, 68);
 }
 
-/* Style the sorting bar */
-.sorting-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #f4f4f4;
-    border-bottom: 1px solid #ccc;
-    border-color: #333;
-    border-width: 4px;
-}
-
 .search-button{
     height: 70%;
-    border: 2px solid rgb(108, 108, 224);
-    border-radius: 10%;
+    border: 4px solid rgb(220, 154, 225);
+    border-radius: 15%;
     margin: 10px 10px 10px 10px;
-    background-color: #98cb91; 
-    color: black;
+    background-color: #b1ffa7; 
+    color: rgb(0, 0, 0);
     font-size: large;
     font-weight: bold;
 }
@@ -137,6 +122,7 @@ label{
 .search-button:hover{
     background-color:honeydew;
 }
+
 /* Style the sort buttons */
 .sort-button {
   display: inline-block;
@@ -153,11 +139,13 @@ label{
 .sort-button:hover {
   background-color: #f4f4f4;
 }
+
 .wallets{
     width: 20%;
     display:  flex;
     text-align: center;
 }
+
 .walletButton{
     border: 2px solid #61ff89;
     border-radius: 10%;
@@ -202,6 +190,10 @@ label{
     border-width: 4px;
     object-fit: cover;
 }
+
+.connect-wallet-button:hover{
+    background-color:rgb(169, 225, 169);
+}
 .connect-wallet{
     display: flex;
     text-align: center;
@@ -212,27 +204,14 @@ label{
 }
 
 .token-img{
-    width: 9%;
+    width: 10%;
     object-fit: cover;
 }
+
 .home-link{
     color:rgb(176, 245, 176);
     font-size: larger;
     font-weight: bolder;
-}
-
-.box-title{
-    display: flex;
-    text-align: center;
-}
-
-.projects{
-    background-color: #333;
-    padding: 10px 10px 10px 10px;
-    display: grid;
-    border-width: 5px;
-    justify-content: center;
-    align-items: center;
 }
 
 .show-assets-button{
@@ -257,6 +236,7 @@ label{
 .dropdown-box{
     text-align: center;
 }
+
 .dropdown-content{
     border-style: solid;
     border-width: 3px;
@@ -279,14 +259,10 @@ label{
 }
 
 .coin{
+    height: 5%;
     border-color:  #c685c5; 
     background-color:#ddadd1; 
     color: #333;
-}
-
-.token-list{
-    display: flex;
-    color:white;
 }
 
 .item-info{
@@ -313,16 +289,69 @@ label{
 .main-img{
     width: 60%;
 }
+
 .img-div{
     text-align: center;
 }
+
 @keyframes spin {
 100% {
     transform: translate(-50%, -50%) rotate(360deg);
 }
 }
 
-
-.policyInfo{
+.token-image{
     text-align: center;
+    width: 100%;
+}
+
+
+
+.metadata{
+    display: flex;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+    color:#879cf8;
+}
+.token-box{
+    display: flex;
+}
+
+.policyData{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+.token-name{
+    text-align: center;
+}
+
+.policy-item{
+    padding: 0px 40px 0px 10px;
+    color:#61ff89
+}
+
+table{
+    border-collapse: collapse;
+}
+
+td {
+    border-color: rgb(47, 141, 255);
+    border-style: solid;
+    border-width: 2px;
+    color: #ddff56;
+    font-size: larger;
+}
+
+.expand-meta{
+    background-color: #061b36;
+    color:white;
+    border-width: 2px;
+    border-color: #879cf8;
+    border-radius: 10%;
+    font-size: small;
+    font-weight: bold;
 }

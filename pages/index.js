@@ -1,11 +1,8 @@
 import { useState} from "react";
-import { BrowserWallet } from "@meshsdk/core";
-import Token from "./token";
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Wallet from "./wallet";
-import { getRouteMatcher } from "next/dist/shared/lib/router/utils/route-matcher";
 
 const Home = () => {
   const [address, setAddress] = useState(null);
@@ -55,11 +52,10 @@ const Home = () => {
   }
 
   const handleSelect = async (wallet) => {
+
     setSelectedWallet(wallet);
     setShowModal(false);
-    const _wallet = await BrowserWallet.enable(wallet);
-    const _address = await _wallet.getChangeAddress();
-    setAddress(_address);
+    
     let logo = '';
     if(wallet == 'Typhon Wallet'){
       logo = <img className="logo-img" src="/typhon.svg"></img>
@@ -73,6 +69,8 @@ const Home = () => {
     if(wallet == 'Flint Wallet'){
       logo = <img className="logo-img" src="/flint.png"></img>
     }
+
+    setAddress(wallet);
     setWalletLogo(logo);
   }
 
