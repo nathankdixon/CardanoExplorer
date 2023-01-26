@@ -13,6 +13,7 @@ const Home = () => {
   const [walletLogo, setWalletLogo] = useState('Connect Wallet');
   const router = useRouter();
 
+
   const handleCustomAddress = async (event) =>{
     event.preventDefault();
     setShowModal(false);
@@ -45,6 +46,14 @@ const Home = () => {
 
   const handleClick = () => {
     setShowModal(true);
+  }
+
+  const foo = async () => {
+    const req = await fetch('http://localhost:1442/matches' , {mode: 'no-cors'});
+    const res = await req.text();
+    console.log(res);
+  
+  
   }
 
   const handleClose = () => {
@@ -108,9 +117,7 @@ const Home = () => {
         )}
       </div>
       </header>
-      <div className="tokenList" ><Wallet address = {address}/></div>
-
-
+      <div className="tokenList" ><button className="connect-wallet-button" onClick={foo}>go</button><Wallet address = {address}/></div>
     </div>
 
   );

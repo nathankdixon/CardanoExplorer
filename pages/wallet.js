@@ -15,72 +15,47 @@ function Wallet ({address}) {
   const [isLoading, setisLoading] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [loadedTokens, setLoadedTokens] = useState();
-
+  
 
   useEffect(() => {
     const getTokens = async () =>{
       if(address == null){
-        console.log('address was undefined');
+        //base
       }
-      else{
-        if(sessionStorage.getItem(address)){
-          try{
-            let _cachedData = JSON.parse(sessionStorage.getItem(address));
-            setPolicies(_cachedData);
-            const out = displayTokens(_cachedData, 'ALL');
-            setTokens(out);
-            setisLoading('done');
-            setIsVisible(false);
-            setIsVisibleGrid(true);
-          }catch{
-            setisLoading('fetching');
-            setIsVisibleGrid(false);
-            setIsVisible(true);
-            if(address[0] != 'a'){
-              address = await getWalletAddress(address);
-            }
-            const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
-            {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-            const _tokenJson = await req.json();
-    
-            const _tokens = await createTokens(_tokenJson.amount);
-            const _policies = groupTokensByPolicyId(_tokens);
-            const out = displayTokens(_policies, 'ALL');
-            sessionStorage.setItem(address, JSON.stringify(_policies));
-            setPolicies(_policies);
-            setTokens(out);
-            setisLoading('done');
-            setIsVisible(false);
-            setIsVisibleGrid(true);
-          }
-
-        }
-        else{
-          setisLoading('fetching');
-          setIsVisibleGrid(false);
-          setIsVisible(true);
-          if(address[0] != 'a'){
-            address = await getWalletAddress(address);
-          }
-          const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
-          {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-          const _tokenJson = await req.json();
-  
-          const _tokens = await createTokens(_tokenJson.amount);
-          const _policies = groupTokensByPolicyId(_tokens);
-          const out = displayTokens(_policies, 'ALL');
-          sessionStorage.setItem(address, JSON.stringify(_policies));
-          setPolicies(_policies);
-          setTokens(out);
-          setisLoading('done');
-          setIsVisible(false);
-          setIsVisibleGrid(true);
-        }
-
+      else if (address == 'Typhon Wallet' || address == 'eternl' || address == 'Nami' || address == 'Flint Wallet'){
+        setisLoading('fetching');
+        setIsVisibleGrid(false);
+        setIsVisible(true);
+        var _tokens = [];
+        _tokens = await getWalletData(address);
+        //change
+        const _policies = groupTokensByPolicyId(_tokens);
+        console.log(_policies);
+        const out = displayTokens(_policies, 'ALL');
+        //sessionStorage.setItem(address, JSON.stringify(_policies));
+        setPolicies(_policies);
+        setTokens(out);
+        setisLoading('done');
+        setIsVisible(false);
+        setIsVisibleGrid(true);
+      }else if (address.startsWith('add')){
+        setisLoading('fetching');
+        setIsVisibleGrid(false);
+        setIsVisible(true);
+        const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address,
+        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+        const _tokenJson = await req.json();
+        const _tokens = await createTokens(_tokenJson.amount);
+        const _policies = groupTokensByPolicyId(_tokens);
+        const out = displayTokens(_policies, 'ALL');
+        //sessionStorage.setItem(address, JSON.stringify(_policies));
+        setPolicies(_policies);
+        setTokens(out);
+        setisLoading('done');
+        setIsVisible(false);
+        setIsVisibleGrid(true);
+      }else{}
       }
-
-
-    }
     getTokens();
   }, [address]);
 
@@ -91,11 +66,11 @@ function Wallet ({address}) {
     </div>
   }
 
-  async function getWalletAddress(wallet){
+  async function getWalletData(wallet){
     const lucid = await Lucid.new(
       new Blockfrost(
         "https://cardano-mainnet.blockfrost.io/api/v0",
-        "mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh",
+        'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
       ),
     );
 
@@ -115,8 +90,39 @@ function Wallet ({address}) {
     }
     
     lucid.selectWallet(api);
-    const _address = await lucid.wallet.address();
-    return _address;
+    const _utxos = await lucid.wallet.getUtxos();
+    let _tokens = [];
+
+    for(const utxo of _utxos){
+      _tokens.push(utxo.assets);
+    }
+
+
+    let totalLovelace = 0;
+    let _assets = [];
+    for(let j = 0; j <_tokens.length; j ++){
+      let _utxo = _tokens[j];
+      let _assetList = Object.keys(_utxo);
+      setLoadedTokens('Loading tokens from UTXO: '+j + ' of ' +_tokens.length);
+      for(const _asset of _assetList){
+        if(_asset != 'lovelace'){
+
+          let token = new Token(_asset, parseInt(_utxo[_asset]));
+          token.metadata = await token.getMetadata();
+          if(token.metadata != null){
+            let ipfs = token.getIpfsFromMetadata();
+            token.ipfs = ipfs;
+          }
+          _assets.push(token);
+        }
+        else{
+          totalLovelace += parseInt(_utxo[_asset]);
+        }
+      }
+    }
+    setBalance((totalLovelace)/1000000);
+    setTokensNumber(_assets.length);
+    return _assets;
 
   }
 
