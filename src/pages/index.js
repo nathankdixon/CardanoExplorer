@@ -17,10 +17,8 @@ const Home = () => {
   const handleCustomAddress = async (event) =>{
     event.preventDefault();
     setShowModal(false);
-    setIsVisible(true);
-    setWalletLogo('');
+    setWalletLogo(addressQuery.substring(0,10)+'...');
     setAddress(addressQuery);
-    setIsVisible(false);
   }
   
   const handleSearch = (event) => {
@@ -33,16 +31,8 @@ const Home = () => {
       router.push(`/token/${searchQuery}`);
     }
 
-  };
+  }
 
-  const handleButtonPress = (tokenId) => {
-    if(searchQuery.startsWith('add')){
-      router.push(`/address/${searchQuery}`);
-    }else{
-      router.push({pathname : `/token/${tokenId}`});
-
-    }
-  };
 
   const handleClick = () => {
     setShowModal(true);
@@ -117,7 +107,7 @@ const Home = () => {
         )}
       </div>
       </header>
-      <div className="tokenList" ><button className="connect-wallet-button" onClick={foo}>go</button><Wallet address = {address}/></div>
+      <Wallet address = {address}/>
     </div>
 
   );

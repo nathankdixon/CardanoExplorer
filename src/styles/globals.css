@@ -3,6 +3,7 @@ body {
     font-family: Arial, sans-serif;
     color: rgb(255, 255, 255);
     background-color: #333;
+    margin: 0 0 0 0;
   }
   
   /* Style the header */
@@ -10,6 +11,7 @@ header {
     display: flex;
     background-color: #333;
     color: #fff;
+    height: 100px;
     padding: 5px 5px 5px 5px;
 }
 
@@ -71,69 +73,61 @@ label{
     margin: 10px 10px 10px 10px;
 
 }
-.wallet-info{
-    display: flex;
-    text-align: center;
-    border-color: #333;
-    border-width: 15px;
-}
-
-.token-info{
-    background-color: #333;
-    padding: 30px 30px 30px 30px;
-    width: 50%;
-    text-align: center;
-    color: white;
-    border-color: #333;
-    border-width: 15px;
-}
-
-.ada-info{
-    background-color: #333;
-    padding: 30px 30px 30px 30px;
-    width: 50%;
-}
-
-.inner{
-
-    font-weight: bold;
-    font-size: large;
-    padding: 10px 10px 10px 10px;
-    border-color:  #8280cae0; 
-    border-style: solid;
-    border-width: 5px;
-    justify-self: center;
-    align-items: center;
-    background-color:#a8e3b8db; 
-    color:rgb(71, 68, 68);
-}
 
 .search-button{
     height: 70%;
-    border: 4px solid rgb(220, 154, 225);
+    border: 4px solid rgb(239, 216, 240);
     border-radius: 15%;
     margin: 10px 10px 10px 10px;
     background-color: #b1ffa7; 
     color: rgb(0, 0, 0);
     font-size: large;
     font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .search-button:hover{
     background-color:honeydew;
 }
+.wallet-info{
+    border: none;
+    background-color: rgb(180, 225, 183);
+    font-weight: bolder;
+    color: rgb(47, 62, 64);
+    font-size: 14px;
+    padding: 10px 20px;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(180, 225, 183);
 
+}
 /* Style the sort buttons */
 .sort-button {
   display: inline-block;
   padding: 10px 20px;
   border: none;
-  background-color: rgb(180, 225, 183);
+  font-weight: bolder;
   font-size: 14px;
-  color: rgb(47, 62, 64);
   cursor: pointer;
   transition: background-color 0.2s;
+  color: rgb(255, 255, 255);
+  background-color: rgb(114, 115, 176);
+
 }
+
+.sort-label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgb(238, 238, 110);
+    color: rgb(47, 62, 64);
+
+    font-weight: bolder;
+    font-size: 14px;
+  }
 
 /* Add a hover effect for the sort buttons */
 .sort-button:hover {
@@ -189,6 +183,8 @@ label{
     border-color: white;
     border-width: 4px;
     object-fit: cover;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .connect-wallet-button:hover{
@@ -223,7 +219,7 @@ label{
 }
 .grid-item{
     color: rgb(47, 62, 64);
-    margin: 10px 0px 0px 20px;
+    margin: 10px 10px 10px 10px;
     border-style: solid;
     border-width: 5px;
     border-color:  #6d6ac9e0; 
@@ -284,6 +280,18 @@ label{
     border-radius: 50%;
     border-top-color: #333;
     animation: spin 1s linear infinite;
+}
+
+.loading-info{
+    position: absolute;
+    top: 40%;
+    left: 40%;
+}
+.wallet{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border:0;
 }
 
 .main-img{

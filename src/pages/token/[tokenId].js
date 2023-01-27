@@ -18,10 +18,6 @@ function TokenPage() {
     );
   }
 
-
-
-
-
 export async function getStaticPaths() {
     // This function creates the dynamic paths for the page.
     // In this case, we have a list of all possible numbers between 1 and 5 that we can use to create the paths

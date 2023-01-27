@@ -13,9 +13,7 @@ function AddressPage() {
       <div>
         <a href="/" className="home-link">Home</a>
         <h1 className="main-title">Address :  {address}</h1>
-        <div className="projects"><label className="main-label">Assets:</label>
-          <div className="tokenList"><Wallet address={address}/></div>
-        </div>
+        <div className="tokenList"><Wallet address={address}/></div>
       </div>
     );
 }
@@ -34,9 +32,6 @@ export async function getStaticProps({ params }) {
     // This function fetches the data for the page.
     // In this case, we don't need to fetch any data because the number is already available in the params object.
     const address = params.address;
-
-
-
 
     return {
       props: {
