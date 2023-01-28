@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Header from "../header";
 import TokenData from "../tokenData";
 
 
@@ -8,8 +9,15 @@ function TokenPage() {
     const router = useRouter();
     const { tokenId } = router.query;
 
+    const [address, setAddress] = useState(null);
+
+    const handleAddressUpdate = (newAddress) => {
+      setAddress(newAddress);
+    }
+
     return (
       <div>
+        <Header updatedAddress={handleAddressUpdate}/>
         <a href="/" className="home-link">Home</a>
         <h1>
           <TokenData tokenId = {tokenId}/>

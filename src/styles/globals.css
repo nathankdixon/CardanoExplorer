@@ -28,6 +28,67 @@ header input[type="text"] {
 
 .main-label{
     font-size: xx-large;
+    width: 20%;
+    margin: 10px 10px 10px 10px;
+}
+
+.searchForm{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input{
+    width: 100%;
+    height: 55%;
+}
+.search-button{
+
+    margin: 10px 10px 10px 10px;
+    background-color: #b1ffa7; 
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-weight: bold;
+    border-radius: 10%;
+    border-color: white;
+    border-width: 4px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    height: 55%;
+}
+
+.search-button:hover{
+    background-color:honeydew;
+}
+
+.connect-wallet-button{
+    display: flex;
+    margin: 10px 10px 10px 10px;
+
+    font-weight: bold;
+    font-size: medium;
+    background-color: rgb(238, 238, 110);
+    border-radius: 10%;
+    align-items: center;
+    border-color: white;
+    border-width: 4px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.connect-wallet-button:hover{
+    background-color:rgb(255, 255, 255);
+}
+.connect-wallet{
+    display: flex;
+    margin: 10px 10px 10px 10px;
+    width: 10%;
+}
+.walletButton:hover{
+    background-color:rgb(169, 225, 169);
 }
 
 label{
@@ -41,15 +102,15 @@ label{
 }
 
 .modal {
-    border-color: rgb(11, 11, 11);
+    border-color: rgb(130, 149, 4);
     border-width: 5px;
     border-style: solid;
     border-radius: 5%;
     display:  flex;
     text-align: center;
     padding: 10px 10px 10px 10px;
-    background-color: rgb(95, 95, 95);
-    color: rgb(199, 252, 179);
+    background-color: rgb(206, 206, 206);
+    color: rgb(33, 32, 32);
     position: fixed;
     top: 50%;
     left: 50%;
@@ -61,47 +122,10 @@ label{
     border-width: 5px;
 }
 
-.searchForm{
-    padding: 10px 10px 10px 10px;
-    width: 75%;
-    text-align: center;
-}
-
-.search-input{
-    height: 70%;
-    width: 60%;
-    margin: 10px 10px 10px 10px;
-
-}
-
-.search-button{
-    height: 70%;
-    border: 4px solid rgb(239, 216, 240);
-    border-radius: 15%;
-    margin: 10px 10px 10px 10px;
-    background-color: #b1ffa7; 
-    color: rgb(0, 0, 0);
-    font-size: large;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.search-button:hover{
-    background-color:honeydew;
-}
-.wallet-info{
-    border: none;
-    background-color: rgb(138, 138, 138);
-    font-weight: bolder;
-    color: rgb(255, 255, 255);
-    font-size: 14px;
-    padding: 10px 20px;
-}
 nav{
     display: flex;
     justify-content: space-between;
-    background-color: rgb(138, 138, 138);
+    background-color: rgb(199, 196, 196);
 
 }
 /* Style the sort buttons */
@@ -113,8 +137,8 @@ nav{
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s;
-  color: rgb(255, 255, 255);
-  background-color: rgb(114, 115, 176);
+  color: rgb(0, 0, 0);
+  background-color: rgb(226, 226, 115);
 
 }
 
@@ -141,13 +165,13 @@ nav{
 }
 
 .walletButton{
-    border: 2px solid #61ff89;
+    border: 4px solid #4d4a01;
     border-radius: 10%;
     margin: 10px 10px 10px 10px;
     display: inline-block;
     width: 100px;
     height: 100px;
-    background-color: #c89df1;
+    background-color: rgb(183, 183, 183);
     background-position: center;
     background-size: cover;
     padding: 10px 10px 10px 10px;
@@ -169,68 +193,54 @@ nav{
     width: 40px;
 }
 
-.connect-wallet-button{
-    display: flex;
-    padding: 10px 10px 10px 10px;
-    margin: 18px 10px 10px 10px;
-    width: 100%;
-    height: 55%;
-    font-weight: bold;
-    font-size: medium;
-    background-color: rgb(238, 238, 110);
-    border-radius: 10%;
-    align-items: center;
-    border-color: white;
-    border-width: 4px;
-    object-fit: cover;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
 
-.connect-wallet-button:hover{
-    background-color:rgb(169, 225, 169);
-}
-.connect-wallet{
-    display: flex;
-    text-align: center;
-    justify-content: center;
-}
-.walletButton:hover{
-    background-color:rgb(169, 225, 169);
-}
-
-
-.home-link{
-    color:rgb(176, 245, 176);
-    font-size: larger;
+.wallet-info{
     font-weight: bolder;
+    font-size: larger;
+    color:#ffffff;
+    background-color: #7a0000;
+    padding: 10px 10px 10px 10px;
 }
 
+
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 5fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 5fr));
+
+    grid-gap: 20px;
+    justify-content: center;
+    margin: 20px 40px 10px 40px ;
+    padding: 10px 10px 10px 10px;
+
+}
 
 .grid-item{
     color: rgb(47, 62, 64);
-    margin: 10px 10px 10px 10px;
     border-style: solid;
     border-width: 5px;
     border-color:  #c3b2b2e0; 
     border-radius: 2%;
-    width: 80%;
+    width: 300px;
+    height: 300px;
     background-color: rgb(0, 0, 0);
-    justify-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.grid-img{
-
-    width: 100%;
+.grid-item:hover{
+    border-color: #ebfe1c;
 }
 
-.tokens{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    margin: 10px 10px 10px 10px;
-    justify-items: center;
-
+.grid-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
+
+
 
 .dropdown-box{
     text-align: center;
@@ -294,6 +304,25 @@ nav{
 
 .main-img{
     width: 60%;
+}
+
+.home-link{
+    color:rgb(176, 245, 176);
+    font-size: larger;
+    font-weight: bolder;
+
+    padding: 10px 10px 10px 10px;
+}
+.main-title{
+
+
+}
+
+.address-info{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
 }
 
 .img-div{

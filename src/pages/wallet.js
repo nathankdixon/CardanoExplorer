@@ -3,6 +3,7 @@ import Link from "next/link";
 import DropdownBox from "./dropdownBox";
 import Token from "./token";
 import { Lucid, Kupmios, Blockfrost } from "lucid-cardano";
+import { Router, useRouter } from "next/router";
 
 
 function Wallet ({address}) {
@@ -17,6 +18,8 @@ function Wallet ({address}) {
   const [loadedTokens, setLoadedTokens] = useState();
   const [filter, setFilter] = useState('All');
   const [order, setOrder] = useState('Quantity (Most)');
+
+  const router = useRouter();
   
 
   useEffect(() => {
@@ -213,27 +216,37 @@ function Wallet ({address}) {
 
   }
 
+
+  function showTokensFromPolicy(policy){
+    let display = [];
+    console.log(policy);
+    for(const token of policy){
+      display.push(<div key = {token.unit + 'poly'} className = "grid-item" onClick={() => router.push('/token/'+token.unit)}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
+    }
+    setTokens(display);
+  }
+
   function displayTokens(tokenList, type){
 
     if(tokenList != null){
-      let keys = Object.keys(tokenList);
+      let policies = Object.keys(tokenList);
       let display = [];
   
   
-      for(const element of keys){
-        let token = tokenList[element][0];
+      for(const policy of policies){
+        let token = tokenList[policy][0];
         
         if(type == 'ALL'){
-          display.push(<div key = {token.unit + 'all'} className = "grid-item"><img className = "grid-img" src={token.ipfs} alt = 'failed to load image'></img></div>);
+          display.push(<div key = {token.unit + 'all'} className = "grid-item" onClick = {() => showTokensFromPolicy(tokenList[policy])}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
         }
         if(type == 'NFT'){
           if(token.quantity == 1){
-            display.push(<div key = {token.unit + 'nft'} className = "grid-item"><img className = "grid-img" src={token.ipfs} alt = 'failed to load image'></img></div>);
+            display.push(<div key = {token.unit + 'nft'} className = "grid-item" onClick = {() => showTokensFromPolicy(tokenList[policy])}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
           }
         }
         if(type == 'FT'){
           if(token.quantity != 1){
-            display.push(<div key = {token.unit + 'ft'} className = "grid-item"><img className = "grid-img" src={token.ipfs} alt = 'failed to load image'></img></div>);
+            display.push(<div key = {token.unit + 'ft'} className = "grid-item" onClick = {() => showTokensFromPolicy(tokenList[policy])}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
           }
         } 
   
@@ -249,14 +262,14 @@ function Wallet ({address}) {
   return(
     <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>
       <nav>
-        <div className="wallet-info">Balance: {balance}₳</div>
         <div className="wallet-info">Number of Tokens: {tokensNumber}</div> 
+        <div className="wallet-info">Balance: {balance}₳</div>
         <div className="wallet-info"> Number of Projects: {projectsNumber}</div>
       </nav>
       <nav>
         <div>
-          <button className="sort-button" onClick={() => changeDisplay('ALL')}>Order By:</button>
-          <label className="sort-label">{order}</label>
+          <button className="sort-label">Order By:</button>
+          <label className="sort-button">{order}</label>
         </div>
         <div>
           <label className="sort-label">Filter:</label>
@@ -265,7 +278,7 @@ function Wallet ({address}) {
           <button className="sort-button" onClick={() => changeDisplay('FT')}>Coins</button>
         </div>
       </nav>
-      <div className="tokens">
+      <div className="grid">
         {tokens}
       </div>
 
@@ -274,3 +287,4 @@ function Wallet ({address}) {
 }
 
 export default Wallet;
+

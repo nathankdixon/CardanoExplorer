@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Header from "../header";
 import Token from "../token";
 import Wallet from "../wallet";
 
@@ -9,10 +10,19 @@ function AddressPage() {
     const router = useRouter();
     const { address } = router.query;
 
+
+    const handleAddressUpdate = (newAddress) => {
+      router.push(`/address/`+newAddress);
+    }
+
     return (
       <div>
-        <a href="/" className="home-link">Home</a>
-        <h1 className="main-title">Address :  {address}</h1>
+        <Header updatedAddress={handleAddressUpdate}/>
+        <div className="address-info">
+          <a href="/" className="home-link">Home</a>
+          <h3 className="main-title">Address :  {address}</h3>
+        </div>
+
         <div className="tokenList"><Wallet address={address}/></div>
       </div>
     );

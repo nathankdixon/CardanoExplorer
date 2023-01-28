@@ -1,0 +1,1 @@
+{"c":["pages/index","pages/address/[address]","webpack"],"r":["pages/address/[address]"],"m":["./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=%2FUsers%2Fnathan%2FDesktop%2Fexplorer%2Fsrc%2Fpages%2Faddress%2F%5Baddress%5D.js&page=%2Faddress%2F%5Baddress%5D!","./src/pages/address/[address].js"]}
