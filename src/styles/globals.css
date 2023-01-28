@@ -2,14 +2,14 @@
 body {
     font-family: Arial, sans-serif;
     color: rgb(255, 255, 255);
-    background-color: #333;
+    background-color: rgb(50, 7, 7);
     margin: 0 0 0 0;
   }
   
   /* Style the header */
 header {
     display: flex;
-    background-color: #333;
+    background-color: rgb(50, 7, 7);
     color: #fff;
     height: 100px;
     padding: 5px 5px 5px 5px;
@@ -92,16 +92,16 @@ label{
 }
 .wallet-info{
     border: none;
-    background-color: rgb(180, 225, 183);
+    background-color: rgb(138, 138, 138);
     font-weight: bolder;
-    color: rgb(47, 62, 64);
+    color: rgb(255, 255, 255);
     font-size: 14px;
     padding: 10px 20px;
 }
 nav{
     display: flex;
     justify-content: space-between;
-    background-color: rgb(180, 225, 183);
+    background-color: rgb(138, 138, 138);
 
 }
 /* Style the sort buttons */
@@ -199,10 +199,6 @@ nav{
     background-color:rgb(169, 225, 169);
 }
 
-.token-img{
-    width: 10%;
-    object-fit: cover;
-}
 
 .home-link{
     color:rgb(176, 245, 176);
@@ -210,22 +206,29 @@ nav{
     font-weight: bolder;
 }
 
-.show-assets-button{
-    border: 2px solid rgb(108, 108, 224);
-    border-radius: 10%;
-    margin: 10px 10px 10px 10px;
-    background-color: #8294e1; 
-    color: white;
-}
+
 .grid-item{
     color: rgb(47, 62, 64);
     margin: 10px 10px 10px 10px;
     border-style: solid;
     border-width: 5px;
-    border-color:  #6d6ac9e0; 
-    background-color: rgb(133, 188, 137);
-    display: flex;
-    align-items: center;
+    border-color:  #c3b2b2e0; 
+    border-radius: 2%;
+    width: 80%;
+    background-color: rgb(0, 0, 0);
+    justify-items: center;
+}
+
+.grid-img{
+
+    width: 100%;
+}
+
+.tokens{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    margin: 10px 10px 10px 10px;
+    justify-items: center;
 
 }
 
@@ -244,7 +247,7 @@ nav{
 }
 
 .token-sub-img{
-    width: 20%;
+    width: 50%;
 }
 
 .nft{
@@ -287,12 +290,7 @@ nav{
     top: 40%;
     left: 40%;
 }
-.wallet{
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border:0;
-}
+
 
 .main-img{
     width: 60%;

@@ -16,7 +16,7 @@ function Wallet ({address}) {
   const [isVisible, setIsVisible] = useState(false);
   const [loadedTokens, setLoadedTokens] = useState();
   const [filter, setFilter] = useState('All');
-  const [displayMode, setDisplayMode] = useState('List');
+  const [order, setOrder] = useState('Quantity (Most)');
   
 
   useEffect(() => {
@@ -30,6 +30,8 @@ function Wallet ({address}) {
         setIsVisible(true);
 
         let _tokens = [];
+
+
 
         if (address == 'Typhon Wallet' || address == 'eternl' || address == 'Nami' || address == 'Flint Wallet'){
           _tokens = await getDataFromWallet(address);
@@ -61,6 +63,8 @@ function Wallet ({address}) {
       <label className="loading-info">{loadedTokens}</label>
     </div>
   }
+
+
 
   async function getDataFromWallet(wallet){
     
@@ -107,19 +111,18 @@ function Wallet ({address}) {
     lucid.selectWallet(api);
     setLoadedTokens('Fetching UTxOs...');
     const _utxos = await lucid.wallet.getUtxos();
-    let _tokens = [];
-
-    for(const utxo of _utxos){
-      _tokens.push(utxo.assets);
-    }
-
+    
+    const _assets = getAssetsFromUTXOs(_utxos);
 
     let totalLovelace = 0;
-    let _assets = [];
-    for(let j = 0; j <_tokens.length; j ++){
-      setLoadedTokens('Loading tokens from UTXOs: '+j + ' of ' +_tokens.length);
-      let _utxo = _tokens[j];
+    let _tokens = [];
+    for(let j = 0; j <_assets.length; j ++){
+      setLoadedTokens('Loading tokens from UTXOs: '+j + ' of ' +_assets.length);
+
+      let _utxo = _assets[j];
       let _assetList = Object.keys(_utxo);
+
+
       for(const _asset of _assetList){
         if(_asset != 'lovelace'){
 
@@ -129,7 +132,8 @@ function Wallet ({address}) {
             let ipfs = token.getIpfsFromMetadata();
             token.ipfs = ipfs;
           }
-          _assets.push(token);
+          _tokens.push(token);
+
         }
         else{
           totalLovelace += parseInt(_utxo[_asset]);
@@ -137,9 +141,19 @@ function Wallet ({address}) {
       }
     }
     setBalance(((totalLovelace)/1000000).toFixed(2));
-    setTokensNumber(_assets.length);
-    return _assets;
+    setTokensNumber(_tokens.length);
+    return _tokens;
 
+  }
+
+  function getAssetsFromUTXOs(_utxos){
+    let _tokens = [];
+
+    for(const utxo of _utxos){
+      _tokens.push(utxo.assets);
+    }
+
+    return _tokens;
   }
 
   function groupTokensByPolicyId(tokenList){
@@ -208,29 +222,18 @@ function Wallet ({address}) {
   
       for(const element of keys){
         let token = tokenList[element][0];
-        let tokenArr = tokenList[element];
-        let tokenDisplay = [];
-        for(const element of tokenArr){
-          tokenDisplay.push(<div key = {element.unit+'dropbox'} className = "dropdown-content" ><img className = "token-sub-img" src = {element.ipfs}></img><div className="item-info"><Link href={"/token/"+element.unit}>Open</Link></div></div>)
-        }
         
-  
         if(type == 'ALL'){
-          display.push(<div key = {token.unit + 'all'} className="grid-item"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-          <div className="item-info">Policy ID: &nbsp;{token.policyId}<br /></div><div className="item-info">Quantity:&nbsp;{tokenList[element].length}</div></div>);
-          display.push(<div key = {token.policyId+'drop1'}><DropdownBox content = {tokenDisplay}/></div>);
+          display.push(<div key = {token.unit + 'all'} className = "grid-item"><img className = "grid-img" src={token.ipfs} alt = 'failed to load image'></img></div>);
         }
         if(type == 'NFT'){
           if(token.quantity == 1){
-            display.push(<div key = {token.unit + 'nft'} className="grid-item nft"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-            <div className="item-info">Policy ID: &nbsp;{token.policyId}<br /></div><div className="item-info">Quantity:&nbsp;{tokenList[element].length}</div></div>);
-            display.push(<div key = {token.policyId+'drop2'} ><DropdownBox content = {tokenDisplay}/></div>);
+            display.push(<div key = {token.unit + 'nft'} className = "grid-item"><img className = "grid-img" src={token.ipfs} alt = 'failed to load image'></img></div>);
           }
         }
         if(type == 'FT'){
           if(token.quantity != 1){
-            display.push(<div key = {token.unit + 'coin'} className=" grid-item coin"><img className = "token-img" src={token.ipfs} alt = 'failed to load image'></img>
-            <div className="item-info">{token.policyId}</div><div><Link href={"/token/"+token.unit}>Open</Link></div><div className="item-info">Quantity:&nbsp;{token.quantity}</div></div>);
+            display.push(<div key = {token.unit + 'ft'} className = "grid-item"><img className = "grid-img" src={token.ipfs} alt = 'failed to load image'></img></div>);
           }
         } 
   
@@ -244,7 +247,7 @@ function Wallet ({address}) {
   }
 
   return(
-    <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }} className = "wallet">
+    <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>
       <nav>
         <div className="wallet-info">Balance: {balance}₳</div>
         <div className="wallet-info">Number of Tokens: {tokensNumber}</div> 
@@ -252,8 +255,8 @@ function Wallet ({address}) {
       </nav>
       <nav>
         <div>
-          <button className="sort-button" onClick={() => changeDisplay('ALL')}>Display Mode:</button>
-          <label className="sort-label">{displayMode}</label>
+          <button className="sort-button" onClick={() => changeDisplay('ALL')}>Order By:</button>
+          <label className="sort-label">{order}</label>
         </div>
         <div>
           <label className="sort-label">Filter:</label>
@@ -262,7 +265,7 @@ function Wallet ({address}) {
           <button className="sort-button" onClick={() => changeDisplay('FT')}>Coins</button>
         </div>
       </nav>
-      <div>
+      <div className="tokens">
         {tokens}
       </div>
 

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@meshsdk/core": "^1.4.0",
+    "@meshsdk/react": "^1.1.4",
     "@next/font": "13.1.5",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.5",

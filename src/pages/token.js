@@ -3,7 +3,6 @@ export default class Token{
     constructor(unit, quantity){
         this.quantity = quantity; 
         this.unit = unit;
-        
     }
 
     async getMetadata(){
