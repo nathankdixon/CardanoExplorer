@@ -19,16 +19,15 @@ function TokenData ({tokenId}) {
           }
           else{
             let _tokenData = await loadTokenData(tokenId);
-            const token = new Token(_tokenData.asset, _tokenData.quantity);
+            const token = new Token(_tokenData.asset_name, _tokenData.policy_id , _tokenData.quantity);
             token.metadata = await token.getMetadata();
-            let _policyData = await loadPolicyData(token.policyId);
+            let _policyData = await loadPolicyData(token.policy_id);
 
             setFloorPrice(Math.round(_policyData.floor_price/1000000)+'₳');
             setVolume(Math.round(_policyData.total_volume/1000000)+'₳');
             setHolderCount(_policyData.asset_holders);
             const meta = token.metadata;
             const keys = Object.keys(meta);
-            console.log(keys);
             const _ipfs = await token.getIpfsFromMetadata();
             setImage(<img className = "main-img"src = {_ipfs}></img>);
             setTokendata(meta.name);
@@ -38,8 +37,8 @@ function TokenData ({tokenId}) {
         getTokenData();
       }, [tokenId])
 
-    async function loadTokenData(unit){
-        const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+unit,
+    async function loadTokenData(tokenId){
+        const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+tokenId,
         {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
         const res = await data.json();
         return res;
@@ -53,10 +52,10 @@ function TokenData ({tokenId}) {
     }
 
     return(
-    <div>
-        <h2 className="token-name">
+    <div className="token-main">
+        <div className="token-name">
             {tokenData}
-        </h2>
+        </div>
         <div className="policyData">
             <p className="policy-item">Floor Price: {floorPrice}</p>
             <p className="policy-item">Collection Volume : {volume}</p>
@@ -64,11 +63,10 @@ function TokenData ({tokenId}) {
         </div>
         <div className="token-box">
             <div className="token-image">{image}</div>
+            <div className="metadata">
+                {metadata} </div>
         </div>
-        <h3 className="token-name">Metadata</h3>
-        <div className="metadata">
-                {metadata}
-        </div>
+
 
     </div>)
 }

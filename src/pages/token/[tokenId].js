@@ -18,10 +18,7 @@ function TokenPage() {
     return (
       <div>
         <Header updatedAddress={handleAddressUpdate}/>
-        <a href="/" className="home-link">Home</a>
-        <h1>
-          <TokenData tokenId = {tokenId}/>
-        </h1>
+        <TokenData tokenId = {tokenId}/>
       </div>
     );
   }

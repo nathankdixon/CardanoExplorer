@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -11,21 +11,74 @@ export default function Header({updatedAddress}){
     const [addressQuery, setAddressQuery] = useState('');
     const [showModal, setShowModal] = useState(false)
     const [walletLogo, setWalletLogo] = useState('Connect Wallet');
+    const [address, setAddress] = useState('');
     const router = useRouter();
+
   
+    async function getStakeAddressFromWallet(wallet){
+      const lucid = await Lucid.new();
   
+      var api = '';
+  
+      if(wallet == 'Typhon Wallet'){
+        api = await window.cardano.typhoncip30.enable();
+      }
+      if(wallet == 'eternl'){
+        api = await window.cardano.eternl.enable();
+      }
+      if(wallet == 'Nami'){
+        api = await window.cardano.nami.enable();
+      }
+      if(wallet == 'Flint Wallet'){
+        api = await window.cardano.flint.enable();
+      }
+      
+      lucid.selectWallet(api);
+      let stake = await lucid.wallet.rewardAddress();
+      return stake;
+  
+    }
+
+    async function getStakeFromAddressKoios(address){
+      const req = await fetch('https://api.koios.rest/api/v0/address_info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "_addresses": [ address
+          ]
+        })
+      });
+  
+      const res = await req.json();
+      return res[0].stake_address;
+    }
+
     const handleCustomAddress = async (event) =>{
       event.preventDefault();
       setShowModal(false);
-      setWalletLogo(addressQuery.substring(0,10)+'...');
-      updatedAddress(addressQuery);
+      if(addressQuery.startsWith('add')){
+        let stakeAddress = await getStakeFromAddressKoios(addressQuery);
+        router.push(`/address/${stakeAddress}`);
+      }
+      else if (addressQuery.startsWith('stake')){
+        router.push(`/address/${address}`);
+      }
+      else{
+        router.push(`/token/${searchQuery}`);
+      }
     }
     
-    const handleSearch = (event) => {
+    const handleSearch = async  (event) => {
       event.preventDefault();
       // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
       if(searchQuery.startsWith('add')){
-        router.push(`/address/${searchQuery}`);
+        let stakeAddress = await getStakeFromAddressKoios(searchQuery);
+        router.push(`/address/${stakeAddress}`);
+      }
+      else if (searchQuery.startsWith('stake')){
+        router.push(`/address/${address}`);
       }
       else{
         router.push(`/token/${searchQuery}`);
@@ -43,36 +96,23 @@ export default function Header({updatedAddress}){
   
     const handleSelect = async (wallet) => {
       setShowModal(false);
-  
-      let logo = '';
-      if(wallet == 'Typhon Wallet'){
-        logo = <img className="logo-img" src="/typhon.svg"></img>
-      }
-      if(wallet == 'eternl'){
-        logo = <img className="logo-img" src="/eternl.png"></img>
-      }
-      if(wallet == 'Nami'){
-        logo = <img className="logo-img" src="/nami.svg"></img>
-      }
-      if(wallet == 'Flint Wallet'){
-        logo = <img className="logo-img" src="/flint.png"></img>
-      }
-  
-      setWalletLogo(logo);
 
-      updatedAddress(wallet);
+      let stake = await getStakeAddressFromWallet(wallet);
+      router.push(`/address/${stake}`);
+
     }
 
     
 
     return (
         <header>
-        <label className="main-label">tokenExplr.io</label>
+        <label className="main-label">Explorer</label>
         <form className="searchForm" onSubmit={handleSearch}>
           <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
         <div className="connect-wallet">
+        <button className="connect-wallet-button" onClick={() => router.push('/')}>Home</button>
         <button className="connect-wallet-button" onClick={handleClick}>{walletLogo}</button>
         { showModal && (
           <div className="modal">

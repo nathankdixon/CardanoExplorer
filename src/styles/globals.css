@@ -14,7 +14,47 @@ header {
     height: 100px;
     padding: 5px 5px 5px 5px;
 }
+.index{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    align-items: center;
+}
 
+.main-title{
+    text-align: center;
+    font-weight: bolder;
+    font-size: xx-large;
+    padding: 10px 10px 10px 10px;
+}
+.searchbar{
+    width:100%;
+    padding: 10px 10px 10px 10px;
+}
+.search-main{
+    width: 100%;
+}
+.walletButton-main{
+    border: 4px solid #4d4a01;
+    border-radius: 10%;
+    margin: 10px 10px 10px 10px;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: rgb(183, 183, 183);
+    background-position: center;
+    background-size: cover;
+    padding: 10px 10px 10px 10px;
+    font-weight: bold;
+    color: rgb(40, 42, 40);
+}
+
+.connect-wallet-main{
+    display: flex;
+    justify-content: space-between;
+}
 /* Style the search bar in the header */
 header input[type="text"] {
     width: 80%;
@@ -85,10 +125,15 @@ header input[type="text"] {
 .connect-wallet{
     display: flex;
     margin: 10px 10px 10px 10px;
-    width: 10%;
+    width: 20%;
 }
 .walletButton:hover{
     background-color:rgb(169, 225, 169);
+}
+.walletButton-main:hover{
+    background-color:rgb(169, 225, 169);
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 label{
@@ -125,9 +170,10 @@ label{
 nav{
     display: flex;
     justify-content: space-between;
-    background-color: rgb(199, 196, 196);
+    background-color: rgb(254, 209, 209);
 
 }
+
 /* Style the sort buttons */
 .sort-button {
   display: inline-block;
@@ -206,21 +252,18 @@ nav{
 
 .grid{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 5fr));
-    grid-template-columns: repeat(auto-fill, minmax(300px, 5fr));
-
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 3fr));
+    padding: 40px 40px 40px 40px;
+    grid-gap:20px;
+    align-items: center;
     justify-content: center;
-    margin: 20px 40px 10px 40px ;
-    padding: 10px 10px 10px 10px;
-
 }
 
 .grid-item{
-    color: rgb(47, 62, 64);
+    color: rgb(38, 46, 47);
     border-style: solid;
     border-width: 5px;
-    border-color:  #c3b2b2e0; 
+    border-color:  #363636e0; 
     border-radius: 2%;
     width: 300px;
     height: 300px;
@@ -228,13 +271,93 @@ nav{
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 
+.grid-item-collection{
+    color: rgb(146, 146, 146);
+    border-style: solid;
+    border-width: 5px;
+    border-color:  #b4b4b4e0; 
+    border-radius: 2%;
+    width: 300px;
+    height: 300px;
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.fifty{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.ada-info{
+    background-color: #551a50;
+    padding: 10px 10px 10px 10px;
+    color:rgb(255, 255, 255);
+    border-radius: 5%;
+    border-color: #061b36;
+    border-width: 5px;
+    font-weight: bold;
+}
+
+.fts{
+    background-color: #115287;
+    padding: 10px 10px 10px 10px;
+    color:rgb(255, 255, 255);
+    border-radius: 5%;
+    border-color: #061b36;
+    border-width: 5px;
+}
+
+.nfts{
+    background-color: #ec9617;
+    padding: 10px 10px 10px 10px;
+    color:rgb(0, 0, 0);
+    border-radius: 1%;
+    border-color: #061b36;
+    border-width: 5px;
+}
+.grid-ft {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+    justify-content: center;
+    margin: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+    background-color: rgb(41, 0, 0);
+    text-align: center;
+}
+
+.grid-item-ft{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bolder;
+}
+  
+
 .grid-item:hover{
+    border-color: #4fea3e;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.grid-item-collection:hover{
     border-color: #ebfe1c;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .grid-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.grid-item-collection img {
     max-width: 100%;
     max-height: 100%;
     object-fit: cover;
@@ -258,20 +381,6 @@ nav{
 
 .token-sub-img{
     width: 50%;
-}
-
-.nft{
-    border-width: 5px;
-    border-color:  #483fe7e0;
-    background-color: rgb(155, 132, 225);
-    color:white;
-}
-
-.coin{
-    height: 5%;
-    border-color:  #c685c5; 
-    background-color:#ddadd1; 
-    color: #333;
 }
 
 .item-info{
@@ -301,23 +410,6 @@ nav{
     left: 40%;
 }
 
-
-.main-img{
-    width: 60%;
-}
-
-.home-link{
-    color:rgb(176, 245, 176);
-    font-size: larger;
-    font-weight: bolder;
-
-    padding: 10px 10px 10px 10px;
-}
-.main-title{
-
-
-}
-
 .address-info{
     display: flex;
     justify-content: center;
@@ -336,37 +428,52 @@ nav{
 }
 
 .token-image{
-    text-align: center;
+    width: 50%;
+    padding: 10px 10px 10px 10px;
+}
+
+.main-img{
     width: 100%;
+}
+
+.token-main{
+    padding: 30px 30px 30px 30px;
+
+    text-align: center;
+    font-weight: bolder;
+    font-size: xx-large;
 }
 
 
 
 .metadata{
     display: flex;
-    width: 100%;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+    width: 50%;
     font-size: large;
     color:#879cf8;
+    padding: 10px 10px 10px 10px;
+
+
 }
 .token-box{
     display: flex;
+    width: 100%;
+
 }
+
 
 .policyData{
     text-align: center;
     display: flex;
     justify-content: center;
 }
-.token-name{
-    text-align: center;
-}
+
 
 .policy-item{
     padding: 0px 40px 0px 10px;
-    color:#61ff89
+    color:#61ff89;
+    font-size: larger;
+    font-weight: bold;
 }
 
 table{

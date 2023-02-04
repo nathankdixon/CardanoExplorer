@@ -18,12 +18,7 @@ function AddressPage() {
     return (
       <div>
         <Header updatedAddress={handleAddressUpdate}/>
-        <div className="address-info">
-          <a href="/" className="home-link">Home</a>
-          <h3 className="main-title">Address :  {address}</h3>
-        </div>
-
-        <div className="tokenList"><Wallet address={address}/></div>
+        <div className="tokenList"><Wallet stakeAddress={address}/></div>
       </div>
     );
 }

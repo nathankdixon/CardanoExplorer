@@ -1,20 +1,17 @@
 export default class Token{
 
-    constructor(unit, quantity){
+    constructor(asset_name, policy_id, quantity){
+        this.asset_name = asset_name;
+        this.policy_id = policy_id;
         this.quantity = quantity; 
-        this.unit = unit;
     }
 
     async getMetadata(){
       try{
-        const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.unit,
-          {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
-                    'cache-control': 'max-age=31536000'}});
+        const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.policy_id+this.asset_name,
+          {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh'}});
 
         this.metadata = await data.json();
-        this.policyId = this.metadata.policy_id;
-        this.fingerprint = this.metadata.fingerprint;
-        this.asset = this.metadata.asset;
         if(this.metadata.metadata != null){
           return this.metadata.metadata;
         }
@@ -26,6 +23,7 @@ export default class Token{
         }
       }catch(error){
         console.log(error);
+        return 'none';
       }
         
     }
@@ -72,7 +70,7 @@ export default class Token{
           ipfs = "http://dweb.link/ipfs/"+ipfs;
         }
       }catch{
-        return null;
+        return 'none';
       }
       return ipfs;
     
