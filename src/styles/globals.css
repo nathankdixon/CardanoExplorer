@@ -251,12 +251,18 @@ nav{
 
 
 .grid{
-    display: grid;
+    display: grid;    
+    margin:10px 10px 10px 10px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 3fr));
-    padding: 40px 40px 40px 40px;
     grid-gap:20px;
+    padding: 10px 10px 10px 10px;
+
     align-items: center;
     justify-content: center;
+    border-radius: 0.25%;
+    border-color: #cfb706;
+    border-width: 5px;
+    border-style: solid;
 }
 
 .grid-item{
@@ -299,8 +305,9 @@ nav{
     padding: 10px 10px 10px 10px;
     color:rgb(255, 255, 255);
     border-radius: 5%;
-    border-color: #061b36;
+    border-color: #ffffff;
     border-width: 5px;
+    border-style: solid;
     font-weight: bold;
 }
 
@@ -309,8 +316,9 @@ nav{
     padding: 10px 10px 10px 10px;
     color:rgb(255, 255, 255);
     border-radius: 5%;
-    border-color: #061b36;
+    border-color: #ffffff;
     border-width: 5px;
+    border-style: solid;
 }
 
 .nfts{

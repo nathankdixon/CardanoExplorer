@@ -15,12 +15,12 @@ export default function Fts ({tokens}){
           let _display = [];
           let policies = Object.keys(tokens);
           _display.push(<div key = 'title' className = "grid-item-ft">Coins: </div>)
-          _display.push(<div><br/></div>);
+          _display.push(<div key = 'break'><br/></div>);
           for(const policy of policies){
             let token = tokens[policy][0];
             _display.push(<div key = {token.asset_name + 'ft'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>{token.metadata.name} : {token.quantity}</div>);
           }
-
+          
           setDisplay(_display);
         }
 

@@ -39,21 +39,6 @@ export default function Header({updatedAddress}){
   
     }
 
-    async function getStakeFromAddressKoios(address){
-      const req = await fetch('https://api.koios.rest/api/v0/address_info', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "_addresses": [ address
-          ]
-        })
-      });
-  
-      const res = await req.json();
-      return res[0].stake_address;
-    }
 
     const handleCustomAddress = async (event) =>{
       event.preventDefault();
@@ -62,8 +47,8 @@ export default function Header({updatedAddress}){
         let stakeAddress = await getStakeFromAddressKoios(addressQuery);
         router.push(`/address/${stakeAddress}`);
       }
-      else if (addressQuery.startsWith('stake')){
-        router.push(`/address/${address}`);
+      else if (addressQuery.startsWith('stake')  || addressQuery.startsWith('$')){
+        router.push(`/address/${addressQuery}`);
       }
       else{
         router.push(`/token/${searchQuery}`);
@@ -77,8 +62,8 @@ export default function Header({updatedAddress}){
         let stakeAddress = await getStakeFromAddressKoios(searchQuery);
         router.push(`/address/${stakeAddress}`);
       }
-      else if (searchQuery.startsWith('stake')){
-        router.push(`/address/${address}`);
+      else if (searchQuery.startsWith('stake') || searchQuery.startsWith('$')){
+        router.push(`/address/${searchQuery}`);
       }
       else{
         router.push(`/token/${searchQuery}`);

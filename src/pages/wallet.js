@@ -21,39 +21,7 @@ function Wallet ({stakeAddress}) {
   const [overviewData, setOverviewData] = useState();
   const [refresh, setRefresh] = useState(false);
   
-  useEffect(() =>{
-    const refreshWallet = async () =>{
-      if(stakeAddress == null){
-        //base
-      }
-      else{
 
-        setisLoading('fetching');
-        setIsVisibleGrid(false);
-        setIsVisible(true);
-
-        var policies = '';
-        let assets = await getAssetsFromKoios(stakeAddress);
-        if(assets.length == 0 ){
-          console.log('no assets');
-        }
-        else{
-          let tokens = await createTokens(assets[0].asset_list);
-
-          let stakeData = groupTokensByPolicyId(tokens);
-          sortTokenFungibilities(stakeData.policies);
-
-
-          sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
-
-        }
-
-        setisLoading('done');
-        setIsVisible(false);
-        setIsVisibleGrid(true);
-    }}
-    refreshWallet();
-  }, [refresh])
 
   useEffect(() => {
     const getTokens = async () =>{
@@ -66,6 +34,11 @@ function Wallet ({stakeAddress}) {
         setisLoading('fetching');
         setIsVisibleGrid(false);
         setIsVisible(true);
+
+        if(stakeAddress.startsWith('$')){
+          let stake = await getAddressFromHandle(stakeAddress.slice(1));
+          stakeAddress = stake;
+        }
 
         var stakeData = '';
 
@@ -112,6 +85,45 @@ function Wallet ({stakeAddress}) {
     getTokens();
   }, [stakeAddress]);
 
+  useEffect(() =>{
+    const refreshWallet = async () =>{
+      if(stakeAddress == null){
+        //base
+      }
+
+      else{
+        setisLoading('fetching');
+        setIsVisibleGrid(false);
+        setIsVisible(true);
+
+        if(stakeAddress.startsWith('$')){
+          let stake = await getAddressFromHandle(stakeAddress.slice(1));
+          stakeAddress = stake;
+        }
+
+        var policies = '';
+        let assets = await getAssetsFromKoios(stakeAddress);
+        if(assets.length == 0 ){
+          console.log('no assets');
+        }
+        else{
+          let tokens = await createTokens(assets[0].asset_list);
+
+          let stakeData = groupTokensByPolicyId(tokens);
+          sortTokenFungibilities(stakeData.policies);
+
+
+          sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
+
+        }
+
+        setisLoading('done');
+        setIsVisible(false);
+        setIsVisibleGrid(true);
+    }}
+    refreshWallet();
+  }, [refresh])
+
   if(isLoading == 'fetching'){
     return <div>
 
@@ -122,6 +134,48 @@ function Wallet ({stakeAddress}) {
 
   function refreshWallet(){
     setRefresh(true);
+  }
+
+  async function getStakeFromAddressKoios(address){
+    const req = await fetch('https://api.koios.rest/api/v0/address_info', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "_addresses": [ address
+        ]
+      })
+    });
+
+    const res = await req.json();
+    return res[0].stake_address;
+  }
+
+  const getAddressFromHandle = async (handle) => {
+    let policyID = 'f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a';
+    
+    // A blank Handle name should always be ignored.
+    if (handle.length === 0) {
+      // Handle error.
+    }
+  
+    // Convert handleName to hex encoding.
+    let assetName = Buffer.from(handle).toString('hex');
+  
+    const data = await fetch(
+      `https://cardano-mainnet.blockfrost.io/api/v0/assets/${policyID}${assetName}/addresses`,
+      {
+        headers: {
+          // Your Blockfrost API key
+          project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then(res => res.json());
+    
+    let stake = await getStakeFromAddressKoios(data[0].address);
+    return stake;
   }
 
   function sortTokenFungibilities(policies){

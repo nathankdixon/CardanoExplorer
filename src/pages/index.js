@@ -59,44 +59,20 @@ const Home = () => {
       const res = await req.json();
       return res[0].stake_address;
     }
-
-    const handleCustomAddress = async (event) =>{
-      event.preventDefault();
-      setShowModal(false);
-      if(addressQuery.startsWith('add')){
-        let stakeAddress = await getStakeFromAddressKoios(addressQuery);
-        router.push(`/address/${stakeAddress}`);
-      }
-      else if (addressQuery.startsWith('stake')){
-        router.push(`/address/${address}`);
-      }
-      else{
-        router.push(`/token/${searchQuery}`);
-      }
-    }
     
     const handleSearch = async  (event) => {
       event.preventDefault();
       // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
-      if(searchQuery.startsWith('add')){
+      if(searchQuery.startsWith('add') ){
         let stakeAddress = await getStakeFromAddressKoios(searchQuery);
         router.push(`/address/${stakeAddress}`);
       }
-      else if (searchQuery.startsWith('stake')){
-        router.push(`/address/${address}`);
+      else if (searchQuery.startsWith('stake') || searchQuery.startsWith('$')){
+        router.push(`/address/${searchQuery}`);
       }
       else{
         router.push(`/token/${searchQuery}`);
       }
-    }
-  
-  
-    const handleClick = () => {
-      setShowModal(true);
-    }
-  
-    const handleClose = () => {
-      setShowModal(false);
     }
   
     const handleSelect = async (wallet) => {
@@ -104,8 +80,9 @@ const Home = () => {
 
       let stake = await getStakeAddressFromWallet(wallet);
       router.push(`/address/${stake}`);
-
     }
+
+
 
 
   return (

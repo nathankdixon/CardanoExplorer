@@ -9,10 +9,8 @@ function TokenPage() {
     const router = useRouter();
     const { tokenId } = router.query;
 
-    const [address, setAddress] = useState(null);
-
     const handleAddressUpdate = (newAddress) => {
-      setAddress(newAddress);
+      router.push(`/address/`+newAddress);
     }
 
     return (
