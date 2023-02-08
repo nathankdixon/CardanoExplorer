@@ -29,12 +29,13 @@ const MetadataTable = ({ json }) => {
 
   return (
     <table>
-      {Object.entries(json).map(([key, value]) => (
+      <tbody>{Object.entries(json).map(([key, value]) => (
         <tr className = "meta-row" key={key}>
           <td className='meta-col'>{key}</td>
           <td className='meta-col'>{renderValue(key, value)}</td>
         </tr>
-      ))}
+      ))}</tbody>
+
     </table>
   );
 };

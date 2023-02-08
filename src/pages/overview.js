@@ -1,53 +1,63 @@
-import { useEffect, useState } from "react"
+import { useDebugValue, useEffect, useState } from "react"
 
 export default function Overview({data}){
 
     //returns an overview of wallet information
 
     //ada price, usd price, last 3 transactions, staking rewards, staking pool...
-
-    const [out, setOut] = useState();
-    const [balance, setBalance] = useState();
-    const [pool, setPool] = useState();
-    const [rewards, setRewards] = useState();
-    const [tokenNumber, setTokenNumber] = useState();
-    const [ projectNumber, setProjectNumber] = useState();
-    const [usdValue, setUsdValue] = useState();
-    const [usd, setUsd] = useState();
-    const [gbp, setGbp] = useState();
-    const [btc, setBtc] = useState();
-    const [ada30d, setAda30d] = useState();
-
-
+    const [display, setDisplay] = useState();
 
     useEffect(() => {
         const getWalletData = async () => {
             if(data != null){
                 try{
-                    let accountInfo = await getAccountInfoFromKoios(data.stake);
-                    setBalance(accountInfo[0].total_balance / 1000000);
-                    setPool(accountInfo[0].delegated_pool);
-                    setRewards(accountInfo[0].rewards / 1000000);
-                    setTokenNumber(data.tokenNumber);
-                    setProjectNumber(data.projectNumber);
+                  let fts = data.fts;
 
-                    let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
-                    let res = await req.json();
+                  console.log(data);
+                  //let re = await fetch('https://api.coingecko.com/api/v3/coins/list');
+                  //let rs = await re.json();
+                  
+                  //let found = rs.find(item => item.symbol == 'lq');
 
-                    let gbp = res.market_data.current_price.gbp;
-                    let usd = res.market_data.current_price.usd;
-                    let btc = res.market_data.current_price.btc;
-                    let ada30d = res.market_data.price_change_percentage_30d;
+                  let _display = [];
+                  let accountInfo = await getAccountInfoFromKoios(data.stake);
+                  console.log(accountInfo);
+                  let _balance = (accountInfo[0].total_balance / 1000000);
+                  let _pool = (accountInfo[0].delegated_pool);
+                  let _rewards = (accountInfo[0].rewards / 1000000);
+                  let _tokenNumber = (data.tokenNumber);
+                  let _projectNumber = (data.projectNumber);
 
-                    setUsdValue((accountInfo[0].total_balance / 1000000)*usd);
-                    setUsd(usd);
-                    setGbp(gbp);
-                    setBtc(btc);
-                    setAda30d(ada30d + '%');
-                    console.log(gbp);
+                  let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
+                  let res = await req.json();
 
-                }catch{
-                    console.log('overview error');
+                  let gbp = res.market_data.current_price.gbp;
+                  let usd = res.market_data.current_price.usd;
+                  let btc = res.market_data.current_price.btc;
+
+                  let ada30d = res.market_data.price_change_percentage_30d;
+                  if(ada30d >0){
+                    ada30d = Math.round(ada30d *100)/100 + '%' +' ↑ 30d';
+                  }
+                  else{
+                    ada30d = '↓'  + ada30d + '%';
+                  }
+
+                  _display.push(<div key='main'>
+                  <div className="grid-item-ft" key='balance'>Balance: {_balance}</div>
+                  <div className="grid-item-ft" key='pool'>Pool: {_pool}</div>
+                  <div className="grid-item-ft" key='rewards'>Rewards: {_rewards}</div>
+                  <div className="grid-item-ft" key='tokenNum'>Tokens Number: {_tokenNumber}</div>
+                  <div className="grid-item-ft" key='projectNum'>Projects Number: {_projectNumber}</div>
+                  <div className="grid-item-ft" key='market'>Market Prices: ADA / USD ${usd} - {ada30d}</div>
+                  <div className="grid-item-ft" key='gbp'>ADA / GBP £{gbp}</div>
+                  <div className="grid-item-ft" key ='btc'>ADA / BTC {btc}</div></div>
+                    );
+
+                  setDisplay(_display);
+
+                }catch(error){
+                    console.log(error);
                 }
 
             }
@@ -70,26 +80,10 @@ export default function Overview({data}){
             });
         
         const res = await req.json();
-        console.log(res);
         return res;
       }
 
     return (
-    <div className="grid-ft">
-        <div className="ada-info">
-        Balance: ₳ {balance} <br/><br/>
-        USD Value : {usdValue}<br/><br/>
-        ADA / USD : {usd} <br/><br/>
-        ADA / USD 30 Day Change : {ada30d} <br/> <br/>
-        ADA / GBP : {gbp} <br/><br/>
-        ADA / BTC : {btc} <br/><br/>
-        Staking Rewards : ₳ {rewards} <br/><br/>
-        Pool : {pool} <br/><br/>
-        Number of Tokens : {tokenNumber}<br/><br/>
-        Number of Projects : {projectNumber}<br/><br/>
-        </div>
-
-        
-    </div>
+          <div className="overview-inner">{display}</div>
     )
 }

@@ -83,6 +83,7 @@ export default function Header({updatedAddress}){
       setShowModal(false);
 
       let stake = await getStakeAddressFromWallet(wallet);
+      setWalletLogo(wallet);
       router.push(`/address/${stake}`);
 
     }

@@ -14,14 +14,25 @@ export default function Fts ({tokens}){
         else{
           let _display = [];
           let policies = Object.keys(tokens);
-          _display.push(<div key = 'title' className = "grid-item-ft">Coins: </div>)
-          _display.push(<div key = 'break'><br/></div>);
+          _display.push(<tr key = 'key' className = "grid-item-ft"><td>Coin</td><td>Ticker</td><td>Quantity</td><td>Price</td></tr>)
           for(const policy of policies){
             let token = tokens[policy][0];
-            _display.push(<div key = {token.asset_name + 'ft'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>{token.metadata.name} : {token.quantity}</div>);
+            let name = token.metadata.ticker;
+            if(token.metadata.ticker == null){
+
+              if(token.metadata.name != null){
+                name = token.metadata.name;
+              }
+              else{
+                name = 'unknown';
+              }
+
+
+            }
+            _display.push(<tr key = {token.asset_name + 'ft'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}><td><img className='ft-img' src={token.ipfs}></img></td><td>{name}</td><td>{token.quantity}</td></tr>);
           }
-          
-          setDisplay(_display);
+          let table = <table><tbody>{_display}</tbody></table>
+          setDisplay(table);
         }
 
       }
@@ -31,7 +42,6 @@ export default function Fts ({tokens}){
 
     //returns a grid view of all NFTs grouped by policy
     return (
-    <div className="grid-ft"><div className="fts">{display}</div>
-    </div>
+    <div className="grid-ft">{display}</div>
     )
 }

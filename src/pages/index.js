@@ -9,11 +9,11 @@ import Header from "./header";
 const Home = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [addressQuery, setAddressQuery] = useState('');
-  const [showModal, setShowModal] = useState(false)
-  const [walletLogo, setWalletLogo] = useState('Connect Wallet');
   const [address, setAddress] = useState('');
   const router = useRouter();
+  const [isLoading, setisLoading] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+
 
 
     const handleAddressUpdate = (newAddress) => {
@@ -21,8 +21,8 @@ const Home = () => {
     }
   
     async function getStakeAddressFromWallet(wallet){
+
       const lucid = await Lucid.new();
-  
       var api = '';
   
       if(wallet == 'Typhon Wallet'){
@@ -62,6 +62,8 @@ const Home = () => {
     
     const handleSearch = async  (event) => {
       event.preventDefault();
+      setisLoading('fetching');
+      setIsVisible(true);
       // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
       if(searchQuery.startsWith('add') ){
         let stakeAddress = await getStakeFromAddressKoios(searchQuery);
@@ -76,13 +78,18 @@ const Home = () => {
     }
   
     const handleSelect = async (wallet) => {
-      setShowModal(false);
-
+      setisLoading('fetching');
+      setIsVisible(true);
       let stake = await getStakeAddressFromWallet(wallet);
       router.push(`/address/${stake}`);
     }
 
-
+    if(isLoading == 'fetching'){
+      return <div>
+  
+        <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
+      </div>
+    }
 
 
   return (

@@ -25,11 +25,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/address/[address]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/address/[address].js"
-    ],
     "/token/[tokenId]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

@@ -38,7 +38,8 @@ export default function Nfts ({tokens}){
         let _display = [];
         
         for(const token of policy){
-          _display.push(<div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
+          _display.push(<div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}><img src= {token.ipfs}
+          alt = 'failed to load image'/></div>);
         }
         setDisplay(_display);
     }
@@ -47,7 +48,7 @@ export default function Nfts ({tokens}){
     return (
       <div>
         <nav><button className="sort-button" onClick={() => showTokens()}>Show All</button></nav>
-        <div className="grid">{display}</div>
+        <div className="grid-nft">{display}</div>
       </div>
 
     )
