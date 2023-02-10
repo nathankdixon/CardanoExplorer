@@ -7,10 +7,14 @@ export default function Nfts ({tokens}){
     const router = useRouter();
 
     useEffect(() => {
-      showTokens();
+      if(tokens != null){
+        let nfts = tokens.nfts;
+        showTokens(nfts);
+
+      }
     }, [tokens]);
 
-    const showTokens = () => {
+    const showTokens = (tokens) => {
       if(tokens == null){
         //base
       }

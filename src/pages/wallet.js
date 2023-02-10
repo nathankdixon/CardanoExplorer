@@ -1,32 +1,28 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import DropdownBox from "./dropdownBox";
 import Token from "./token";
-import { Lucid, Kupmios, Blockfrost } from "lucid-cardano";
-import { Router, useRouter } from "next/router";
 import Nfts from "./nfts";
 import Fts from "./fts";
-import Overview from "./overview";
 
 
 function Wallet ({stakeAddress}) {
   const [isVisibleGrid, setIsVisibleGrid] = useState();
-  const [tokensNumber, setTokensNumber] = useState();
-  const [projectsNumber, setProjectNumber] = useState();
   const [isLoading, setisLoading] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [loadingInfo, setLoadingInfo] = useState();
-  const [nfts, setNfts] = useState();
-  const [fts, setFts] = useState();
-  const [overviewData, setOverviewData] = useState();
-  const [refresh, setRefresh] = useState(false);
-  
-
+  const [stakeData, setStakeData] = useState({stake: null, tokenNumber: null, projectNumber: null, nfts: null, fts: null});
 
   useEffect(() => {
     const getTokens = async () =>{
 
       if(stakeAddress == null){
+        if(sessionStorage.getItem('explorer')){
+          let stakeData = JSON.parse(sessionStorage.getItem('explorer'));
+          setStakeData(stakeData);
+  
+          setisLoading('done');
+          setIsVisible(false);
+          setIsVisibleGrid(true);
+        }
         //base
       }
       else{
@@ -40,59 +36,21 @@ function Wallet ({stakeAddress}) {
           stakeAddress = stake;
         }
 
-        var stakeData = '';
-        
+        let stakeData = '';
 
         //if stake data exist in storage -- get it
-        if(sessionStorage.getItem(stakeAddress)){
-        
-          stakeData = JSON.parse(sessionStorage.getItem(stakeAddress));
-          setOverviewData(stakeData);
-          setFts(stakeData.fts);
-          setNfts(stakeData.nfts);
-
+        if(sessionStorage.getItem('explorer')){
+          stakeData = JSON.parse(sessionStorage.getItem('explorer'));
         }
 
         //if no stored data, create new
         else{
-
-          let assets = await getAssetsFromKoios(stakeAddress);
-          //no assets
-          if(assets.length == 0 ){
-            stakeData = {stake : stakeAddress, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
-            setOverviewData(stakeData);
-            setFts(stakeData.fts);
-            setNfts(stakeData.nfts);
-
-          }
-          else{
-            //assets, create new stake data
-            try{
-              let _tokens = await createTokens(assets[0].asset_list);
-              let _tokenNumber = _tokens.length;
-              let _policies = groupTokensByPolicyId(_tokens);
-
-              let _policyNumber = (Object.keys(_policies).length);
-
-              let _fungObj = sortTokenFungibilities(_policies);
-
-              stakeData = {stake: stakeAddress, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: _fungObj.nfts, fts: _fungObj.fts};
-              console.log(stakeData);
-              sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
-
-              setOverviewData(stakeData);
-              setFts(stakeData.fts);
-              setNfts(stakeData.nfts);
-
-
-            }catch{
-              console.log('no assets');
-            }
-
-          }
+          stakeData = await createStakeDataFromStakeAddress(stakeAddress);
+          sessionStorage.setItem('explorer', JSON.stringify(stakeData));
 
         }
 
+        setStakeData(stakeData);
 
         setisLoading('done');
         setIsVisible(false);
@@ -103,60 +61,7 @@ function Wallet ({stakeAddress}) {
     }
       
     getTokens();
-  }, [stakeAddress]);
-
-  useEffect(() =>{
-    const refreshWallet = async () =>{
-      if(stakeAddress == null){
-        //base
-      }
-
-      else{
-        setisLoading('fetching');
-        setIsVisibleGrid(false);
-        setIsVisible(true);
-
-        let assets = await getAssetsFromKoios(stakeAddress);
-          //no assets
-          if(assets.length == 0 ){
-            stakeData = {stake : stakeAddress, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
-            setOverviewData(stakeData);
-            setFts(stakeData.fts);
-            setNfts(stakeData.nfts);
-
-          }
-          else{
-            //assets, create new stake data
-            try{
-              let _tokens = await createTokens(assets[0].asset_list);
-              let _tokenNumber = _tokens.length;
-              let _policies = groupTokensByPolicyId(_tokens);
-
-              let _policyNumber = (Object.keys(_policies).length);
-
-              let _fungObj = sortTokenFungibilities(_policies);
-
-              stakeData = {stake: stakeAddress, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: _fungObj.nfts, fts: _fungObj.fts};
-              console.log(stakeData);
-              sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
-
-              setOverviewData(stakeData);
-              setFts(stakeData.fts);
-              setNfts(stakeData.nfts);
-
-            }catch{
-              console.log('no assets');
-            }
-
-          }
-
-
-        setisLoading('done');
-        setIsVisible(false);
-        setIsVisibleGrid(true);
-    }}
-    refreshWallet();
-  }, [refresh])
+  }, []);
 
   if(isLoading == 'fetching'){
     return <div>
@@ -166,8 +71,34 @@ function Wallet ({stakeAddress}) {
     </div>
   }
 
-  function refreshWallet(){
-    setRefresh(true);
+  async function createStakeDataFromStakeAddress(stake){
+
+    let stakeData = '';
+    let assets = await getAssetsFromKoios(stakeAddress);
+
+    //no assets
+    if(assets.length == 0 ){
+      stakeData = {stake : stakeAddress, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
+
+    }
+    else{
+      //assets, create new stake data
+      try{
+        let _tokens = await createTokens(assets[0].asset_list);
+        let _tokenNumber = _tokens.length;
+        let _policies = groupTokensByPolicyId(_tokens);
+        let _policyNumber = (Object.keys(_policies).length);
+        let _fungObj = sortTokenFungibilities(_policies);
+
+        stakeData = {stake: stakeAddress, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: _fungObj.nfts, fts: _fungObj.fts};
+      }catch(error){
+        console.log(error);
+      }
+
+    }
+
+    return stakeData;
+
   }
 
   async function getStakeFromAddressKoios(address){
@@ -299,17 +230,9 @@ function Wallet ({stakeAddress}) {
 
   return(
     <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>
-      <nav>
-        <div>
-          <button className = 'sort-button' onClick={() => refreshWallet()}>Refresh</button>
-        </div>
-      </nav>
       <div className="wallet">
-        <div className="top-row">
-          <Overview data = {overviewData} className='overview'/>
-          <Fts tokens={fts} className = 'fts'/>
-        </div>
-      <Nfts tokens = {nfts} className = 'nfts'/>
+      <Fts tokens={stakeData} className = 'fts'/>
+      <Nfts tokens = {stakeData} className = 'nfts'/>
       </div>
 
 

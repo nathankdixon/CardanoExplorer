@@ -11,8 +11,18 @@ export default function Header({updatedAddress}){
     const [addressQuery, setAddressQuery] = useState('');
     const [showModal, setShowModal] = useState(false)
     const [walletLogo, setWalletLogo] = useState('Connect Wallet');
-    const [address, setAddress] = useState('');
     const router = useRouter();
+
+    useEffect(() => {
+      function checkLocalStorageForStake(){
+        if(sessionStorage.getItem('explorer')){
+          setWalletLogo('Connected');
+        }
+        else{
+        }
+      }
+      checkLocalStorageForStake();
+    }, [])
 
   
     async function getStakeAddressFromWallet(wallet){
@@ -83,7 +93,6 @@ export default function Header({updatedAddress}){
       setShowModal(false);
 
       let stake = await getStakeAddressFromWallet(wallet);
-      setWalletLogo(wallet);
       router.push(`/address/${stake}`);
 
     }

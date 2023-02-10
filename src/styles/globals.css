@@ -78,7 +78,9 @@ header input[type="text"] {
     align-items: center;
     justify-content: center;
 }
-
+.main{
+    text-align: center;
+}
 .search-input{
     width: 100%;
     height: 55%;
@@ -283,6 +285,10 @@ nav{
 .grid-item-ft{
     font-weight: bold;
 }
+.grid-item-overview{
+    font-weight: bold;
+    font-size: larger;
+}
 
 
 tr:hover {
@@ -343,15 +349,19 @@ tr:hover {
     padding: 10px 10px 10px 10px;
 }
 
-.fts{
-
-}
 .nfts{
     width: 100%;
 }
 
+.fts{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px 10px 10px 10px;
+}
+
 .overview{
-    width: 40%;
+    
 }
 
 .grid-item:hover{
@@ -503,3 +513,7 @@ table{
     font-size: small;
     font-weight: bold;
 }
+td, th {
+    padding: 4px;
+  }
+  

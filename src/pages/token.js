@@ -9,7 +9,8 @@ export default class Token{
     async getMetadata(){
       try{
         const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.policy_id+this.asset_name,
-          {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh'}});
+        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh'}});
+
 
         this.metadata = await data.json();
         if(this.metadata.metadata != null){
