@@ -171,39 +171,47 @@ label{
 
 nav{
     display: flex;
+    background-color: rgb(42, 59, 106);
     justify-content: space-between;
-    background-color: rgb(255, 255, 255);
 
 }
 
-/* Style the sort buttons */
-.sort-button {
-  display: inline-block;
-  padding: 10px 20px;
-  border: none;
-  font-weight: bolder;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  color: rgb(0, 0, 0);
-  background-color: rgb(226, 226, 115);
-
-}
-
-.sort-label {
+.price-label {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 10px 10px 10px;
     border: none;
-    background-color: rgb(238, 238, 110);
-    color: rgb(47, 62, 64);
-
     font-weight: bolder;
     font-size: 14px;
+    color: rgb(255, 255, 35);
   }
 
+.setting-label {
+    display: inline-block;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    font-weight: bolder;
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(238, 238, 110);
+  }
+
+  .setting-button {
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    font-weight: bolder;
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(219, 219, 76);
+  }
+
+
+
 /* Add a hover effect for the sort buttons */
-.sort-button:hover {
-  background-color: #f4f4f4;
+.setting-button:hover {
+  background-color: #a9f9f8;
 }
 
 .wallets{
