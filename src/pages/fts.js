@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Prices from "./prices";
 import Token from "./token";
 
 export default function Fts ({tokens}){
@@ -7,7 +8,7 @@ export default function Fts ({tokens}){
     const [display, setDisplay] = useState([]);
     const [priced, setPriced] = useState();
     const [isVisible, setIsVisible] = useState(false);
-
+    const [coinPrices, setCoinPrices] = useState();
 
     const router = useRouter();
 
@@ -166,9 +167,13 @@ export default function Fts ({tokens}){
     }
     //returns a grid view of all NFTs grouped by policy
     return (
-      <div className="fts">
-        <div className="grid-ft" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>{priced}</div>
-        <div className="grid-ft">{display}</div>
+      <div>
+        <Prices/>
+        <div className="fts">
+          <div className="grid-ft" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>{priced}</div>
+          <div className="grid-ft">{display}</div>
+        </div>
       </div>
+
     )
 }

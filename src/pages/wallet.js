@@ -15,8 +15,8 @@ function Wallet ({stakeAddress}) {
     const getTokens = async () =>{
 
       if(stakeAddress == null){
-        if(sessionStorage.getItem('explorer')){
-          let stakeData = JSON.parse(sessionStorage.getItem('explorer'));
+        if(sessionStorage.getItem(stakeAddress)){
+          let stakeData = JSON.parse(sessionStorage.getItem(stakeAddress));
           setStakeData(stakeData);
   
           setisLoading('done');
@@ -39,14 +39,14 @@ function Wallet ({stakeAddress}) {
         let stakeData = '';
 
         //if stake data exist in storage -- get it
-        if(sessionStorage.getItem('explorer')){
-          stakeData = JSON.parse(sessionStorage.getItem('explorer'));
+        if(sessionStorage.getItem(stakeAddress)){
+          stakeData = JSON.parse(sessionStorage.getItem(stakeAddress));
         }
 
         //if no stored data, create new
         else{
           stakeData = await createStakeDataFromStakeAddress(stakeAddress);
-          sessionStorage.setItem('explorer', JSON.stringify(stakeData));
+          sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
 
         }
 
@@ -234,8 +234,6 @@ function Wallet ({stakeAddress}) {
       <Fts tokens={stakeData} className = 'fts'/>
       <Nfts tokens = {stakeData} className = 'nfts'/>
       </div>
-
-
     </div>
   );
 }
