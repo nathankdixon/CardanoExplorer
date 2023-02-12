@@ -8,21 +8,10 @@ import { Blockfrost, Lucid } from "lucid-cardano";
 export default function Header({updatedAddress}){
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [addressQuery, setAddressQuery] = useState('');
     const [showModal, setShowModal] = useState(false)
     const [walletLogo, setWalletLogo] = useState('Connect Wallet');
     const router = useRouter();
 
-    useEffect(() => {
-      function checkLocalStorageForStake(){
-        if(sessionStorage.getItem(updatedAddress)){
-          setWalletLogo('Connected');
-        }
-      }
-      checkLocalStorageForStake();
-    }, [])
-
-  
     async function getStakeAddressFromWallet(wallet){
       const lucid = await Lucid.new();
       var api = '';
@@ -48,14 +37,13 @@ export default function Header({updatedAddress}){
     
     const handleSearch = async  (event) => {
       event.preventDefault();
-      sessionStorage.removeItem(updatedAddress);
       // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
       if(searchQuery.startsWith('add')){
         let stakeAddress = await getStakeFromAddressKoios(searchQuery);
-        router.push(`/address/${stakeAddress}`);
+        router.push(`/${stakeAddress}`);
       }
       else if (searchQuery.startsWith('stake') || searchQuery.startsWith('$')){
-        router.push(`/address/${searchQuery}`);
+        router.push(`/${searchQuery}`);
       }
       else{
         router.push(`/token/${searchQuery}`);
@@ -73,10 +61,8 @@ export default function Header({updatedAddress}){
   
     const handleSelect = async (wallet) => {
       setShowModal(false);
-
-      sessionStorage.removeItem(updatedAddress);
       let stake = await getStakeAddressFromWallet(wallet);
-      router.push(`/address/${stake}`);
+      router.push(`/${stake}`);
 
     }
 
@@ -101,10 +87,6 @@ export default function Header({updatedAddress}){
                 <button className="walletButton" onClick={() => handleSelect('eternl')} style={{backgroundImage:`url(${'/eternl.png'})`}}>Eternl</button>
                 <button className="walletButton" onClick={() => handleSelect('Nami')} style={{backgroundImage:`url(${'/nami.svg'})`}}>Nami</button>
                 <button className="walletButton" onClick={() => handleSelect('Flint Wallet')} style={{backgroundImage:`url(${'/flint.png'})`}}>Flint</button><br/>
-                <form className="searchForm" onSubmit={handleSearch}>
-                  <input className="search-input" placeholder="Enter wallet address" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}></input>
-                  <button type="submit" className="search-button">Search</button>
-                </form>
               </div>
               <button className="cancel-button" onClick={handleClose}>Cancel</button>
             </div>

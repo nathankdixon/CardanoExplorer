@@ -113,7 +113,7 @@ export default function Prices () {
             setGranularity('1 year');
         }
         if(granularity == '1 year'){
-            setGranularity('25 hours');
+            setGranularity('24 hours');
         }
     }
 

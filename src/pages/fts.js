@@ -1,5 +1,7 @@
+import { C } from "lucid-cardano";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import PieChart from "./piechart";
 import Prices from "./prices";
 import Token from "./token";
 
@@ -8,16 +10,31 @@ export default function Fts ({tokens}){
     const [display, setDisplay] = useState([]);
     const [priced, setPriced] = useState();
     const [isVisible, setIsVisible] = useState(false);
-    const [coinPrices, setCoinPrices] = useState();
+    const [currency, setCurrency] = useState({name: 'usd', symbol: '$', value: 1});
+    const [pricedTokens, setPriceTokens] = useState();
+
+    const [adaUSD, setAdaUSD] = useState();
+    const [adaGBP, setAdaGBP] = useState();
+    const [adaBTC, setAdaBTC] = useState();
+    const [adaETH, setAdaEth] = useState();
 
     const router = useRouter();
+
+    useEffect(() => {
+      const updateCurrency = () => {
+        displayPriced(pricedTokens, tokens.stake);
+      }
+      updateCurrency();
+    }, [currency])
 
     useEffect( () => {
     const getData = async () =>{
       if(tokens != null){
-        let fts = tokens.fts;
+
+        let fts = tokens.fts;;
         displayTokenTable(fts);
         let pricedTokens = await getTokensWithGeckoPrices(fts);
+        setPriceTokens(pricedTokens);
         displayPriced(pricedTokens, tokens.stake);
       }
     }
@@ -49,6 +66,15 @@ export default function Fts ({tokens}){
         let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
         let res = await req.json();
         let usd = res.market_data.current_price.usd;
+        let gbp = res.market_data.current_price.gbp;
+        let btc = res.market_data.current_price.btc;
+        let eth = res.market_data.current_price.eth;
+
+
+        setAdaUSD(usd);
+        setAdaGBP(gbp);
+        setAdaBTC(btc);
+        setAdaEth(eth);
   
         let ada = {ticker : 'ADA', quantity : _balance, ipfs: '/cardano.png', price: usd.toFixed(2)};
         return ada;
@@ -62,22 +88,37 @@ export default function Fts ({tokens}){
       if(tokens != null){
 
         let ada = await getAdaBalancePriced(stake);
-
+        
         _display.push(<tr key = 'key' className = "grid-item-ft"><td>Coin</td><td>Ticker</td><td>Quantity</td><td>Price</td><td>Value</td></tr>);
-  
+        
+        let price = ada.price / currency.value;
+        let quantity = ada.quantity/1000000;
+        let value = price*quantity;
+
+        let total = value;
+
+
         _display.push(<tr key = {'ada'} className = "grid-item-ft">
             <td><img className='ft-img' src={ada.ipfs}></img></td>
-            <td>{ada.ticker}</td><td>{(ada.quantity/ 1000000).toFixed(2)}</td>
-            <td>${ada.price}</td><td>${(ada.price*ada.quantity/1000000).toFixed(2)}</td></tr>);
+            <td>{ada.ticker}</td><td>{quantity.toFixed(2)}</td>
+            <td>{currency.symbol}{price.toFixed(2)}</td><td>{currency.symbol}{value.toFixed(2)}</td></tr>);
   
+        
         for(const element of tokens){
           let token = element;
+          let quantity = (token.quantity/1000000).toFixed(2);
+          let price = token.price/currency.value;
+          let value = (price*quantity).toFixed(2);
+          total = total + (price*quantity);
 
           _display.push(<tr key = {token.asset_name + 'ft'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
           <td><img className='ft-img' src={token.ipfs}></img></td>
-          <td>{token.metadata.ticker}</td><td>{(token.quantity/ 1000000).toFixed(2)}</td>
-          <td>${token.price}</td><td>${(token.price*token.quantity/1000000).toFixed(2)}</td></tr>);
+          <td>{token.metadata.ticker}</td><td>{quantity}</td>
+          <td>{currency.symbol}{price.toFixed(2)}</td><td>{currency.symbol}{value}</td></tr>);
         }
+        _display.push(<tr className = "grid-item-ft"><td>Total Balance</td><td>{currency.symbol}{total.toFixed(2)}</td></tr>)
+
+
         
         let table = <table><tbody>{_display}</tbody></table>
         setPriced(table);
@@ -146,17 +187,16 @@ export default function Fts ({tokens}){
           let token = tokens[policy][0];
           let name = token.metadata.ticker;
           if(token.metadata.ticker == null){
-
             if(token.metadata.name != null){
               name = token.metadata.name;
             }
             else{
               name = 'unknown';
             }
-
-
           }
-          _display.push(<tr key = {token.asset_name + 'ft'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
+
+          _display.push(<tr key = {token.asset_name + 'ft'} className = "grid-item-ft" 
+            onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
             <td><img className='ft-img' src={token.ipfs}></img></td>
             <td>{name}</td><td>{(token.quantity/ 1000000)}</td></tr>);
         }
@@ -165,12 +205,53 @@ export default function Fts ({tokens}){
       }
 
     }
+
+    const changeCurrency = async (currency) => {
+
+      if(currency == '$'){
+        setCurrency({name: 'usd', symbol: '$', value: 1});
+
+      }
+      if(currency == '₳'){
+        setCurrency({name: 'ada', symbol: '₳', value: adaUSD});
+
+      }
+      if(currency == '£'){
+        setCurrency({name: 'gbp', symbol: '£', value : adaUSD*(1/(adaGBP))});
+
+
+      }
+      if(currency == '₿'){
+        setCurrency({name: 'btc', symbol: '₿', value: adaUSD*(1/adaBTC)});      
+
+      }
+      if(currency == 'Ξ'){
+        setCurrency({name: 'eth', symbol: 'Ξ', value: adaUSD*(1/adaETH)});
+
+      }
+
+
+    }
+    const displayCurrency = (currency) => {
+      
+      return currency.symbol + ' ' + currency.name;
+
+    }
     //returns a grid view of all NFTs grouped by policy
     return (
       <div>
         <Prices/>
         <div className="fts">
+          <div>
+            <div className = "currency">Currency: 
+            <button className="currency-button" onClick={() => changeCurrency('$')}>$</button>
+            <button className="currency-button" onClick={() => changeCurrency('₳')}>₳</button>
+            <button className="currency-button" onClick={() => changeCurrency('£')}>£</button>
+            <button className="currency-button" onClick={() => changeCurrency('₿')}>₿</button>
+            <button className="currency-button" onClick={() => changeCurrency('Ξ')}>Ξ</button>
+            </div>
           <div className="grid-ft" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>{priced}</div>
+          </div>
           <div className="grid-ft">{display}</div>
         </div>
       </div>

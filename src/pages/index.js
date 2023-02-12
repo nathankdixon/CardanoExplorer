@@ -67,10 +67,10 @@ const Home = () => {
       // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
       if(searchQuery.startsWith('add') ){
         let stakeAddress = await getStakeFromAddressKoios(searchQuery);
-        router.push(`/address/${stakeAddress}`);
+        router.push(`/${stakeAddress}`);
       }
       else if (searchQuery.startsWith('stake') || searchQuery.startsWith('$')){
-        router.push(`/address/${searchQuery}`);
+        router.push(`/${searchQuery}`);
       }
       else{
         router.push(`/token/${searchQuery}`);
@@ -81,7 +81,7 @@ const Home = () => {
       setisLoading('fetching');
       setIsVisible(true);
       let stake = await getStakeAddressFromWallet(wallet);
-      router.push(`/address/${stake}`);
+      router.push(`/${stake}`);
     }
 
     if(isLoading == 'fetching'){

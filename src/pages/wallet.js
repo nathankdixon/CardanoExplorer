@@ -15,14 +15,6 @@ function Wallet ({stakeAddress}) {
     const getTokens = async () =>{
 
       if(stakeAddress == null){
-        if(sessionStorage.getItem(stakeAddress)){
-          let stakeData = JSON.parse(sessionStorage.getItem(stakeAddress));
-          setStakeData(stakeData);
-  
-          setisLoading('done');
-          setIsVisible(false);
-          setIsVisibleGrid(true);
-        }
         //base
       }
       else{
@@ -47,7 +39,6 @@ function Wallet ({stakeAddress}) {
         else{
           stakeData = await createStakeDataFromStakeAddress(stakeAddress);
           sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
-
         }
 
         setStakeData(stakeData);
@@ -61,7 +52,7 @@ function Wallet ({stakeAddress}) {
     }
       
     getTokens();
-  }, []);
+  }, [stakeAddress]);
 
   if(isLoading == 'fetching'){
     return <div>
