@@ -13,10 +13,7 @@ export default function Fts ({tokens}){
     const [currency, setCurrency] = useState({name: 'usd', symbol: '$', value: 1});
     const [pricedTokens, setPriceTokens] = useState();
 
-    const [adaUSD, setAdaUSD] = useState();
-    const [adaGBP, setAdaGBP] = useState();
-    const [adaBTC, setAdaBTC] = useState();
-    const [adaETH, setAdaEth] = useState();
+    const [prices, setPrices] = useState({adaUSD : null, adaGBP : null, adaBTC : null, adaETH : null})
 
     const router = useRouter();
 
@@ -26,6 +23,7 @@ export default function Fts ({tokens}){
       }
       updateCurrency();
     }, [currency])
+
 
     useEffect( () => {
     const getData = async () =>{
@@ -40,6 +38,10 @@ export default function Fts ({tokens}){
     }
     getData();
     }, [tokens]);
+
+    function setPriceData(data){
+      setPrices(data);
+    }
 
     async function getAccountInfoFromKoios(stakeAddress){
       const req = await fetch('https://api.koios.rest/api/v0/account_info', {
@@ -58,38 +60,21 @@ export default function Fts ({tokens}){
       return res;
     }
 
-    const getAdaBalancePriced = async (stake) => {
-      if(stake != null){
-        let accountInfo = await getAccountInfoFromKoios(stake);
-        let _balance = (accountInfo[0].total_balance);
-  
-        let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
-        let res = await req.json();
-        let usd = res.market_data.current_price.usd;
-        let gbp = res.market_data.current_price.gbp;
-        let btc = res.market_data.current_price.btc;
-        let eth = res.market_data.current_price.eth;
-
-
-        setAdaUSD(usd);
-        setAdaGBP(gbp);
-        setAdaBTC(btc);
-        setAdaEth(eth);
-  
-        let ada = {ticker : 'ADA', quantity : _balance, ipfs: '/cardano.png', price: usd.toFixed(2)};
-        return ada;
-      }
-
-    }
-
     const displayPriced = async (tokens, stake) => {
       let _display = [];
 
       if(tokens != null){
 
-        let ada = await getAdaBalancePriced(stake);
-        
-        _display.push(<tr key = 'key' className = "grid-item-ft"><td>Coin</td><td>Ticker</td><td>Quantity</td><td>Price</td><td>Value</td></tr>);
+        let accountInfo = await getAccountInfoFromKoios(stake);
+        let _balance = (accountInfo[0].total_balance);
+        let ada = {ticker : 'ADA', quantity : _balance, ipfs: '/cardano.png', price: prices.adaUSD};
+
+        if(ada.price == null){
+          setCurrency({name: 'usd', symbol: '$', value: 1});
+        }
+
+        console.log(ada);        
+        _display.push(<tr key = 'titles' className = "grid-item-ft" style={{color: "darkBlue"}}><td>Coin</td><td>Ticker</td><td>Quantity</td><td>Price</td><td>Value</td></tr>);
         
         let price = ada.price / currency.value;
         let quantity = ada.quantity/1000000;
@@ -111,12 +96,12 @@ export default function Fts ({tokens}){
           let value = (price*quantity).toFixed(2);
           total = total + (price*quantity);
 
-          _display.push(<tr key = {token.asset_name + 'ft'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
+          _display.push(<tr key = {token.asset_name + 'ftpriced'} className = "grid-item-ft" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
           <td><img className='ft-img' src={token.ipfs}></img></td>
           <td>{token.metadata.ticker}</td><td>{quantity}</td>
           <td>{currency.symbol}{price.toFixed(2)}</td><td>{currency.symbol}{value}</td></tr>);
         }
-        _display.push(<tr className = "grid-item-ft"><td>Total Balance</td><td>{currency.symbol}{total.toFixed(2)}</td></tr>)
+        _display.push(<tr key = {'total'} className = "grid-item-ft"><td>Total Balance</td><td>{currency.symbol}{total.toFixed(2)}</td></tr>)
 
 
         
@@ -182,7 +167,7 @@ export default function Fts ({tokens}){
       else{
         let _display = [];
         let policies = Object.keys(tokens);
-        _display.push(<tr key = 'key' className = "grid-item-ft"><td>Coin</td><td>Ticker</td><td>Quantity</td></tr>)
+        _display.push(<tr key = 'keyregular' className = "grid-item-ft" style={{color: "darkBlue"}}><td>Coin</td><td>Ticker</td><td>Quantity</td></tr>)
         for(const policy of policies){
           let token = tokens[policy][0];
           let name = token.metadata.ticker;
@@ -195,7 +180,7 @@ export default function Fts ({tokens}){
             }
           }
 
-          _display.push(<tr key = {token.asset_name + 'ft'} className = "grid-item-ft" 
+          _display.push(<tr key = {token.asset_name + 'ftunpriced'} className = "grid-item-ft" 
             onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
             <td><img className='ft-img' src={token.ipfs}></img></td>
             <td>{name}</td><td>{(token.quantity/ 1000000)}</td></tr>);
@@ -213,34 +198,29 @@ export default function Fts ({tokens}){
 
       }
       if(currency == '₳'){
-        setCurrency({name: 'ada', symbol: '₳', value: adaUSD});
+        setCurrency({name: 'ada', symbol: '₳', value: prices.adaUSD});
 
       }
       if(currency == '£'){
-        setCurrency({name: 'gbp', symbol: '£', value : adaUSD*(1/(adaGBP))});
+        setCurrency({name: 'gbp', symbol: '£', value : prices.adaUSD*(1/(prices.adaGBP))});
 
 
       }
       if(currency == '₿'){
-        setCurrency({name: 'btc', symbol: '₿', value: adaUSD*(1/adaBTC)});      
+        setCurrency({name: 'btc', symbol: '₿', value: prices.adaUSD*(1/prices.adaBTC)});      
 
       }
       if(currency == 'Ξ'){
-        setCurrency({name: 'eth', symbol: 'Ξ', value: adaUSD*(1/adaETH)});
+        setCurrency({name: 'eth', symbol: 'Ξ', value: prices.adaUSD*(1/prices.adaETH)});
 
       }
 
-
     }
-    const displayCurrency = (currency) => {
-      
-      return currency.symbol + ' ' + currency.name;
 
-    }
     //returns a grid view of all NFTs grouped by policy
     return (
       <div>
-        <Prices/>
+        <Prices data = {setPriceData}/>
         <div className="fts">
           <div>
             <div className = "currency">Currency: 

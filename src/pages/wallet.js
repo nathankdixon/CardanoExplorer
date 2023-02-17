@@ -18,12 +18,13 @@ function Wallet ({stakeAddress}) {
         //base
       }
       else{
-
         setisLoading('fetching');
         setIsVisibleGrid(false);
         setIsVisible(true);
+        let handle = '';
 
         if(stakeAddress.startsWith('$')){
+          handle = stakeAddress;
           let stake = await getAddressFromHandle(stakeAddress.slice(1));
           stakeAddress = stake;
         }
@@ -31,14 +32,14 @@ function Wallet ({stakeAddress}) {
         let stakeData = '';
 
         //if stake data exist in storage -- get it
-        if(sessionStorage.getItem(stakeAddress)){
-          stakeData = JSON.parse(sessionStorage.getItem(stakeAddress));
+        if(localStorage.getItem(stakeAddress)){
+          stakeData = JSON.parse(localStorage.getItem(stakeAddress));
         }
 
         //if no stored data, create new
         else{
           stakeData = await createStakeDataFromStakeAddress(stakeAddress);
-          sessionStorage.setItem(stakeAddress, JSON.stringify(stakeData));
+          localStorage.setItem(stakeAddress, JSON.stringify(stakeData));
         }
 
         setStakeData(stakeData);

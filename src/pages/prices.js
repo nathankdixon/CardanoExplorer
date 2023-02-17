@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export default function Prices () {
+export default function Prices (props) {
 
     const [prices, setPrices] = useState();
     const [granularity, setGranularity] = useState('24 hours');
@@ -15,6 +15,9 @@ export default function Prices () {
             let adaGBP = (res.market_data.current_price.gbp).toFixed(2);
             let adaBTC = (res.market_data.current_price.btc).toFixed(5);
             let adaETH = (res.market_data.current_price.eth).toFixed(5);
+
+
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH});
 
             let adaUsdChange = '';
             let adaGbpChange = '';
@@ -55,38 +58,73 @@ export default function Prices () {
 
             }
             
-            let color = 'black';
+            let usdcolor = 'black';
+            let gbpcolor = 'black';
+            let btccolor = 'black';
+            let ethcolor = 'black';
+
 
             if(adaUsdChange <=0 ){
-                color = 'red';
+                usdcolor = 'red';
             }
             else if (adaUsdChange == 0){
-                color = 'grey';
+                usdcolor = 'grey';
             }
             else{
-                color = '#7FFF00';
+                usdcolor = '#7FFF00';
             }
+
+            if(adaGbpChange <= 0){
+                gbpcolor = 'red';
+            }
+            else if(adaGbpChange == 0){
+                gbpcolor ='grey';
+            }
+            else{
+                gbpcolor = '#7FFF00';
+            }
+
+            if(adaEthChange <= 0){
+                ethcolor = 'red';
+            }
+            else if(adaEthChange == 0){
+                gbpcolor ='grey';
+            }
+            else{
+                ethcolor = '#7FFF00';
+            }
+
+            if(adaBtcChange <= 0){
+                btccolor = 'red';
+            }
+            else if(adaBtcChange == 0){
+                btccolor ='grey';
+            }
+            else{
+                btccolor = '#7FFF00';
+            }
+            
 
             setPrices(
                 <nav>
                     <div className="out-price">
                         <div className="price-label">ADA/USD ${adaUSD}</div>
-                        <div className="price-label" style={{color: color}}>({adaUsdChange}%)</div>
+                        <div className="price-label" style={{color: usdcolor}}>({adaUsdChange}%)</div>
                     </div>
 
                     <div className="out-price">   
                     <div className="price-label">ADA/GBP £{adaGBP}</div>
-                    <div className="price-label" style={{color: color}}>({adaGbpChange}%)</div>
+                    <div className="price-label" style={{color: gbpcolor}}>({adaGbpChange}%)</div>
                     </div>
 
                     <div className="out-price">
                     <div className="price-label">ADA/ETH Ξ{adaETH}</div>
-                    <div className="price-label" style={{color: color}}>({adaEthChange}%)</div>
+                    <div className="price-label" style={{color: ethcolor}}>({adaEthChange}%)</div>
                     </div>
 
                     <div className="out-price">
                     <div className="price-label">ADA/BTC ₿{adaBTC}</div>
-                    <div className="price-label" style={{color: color}}>({adaBtcChange}%)</div>
+                    <div className="price-label" style={{color: btccolor}}>({adaBtcChange}%)</div>
                     </div>
                     <div>
                     <label className="setting-label">Price Time Span</label>

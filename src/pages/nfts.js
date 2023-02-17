@@ -51,7 +51,7 @@ export default function Nfts ({tokens}){
     //returns a grid view of all NFTs grouped by policy
     return (
       <div>
-        <nav><button className="setting-button" onClick={() => showTokens()}>Show All</button></nav>
+        <nav><button className="setting-button" onClick={() => showTokens(tokens.nfts)}>Show All</button></nav>
         <div className="grid-nft">{display}</div>
       </div>
 

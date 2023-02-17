@@ -100,7 +100,7 @@ const Home = () => {
       <div className="index">
       <div className = "main-title">Cardano Explorer</div>
         <form  className= 'search-main'onSubmit={handleSearch}>
-          <input type="text" className = "searchbar" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
+          <input type="text" className = "searchbar" placeholder="Enter address, $handle or asset ID..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
         <div className="connect-wallet-main">
