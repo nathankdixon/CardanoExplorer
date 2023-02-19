@@ -105,34 +105,73 @@ header input[type="text"] {
     background-color:honeydew;
 }
 
-.connect-wallet-button{
-    display: flex;
+.connect-wallet{
+    position: relative;
+    padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
 
-    font-weight: bold;
-    font-size: medium;
-    background-color: rgb(238, 238, 110);
-    border-radius: 10%;
-    align-items: center;
+}
+
+.connect-wallet-button{
+    border-style: solid;    
+    border-radius: 4px;
+    border-style: solid;
     border-color: white;
-    border-width: 4px;
-    object-fit: cover;
     cursor: pointer;
-    transition: background-color 0.2s;
+    font-size: 16px;
+    background-color: rgb(238, 238, 110);
+    padding: 10px 10px 10px 10px;
+    margin: 0px 10px 10px 10px;
+    font-size: larger;
+    font-weight: bold;
+    width: 150px;
+}
+
+
+.connect-wallet-img{
+    width: 30px;
+    height: auto;
+    padding: 0px 30px 0px 30px;
 }
 
 .connect-wallet-button:hover{
     background-color:rgb(255, 255, 255);
 }
-.connect-wallet{
-    display: flex;
-    margin: 10px 10px 10px 10px;
-    width: 20%;
-}
-.walletButton:hover{
-    background-color:rgb(169, 225, 169);
 
+.options {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 99%;
+    left: 10%;    
+    width: 150px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius:4px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #ffffff;
+  }
+  
+.option {
+    justify-content: center;
+    background-color: rgb(238, 238, 110);
+    color:rgb(0, 0, 0);
+
+    padding: 10px 10px 10px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-size:small;
+    font-weight: bold;
+  }
+  
+  
+.option:hover {
+    background-color: #d9d9d9;
 }
+
 .walletButton-main:hover{
     background-color:rgb(169, 225, 169);
     cursor: pointer;
@@ -163,7 +202,7 @@ label{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+}
 
 .modal-content{
     border-color: rgb(255, 255, 255);
@@ -173,7 +212,7 @@ label{
 nav{
     display: flex;
     background-color: rgb(42, 59, 106);
-    justify-content: space-between;
+    justify-content:space-between;
 
 }
 
@@ -184,7 +223,7 @@ nav{
     font-weight: bolder;
     font-size: 14px;
     color: rgb(255, 255, 35);
-  }
+}
 
 .setting-label {
     display: inline-block;
@@ -192,21 +231,31 @@ nav{
     border: none;
     font-weight: bolder;
     font-size: 14px;
-    color: rgb(0, 0, 0);
-    background-color: rgb(238, 238, 110);
-  }
+    color: rgb(255, 255, 255);
+    background-color: rgb(83, 164, 33);
 
-  .setting-button {
+    border: 1px white solid;
+    border-radius: 4px;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 5px;
+}
+
+.setting-button {
     display: inline-block;
     cursor: pointer;
     transition: background-color 0.2s;
-    padding: 10px 10px 10px 10px;
-    border: none;
+    border: 1px white solid;
+    border-radius: 4px;
+    padding: 3px 3px 3px 3px;
     font-weight: bolder;
     font-size: 14px;
     color: rgb(0, 0, 0);
-    background-color: rgb(219, 219, 76);
-  }
+    background-color: rgb(238, 238, 110);
+    padding: 5px 5px 5px 5px;
+
+    margin: 5px 5px 5px 5px;
+
+}
 
 
 
@@ -279,6 +328,15 @@ nav{
     align-items: center;
     justify-content: center;
 
+    background-color: #50a6ec;
+    padding: 10px 10px 10px 10px;
+    margin: 20px 20px 20px 20px;
+    color:rgb(255, 255, 255);
+    border-color: #ffffff;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 10px;
+
 }
 
 .grid-item{
@@ -303,10 +361,6 @@ nav{
 .grid-item-ft{
     font-weight: bold;
 }
-.grid-item-overview{
-    font-weight: bold;
-    font-size: larger;
-}
 
 
 tr:hover {
@@ -318,7 +372,7 @@ tr:hover {
     color: rgb(146, 146, 146);
     border-style: solid;
     border-width: 5px;
-    border-color:  #f0f0f0e0; 
+    border-color:  #16025ee0; 
     border-radius: 2%;
     width: 300px;
     height: 300px;
@@ -334,13 +388,35 @@ tr:hover {
 .grid-ft {
     background-color: #50a6ec;
     padding: 10px 10px 10px 10px;
-    margin: 10px 10px 10px 10px;
+    margin: 20px 20px 20px 20px;
     color:rgb(255, 255, 255);
     border-color: #ffffff;
     border-width: 5px;
     border-style: solid;
-    border-radius:3%;
+    border-radius: 10px;
 
+}
+
+.summary{
+    display: flex;
+    justify-content: space-around;
+    background-color: #50a6ec;
+    padding: 10px 10px 10px 10px;
+    margin: 20px 20px 20px 20px;
+    color:rgb(255, 255, 255);
+    border-color: #ffffff;
+    border-width: 5px;
+    border-style: solid;
+    border-radius:20px;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.summary-item{
+    background-color: #0e4069;
+    border: 1px white solid;
+    border-radius: 4px;
+    padding: 10px 10px 10px 10px;
 }
 
 .currency{

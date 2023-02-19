@@ -2,20 +2,58 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Header from "../header";
 import TokenData from "../tokenData";
+import WalletButton from "../walletButton";
 
 
 function TokenPage() {
 
     const router = useRouter();
     const { tokenId } = router.query;
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const handleAddressUpdate = (newAddress) => {
-      router.push(`/address/`+newAddress);
+
+    const handleSearch = async  (event) => {
+      event.preventDefault();
+      // Use the `router.push` method to navigate to the dynamic page with the entered number as the URL parameter.
+      if(searchQuery.startsWith('add')){
+        let stakeAddress = await getStakeFromAddressKoios(searchQuery);
+        router.push(`/${stakeAddress}`);
+      }
+      else if (searchQuery.startsWith('stake') || searchQuery.startsWith('$')){
+        router.push(`/${searchQuery}`);
+      }
+      else{
+        router.push(`/token/${searchQuery}`);
+      }
     }
+
+    async function getStakeFromAddressKoios(address){
+      const req = await fetch('https://api.koios.rest/api/v0/address_info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "_addresses": [ address
+          ]
+        })
+      });
+  
+      const res = await req.json();
+      return res[0].stake_address;
+    }
+
 
     return (
       <div>
-        <Header updatedAddress={handleAddressUpdate}/>
+      <header>
+        <label className="main-label">Explorer</label>
+        <form className="searchForm" onSubmit={handleSearch}>
+          <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
+          <button type="submit" className="search-button">Search</button>
+        </form>
+        <WalletButton stake = {'hi'}/>
+      </header>
         <TokenData tokenId = {tokenId}/>
       </div>
     );

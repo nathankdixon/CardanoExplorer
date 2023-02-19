@@ -31,9 +31,9 @@ export default function Fts ({tokens}){
 
         let fts = tokens.fts;;
         displayTokenTable(fts);
-        let pricedTokens = await getTokensWithGeckoPrices(fts);
-        setPriceTokens(pricedTokens);
-        displayPriced(pricedTokens, tokens.stake);
+        //let pricedTokens = await getTokensWithGeckoPrices(fts);
+        //setPriceTokens(pricedTokens);
+        //displayPriced(pricedTokens, tokens.stake);
       }
     }
     getData();
@@ -203,8 +203,6 @@ export default function Fts ({tokens}){
       }
       if(currency == '£'){
         setCurrency({name: 'gbp', symbol: '£', value : prices.adaUSD*(1/(prices.adaGBP))});
-
-
       }
       if(currency == '₿'){
         setCurrency({name: 'btc', symbol: '₿', value: prices.adaUSD*(1/prices.adaBTC)});      
@@ -219,22 +217,6 @@ export default function Fts ({tokens}){
 
     //returns a grid view of all NFTs grouped by policy
     return (
-      <div>
-        <Prices data = {setPriceData}/>
-        <div className="fts">
-          <div>
-            <div className = "currency">Currency: 
-            <button className="currency-button" onClick={() => changeCurrency('$')}>$</button>
-            <button className="currency-button" onClick={() => changeCurrency('₳')}>₳</button>
-            <button className="currency-button" onClick={() => changeCurrency('£')}>£</button>
-            <button className="currency-button" onClick={() => changeCurrency('₿')}>₿</button>
-            <button className="currency-button" onClick={() => changeCurrency('Ξ')}>Ξ</button>
-            </div>
-          <div className="grid-ft" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>{priced}</div>
-          </div>
-          <div className="grid-ft">{display}</div>
-        </div>
-      </div>
-
+        <div className="grid-ft">{display}</div>
     )
 }

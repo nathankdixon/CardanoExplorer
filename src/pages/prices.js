@@ -4,7 +4,11 @@ export default function Prices (props) {
 
     const [prices, setPrices] = useState();
     const [granularity, setGranularity] = useState('24 hours');
-    const [color, setColor] = useState('red');
+    const [currency, setCurrency] = useState({name: 'ada', value: 1, symbol: '₳'});
+    const [adaUSD, setAdaUSD] = useState();
+    const [adaGBP, setAdaGBP] = useState();
+    const [adaBTC, setAdaBTC] = useState();
+    const [adaETH, setAdaETH] = useState();
 
     useEffect(() => {
         const getPrices = async () => { 
@@ -16,8 +20,13 @@ export default function Prices (props) {
             let adaBTC = (res.market_data.current_price.btc).toFixed(5);
             let adaETH = (res.market_data.current_price.eth).toFixed(5);
 
+            setAdaUSD(adaUSD);
+            setAdaGBP(adaGBP);
+            setAdaBTC(adaBTC);
+            setAdaETH(adaETH);
 
-            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH});
+
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, currency: currency});
 
             let adaUsdChange = '';
             let adaGbpChange = '';
@@ -113,22 +122,18 @@ export default function Prices (props) {
                     </div>
 
                     <div className="out-price">   
-                    <div className="price-label">ADA/GBP £{adaGBP}</div>
-                    <div className="price-label" style={{color: gbpcolor}}>({adaGbpChange}%)</div>
+                        <div className="price-label">ADA/GBP £{adaGBP}</div>
+                        <div className="price-label" style={{color: gbpcolor}}>({adaGbpChange}%)</div>
                     </div>
 
                     <div className="out-price">
-                    <div className="price-label">ADA/ETH Ξ{adaETH}</div>
-                    <div className="price-label" style={{color: ethcolor}}>({adaEthChange}%)</div>
+                        <div className="price-label">ADA/ETH Ξ{adaETH}</div>
+                        <div className="price-label" style={{color: ethcolor}}>({adaEthChange}%)</div>
                     </div>
 
                     <div className="out-price">
-                    <div className="price-label">ADA/BTC ₿{adaBTC}</div>
-                    <div className="price-label" style={{color: btccolor}}>({adaBtcChange}%)</div>
-                    </div>
-                    <div>
-                    <label className="setting-label">Price Time Span</label>
-                    <button className="setting-button" onClick={() => increaseGranularity(granularity)}>{granularity}</button>
+                        <div className="price-label">ADA/BTC ₿{adaBTC}</div>
+                        <div className="price-label" style={{color: btccolor}}>({adaBtcChange}%)</div>
                     </div>
                 </nav>
 
@@ -136,6 +141,35 @@ export default function Prices (props) {
         }
         getPrices();
     }, [granularity])
+
+    useEffect(() => {
+        function updateCurrency (){
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, currency: currency});
+        }
+
+        updateCurrency();
+    }, [currency])
+
+    const changeCurrency = (_currency) => {
+
+
+        if(_currency.name == 'eth'){
+            setCurrency({name: 'ada',value: 1, symbol: '₳'});
+        }
+        else if (_currency.name == 'ada'){
+            setCurrency({name: 'usd', value: adaUSD, symbol: '$'});
+        }
+        else if (_currency.name == 'usd'){
+            setCurrency({name: 'gbp',value: adaGBP, symbol: '£'});
+        }
+        else if (_currency.name == 'gbp'){
+            setCurrency({name: 'btc',value: adaBTC, symbol: '฿'});
+        }
+        else if (_currency.name == 'btc'){
+            setCurrency({name: 'eth',value: adaETH, symbol: 'Ξ'});
+        }
+
+    }
 
     const increaseGranularity = (granularity) => {
         if(granularity == '24 hours'){
@@ -155,6 +189,15 @@ export default function Prices (props) {
         }
     }
 
-    return(<div>{prices}</div>
+    return(<nav>
+        {prices}
+        <div>
+        <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:</button>
+        <label className="setting-label">{granularity}</label>
+        <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:</button>
+        <label className="setting-label">{currency.symbol}</label>
+        </div>
+
+    </nav>
     )
 }
