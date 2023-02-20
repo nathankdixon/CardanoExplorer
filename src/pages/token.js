@@ -6,6 +6,42 @@ export default class Token{
         this.quantity = quantity; 
     }
 
+    async getPrice(){
+
+      let request = await fetch('/coin-gecko.json');
+      let geckoData = await request.json();
+      let ticker = '';
+
+      try{
+        ticker = this.metadata.ticker;
+      }catch(error){
+        ticker = null;
+      }
+
+      if(ticker != null){
+        let foundGeckoCoin  = geckoData.find(item => item.symbol == ticker.toLowerCase());
+        if(foundGeckoCoin != null){
+          this.id = foundGeckoCoin.id;
+        }
+        else{
+          this.id = null;
+        }
+      }
+      if(this.id != null){
+        let req = await fetch('https://api.coingecko.com/api/v3/coins/'+this.id);
+        let res = await req.json();
+        
+        if(res.asset_platform_id == 'cardano'){
+          this.price = res.market_data.current_price.usd.toFixed(2);
+        }
+      }
+      else{
+        this.price = null;
+      }
+
+      return this.price;
+    }
+
     async getMetadata(){
       try{
         const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.policy_id+this.asset_name,
@@ -20,11 +56,10 @@ export default class Token{
           return this.metadata.onchain_metadata;
         }
         else{
-          return 'no metadata found';
+          return null;
         }
       }catch(error){
-        console.log(error);
-        return 'none';
+        return null;
       }
         
     }
@@ -63,15 +98,15 @@ export default class Token{
           }
           ipfs = "http://dweb.link/ipfs/"+ipfs;
         }
-        if(ipfs.startsWith('ipfs/')){
+        else if(ipfs.startsWith('ipfs/')){
           ipfs = ipfs.slice(5);
           ipfs = "http://dweb.link/ipfs/"+ipfs;
         }
-        if(ipfs.startsWith('Qm')){
+        else if(ipfs.startsWith('Qm')){
           ipfs = "http://dweb.link/ipfs/"+ipfs;
         }
       }catch{
-        return 'none';
+        return null;
       }
       return ipfs;
     

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -23,11 +24,45 @@ export default function Nfts ({tokens}){
         let policies = Object.keys(tokens);
         for(const policy of policies){
           let token = tokens[policy][0];
-          if(tokens[policy].length > 1){
-            _display.push(<div key = {token.asset_name + 'nft'} className = "grid-item-collection" onClick = {() => showTokensFromPolicy(tokens[policy])}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
+
+          let name = token.metadata.name;
+          let collection = '';
+
+          if(token.metadata.collection != null){
+            collection = token.metadata.collection;
+          }
+          else if(token.metadata.Collection != null){
+            collection = token.metadata.Collection;
+          }
+          else if(token.metadata.project != null){
+            collection = token.metadata.project;
+          }
+          else if(token.metadata.Project != null){
+            collection = token.metadata.Project;
           }
           else{
-            _display.push(<div key = {token.asset_name + 'nft'} className = "grid-item" onClick = {() => router.push('/token/'+token.policy_id+token.asset_name)}><img src={token.ipfs} alt = 'failed to load image'></img></div>);
+            console.log(token);
+          }
+
+          if(tokens[policy].length > 1){
+            _display.push(
+            <div key = {token.asset_name + 'nft'} className = "grid-item-collection" onClick = {() => showTokensFromPolicy(tokens[policy])}>
+              <Image className="grid-img" src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
+                <div className="grid-item-title">{name}</div>
+                <div className="grid-item-text">{collection}</div>
+                <div className="grid-item-text">Quantity: {tokens[policy].length}</div>
+              </div>);
+          }
+          else{
+            _display.push(
+            <div key = {token.asset_name + 'nft'} className = "grid-item" onClick = {() => router.push('/'+tokens.stake+'/'+token.policy_id+token.asset_name)}>
+              <Image className='grid-img' src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
+              <div className="grid-item-info">
+                <div className="grid-item-title">{name}</div>
+                <div className="grid-item-text" >{collection}</div>
+                <div className="grid-item-text" >Quantity: {tokens[policy].length}</div>
+              </div>
+              </div>);
 
           }
 
@@ -42,8 +77,36 @@ export default function Nfts ({tokens}){
         let _display = [];
         
         for(const token of policy){
-          _display.push(<div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}><img src= {token.ipfs}
-          alt = 'failed to load image'/></div>);
+
+          let name = token.metadata.name;
+          let collection = '';
+
+          if(token.metadata.collection != null){
+            collection = token.metadata.collection;
+          }
+          else if(token.metadata.Collection != null){
+            collection = token.metadata.Collection;
+          }
+          else if(token.metadata.project != null){
+            collection = token.metadata.project;
+          }
+          else if(token.metadata.Project != null){
+            collection = token.metadata.Project;
+          }
+          else{
+            console.log(token);
+          }
+
+
+          _display.push(
+          <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+tokens.stake+'/'+token.policy_id+token.asset_name)}>
+            <img className="grid-img" src= {token.ipfs}
+          alt = 'failed to load image'/>
+            <div className="grid-item-info">
+            <div className="grid-item-title">{name}</div>
+            <div className="grid-item-text" >{collection}</div>
+              </div>
+          </div>);
         }
         setDisplay(_display);
     }

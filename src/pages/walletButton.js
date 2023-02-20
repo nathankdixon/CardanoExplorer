@@ -9,6 +9,7 @@ export default function WalletButton(stake){
     const router = useRouter();
 
 
+
     useEffect(() => {
         function checkStorage(){
             if(stake.stake == undefined){
@@ -76,12 +77,28 @@ export default function WalletButton(stake){
         <button className="connect-wallet-button" onClick={showOptions}>{buttonText}</button>
         { showDropdown && (
             <div className="options">
-                <button className="option" onClick={() => handleSelect('Typhon Wallet')}><img className = 'connect-wallet-img' src="/typhon.svg"></img>Typhon</button>
-                <button className="option" onClick={() => handleSelect('eternl')}><img className = 'connect-wallet-img' src = '/eternl.png'></img>Eternl</button>
-                <button className="option" onClick={() => handleSelect('Nami')}><img className="connect-wallet-img" src="/nami.svg"></img>Nami</button>
-                <button className="option" onClick={() => handleSelect('Flint Wallet')}><img className="connect-wallet-img" src="/flint.png"></img> Flint</button>
-                <button className="option" onClick={() => refreshWallet()}>↺ Refresh</button>
-                <button className="option" onClick={() => disconnectWallet()}>✗ Disconnect</button>
+                <div className="option">
+                    <button className="option-button" onClick={() => router.push('/'+stake.stake)}>⌂ Home</button>
+                </div>
+
+                <div className="option">
+                    <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}><img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
+                </div>
+                <div className="option">
+                    <button className="option-button" onClick={() => handleSelect('eternl')}><img className = 'connect-wallet-img' src = '/eternl.png'></img></button>
+                </div>
+                <div className="option">
+                    <button className="option-button" onClick={() => handleSelect('Nami')}><img className="connect-wallet-img" src="/nami.svg"></img></button>
+                </div>
+                <div className="option">
+                    <button className="option-button" onClick={() => handleSelect('Flint Wallet')}><img className="connect-wallet-img" src="/flint.png"></img></button>
+                </div>
+                <div className="option">
+                    <button className="option-button" onClick={() => refreshWallet()}>↺ Refresh</button>
+                </div>
+                <div className="option">
+                    <button className="option-button" onClick={() => disconnectWallet()}>✗ Disconnect</button>
+                </div>
             </div>
         )}
         </div>

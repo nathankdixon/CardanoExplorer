@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import MetadataTable from "./metadataTable";
 import Token from "./token";
@@ -29,7 +30,7 @@ function TokenData ({tokenId}) {
             const meta = token.metadata;
             const keys = Object.keys(meta);
             const _ipfs = await token.getIpfsFromMetadata();
-            setImage(<img className = "main-img"src = {_ipfs}></img>);
+            setImage(<Image className = "main-img" src = {_ipfs} width = {700} height = {700}/>);
             setTokendata(meta.name);
             setMetadata(<MetadataTable json = {meta}/>);
           }

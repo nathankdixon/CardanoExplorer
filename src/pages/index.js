@@ -104,10 +104,10 @@ const Home = () => {
           <button type="submit" className="search-button">Search</button>
         </form>
         <div className="connect-wallet-main">
-        <button className="walletButton-main" onClick={() => handleSelect('Typhon Wallet')} style={{backgroundImage:`url(${'/typhon.svg'})`}}>Typhon</button>
-        <button className="walletButton-main" onClick={() => handleSelect('eternl')} style={{backgroundImage:`url(${'/eternl.png'})`}}>Eternl</button>
-        <button className="walletButton-main" onClick={() => handleSelect('Nami')} style={{backgroundImage:`url(${'/nami.svg'})`}}>Nami</button>
-        <button className="walletButton-main" onClick={() => handleSelect('Flint Wallet')} style={{backgroundImage:`url(${'/flint.png'})`}}>Flint</button><br/>
+        <button className="walletButton-main" onClick={() => handleSelect('Typhon Wallet')}><img className="wallet-img" src='/typhon.svg'></img></button>
+        <button className="walletButton-main" onClick={() => handleSelect('eternl')}><img className="wallet-img" src='/eternl.png'></img></button>
+        <button className="walletButton-main" onClick={() => handleSelect('Nami')}><img className="wallet-img" src='/nami.svg'></img></button>
+        <button className="walletButton-main" onClick={() => handleSelect('Flint Wallet')}><img className="wallet-img" src='/flint.png'></img></button><br/>
       </div>
       </div>
 

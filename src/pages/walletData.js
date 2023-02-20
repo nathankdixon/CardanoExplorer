@@ -206,19 +206,38 @@ function WalletData ({stakeAddress}) {
 
 
     const _tokens = [];
+
+    let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
+    let res = await req.json();
+
+    let adaUSD = res.market_data.current_price.usd;
+    
+
     for(let i =0; i<assets.length;i++){
       setLoadingInfo('Loading tokens: '+i + ' of ' +assets.length)
       let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
       token.metadata = await token.getMetadata();
+      let usdPrice = await token.getPrice();
+      if(usdPrice != null){
+        token.price = usdPrice * (1/adaUSD);
+      }
+      else{
+        token.price = 0;
+      }
+
       if(token.metadata != null){
         let ipfs = token.getIpfsFromMetadata();
         token.ipfs = ipfs;
        _tokens.push(token);
       }
-
     }
-    return _tokens;
+    let priceSorted = sortByPrice(_tokens);
+    return priceSorted;
 
+  }
+
+  function sortByPrice(list) {
+    return list.sort((a, b) => a.price - b.price);
   }
 
 

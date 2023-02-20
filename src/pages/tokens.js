@@ -22,10 +22,6 @@ export default function Tokens ({tokens}) {
         setShowNfts(false);
     }
 
-    function func (){
-        console.log(prices);
-    }
-
 
     
     return (
@@ -45,10 +41,8 @@ export default function Tokens ({tokens}) {
                     <button className="setting-label">Quantity</button>
                     <button className="setting-label">Alphabetically</button>
                 </div>
-
-
              </nav>
-             {showNfts ? <Nfts tokens = {tokens} /> : <Fts tokens = {tokens}/>}
+             {showNfts ? <Nfts tokens = {tokens} /> : <Fts tokens = {tokens} prices = {prices}/>}
         </div>
     )
 }
