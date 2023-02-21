@@ -27,19 +27,27 @@ export default class Token{
           this.id = null;
         }
       }
+
+      let prices = '';
       if(this.id != null){
         let req = await fetch('https://api.coingecko.com/api/v3/coins/'+this.id);
         let res = await req.json();
         
         if(res.asset_platform_id == 'cardano'){
-          this.price = res.market_data.current_price.usd.toFixed(2);
+          let _currentPrice = res.market_data.current_price.usd.toFixed(2);
+          let _24change = res.market_data.price_change_percentage_24h.toFixed(2);
+          let _7dchange = res.market_data.price_change_percentage_7d.toFixed(2);
+          let _30dchange = res.market_data.price_change_percentage_30d.toFixed(2);
+          let _1ychange = res.market_data.price_change_percentage_1y.toFixed(2);
+          prices = {current : _currentPrice, change24h: _24change, change7d: _7dchange,
+                    change30d : _30dchange, change1y: _1ychange};
         }
       }
       else{
-        this.price = null;
       }
 
-      return this.price;
+
+      return prices;
     }
 
     async getMetadata(){

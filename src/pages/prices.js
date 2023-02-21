@@ -20,13 +20,18 @@ export default function Prices (props) {
             let adaBTC = (res.market_data.current_price.btc).toFixed(5);
             let adaETH = (res.market_data.current_price.eth).toFixed(5);
 
+            let usd24h = (res.market_data.price_change_percentage_24h_in_currency.usd).toFixed(2);
+            let usd7d = (res.market_data.price_change_percentage_7d_in_currency.usd).toFixed(2);
+            let usd30d = (res.market_data.price_change_percentage_30d_in_currency.usd).toFixed(2);
+            let usd1y = (res.market_data.price_change_percentage_1y_in_currency.usd).toFixed(2);
+
             setAdaUSD(adaUSD);
             setAdaGBP(adaGBP);
             setAdaBTC(adaBTC);
             setAdaETH(adaETH);
 
 
-            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, currency: currency});
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, currency: currency, usd24h: usd24h, usd7d: usd7d, usd30d: usd30d, usd1y:usd1y});
 
             let adaUsdChange = '';
             let adaGbpChange = '';
@@ -115,7 +120,7 @@ export default function Prices (props) {
             
 
             setPrices(
-                <nav>
+                <nav className="price-nav-inner">
                     <div className="out-price">
                         <div className="price-label">ADA/USD ${adaUSD}</div>
                         <div className="price-label" style={{color: usdcolor}}>({adaUsdChange}%)</div>
@@ -189,15 +194,10 @@ export default function Prices (props) {
         }
     }
 
-    return(<nav>
+    return(<nav className="price-nav">
         {prices}
-        <div>
-        <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:</button>
-        <label className="setting-label">{granularity}</label>
-        <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:</button>
-        <label className="setting-label">{currency.symbol}</label>
-        </div>
-
+        <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:{granularity}</button>
+        <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:{currency.symbol}</button>
     </nav>
     )
 }

@@ -28,7 +28,7 @@ export default function Tokens ({tokens}) {
         <div className="wallet">
             <Prices data ={setPriceData}/>
             <Summary tokens = {tokens} prices = {prices}/>
-             <nav>
+             <nav className="setting-nav">
                 <div>
                     <button className="setting-button" onClick={displayNfts}>NFTs</button>
                     <button className="setting-button" onClick={displayFts}>FTs</button>
@@ -38,8 +38,6 @@ export default function Tokens ({tokens}) {
                 </div>
                 <div>
                     <button className="setting-button">Filter</button>
-                    <button className="setting-label">Quantity</button>
-                    <button className="setting-label">Alphabetically</button>
                 </div>
              </nav>
              {showNfts ? <Nfts tokens = {tokens} /> : <Fts tokens = {tokens} prices = {prices}/>}

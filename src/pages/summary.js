@@ -18,10 +18,11 @@ export default function Summary(props){
                     setCurrency(props.prices.currency);
                     let currency = props.prices.currency.value;
                     let _balance = stakeData[0].total_balance/1000000;
-                    let value = (currency*_balance).toFixed(5);
+                    let value = (currency*_balance).toFixed(2);
 
                     let tokenBalance = getTokenBalance(props.tokens.fts);
-                    let tokenValue = (currency * tokenBalance).toFixed(5);
+
+                    let tokenValue = (currency * tokenBalance).toFixed(2);
                     setAdaBalance(value);
                     setTokenBalance(tokenValue);
                 }
@@ -34,7 +35,11 @@ export default function Summary(props){
         let total = 0;
         for(const element of fts){
             let token = element[0];
-            let value = (token.price)* (token.quantity/1000000);
+            let price = token.current;
+            let value = 0;
+            if(price != -1){
+                value = (price)* (token.quantity/1000000);
+            }
             total = total + value;
         }
 
@@ -61,24 +66,23 @@ export default function Summary(props){
     return (
         <div className="summary">
             <div className="summary-item">
-                Ada Balance: {currency.symbol} {adaBalance} <br/>
+                Ada Value: <div className="value"><div className="currency">{currency.symbol}</div> {adaBalance}</div>
             </div>
             <div className="summary-item">
-                Token Balance: {currency.symbol} {tokenBalance} <br/>
+                Token Value: <div className="value"><div className="currency">{currency.symbol}</div> {tokenBalance}</div>
             </div>
             <div className="summary-item">
-                Tokens: {walletData.tokens}<br/>
+                Tokens:<div className="value">{walletData.tokens}</div>
             </div>
             <div className="summary-item">
-                Projects: {walletData.projects}
+                Projects:<div className="value"> {walletData.projects}</div>
             </div>
             <div className="summary-item">
-                NFTs: {walletData.nfts}
+                NFTs:<div className="value"> {walletData.nfts}</div>
             </div>
             <div className="summary-item">
-                FTs: {walletData.fts}
+                FTs:<div className="value"> {walletData.fts}</div>
             </div>
-
         </div>
     )
 }

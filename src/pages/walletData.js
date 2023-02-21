@@ -217,12 +217,14 @@ function WalletData ({stakeAddress}) {
       setLoadingInfo('Loading tokens: '+i + ' of ' +assets.length)
       let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
       token.metadata = await token.getMetadata();
-      let usdPrice = await token.getPrice();
-      if(usdPrice != null){
-        token.price = usdPrice * (1/adaUSD);
+      let prices = await token.getPrice();
+      if(prices != ''){
+        token.current = prices.current;
+        token.prices = prices;
       }
       else{
-        token.price = 0;
+        token.prices = '';
+        token.current = -1;
       }
 
       if(token.metadata != null){
@@ -237,7 +239,7 @@ function WalletData ({stakeAddress}) {
   }
 
   function sortByPrice(list) {
-    return list.sort((a, b) => a.price - b.price);
+    return list.sort((a, b) => a.current - b.current);
   }
 
 
