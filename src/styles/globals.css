@@ -232,7 +232,7 @@ header input[type="text"] {
 
 }
 .grid-nft{
-    display: grid;    
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
     text-align: center;
     background-color: #000000;
@@ -250,8 +250,8 @@ header input[type="text"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
-    margin: 10px;
+    padding: 10px, 10px 10px 10px;
+    margin: 10px, 10px 10px 10px;
     text-align: center;
     align-items: center;
     color: rgb(255, 255, 255);
@@ -321,18 +321,6 @@ tr:hover {
 
 
 
-
-
-
-
-
-
-
-
-.main{
-    text-align: center;
-}
-
 .index{
     position: absolute;
     top: 50%;
@@ -342,6 +330,11 @@ tr:hover {
     align-items: center;
 }
 
+.main-title{
+    font-size: x-large;
+    font-weight: bold;
+}
+
 .searchbar{
     width:100%;
     padding: 10px 10px 10px 10px;
@@ -349,6 +342,11 @@ tr:hover {
 .search-main{
     width: 100%;
 }
+
+.connect-wallet-main{
+    display: flex;
+}
+
 .walletButton-main{
     border: 4px solid #ffffff;
     border-radius: 10%;
@@ -362,6 +360,29 @@ tr:hover {
     font-weight: bold;
     color: rgb(40, 42, 40);
 }
+
+.walletButton-main:hover{
+    background-color: #61ff89;
+    cursor: pointer;
+}
+
+.wallet-img{
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+.main{
+    text-align: center;
+}
+
 
 
 
@@ -441,6 +462,14 @@ label{
     background-color: #7a0000;
     padding: 10px 10px 10px 10px;
 }
+
+
+
+
+
+
+
+
 
 
 

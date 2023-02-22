@@ -9,17 +9,22 @@ export default function Tokens ({tokens}) {
 
     const [prices, setPrices] = useState();
     const [showNfts, setShowNfts] = useState(false);
+    const [nftColor, setNftColor] = useState('#49f500');
+    const [ftColor, setFtColor] = useState('black');
 
     function setPriceData(data){
         setPrices(data);
     }
 
     function displayNfts(){
+        
         setShowNfts(true);
+        setNftColor('black');
     }
 
     function displayFts(){
         setShowNfts(false);
+        setFtColor('#49f500');
     }
 
 
@@ -30,7 +35,7 @@ export default function Tokens ({tokens}) {
             <Summary tokens = {tokens} prices = {prices}/>
              <nav className="setting-nav">
                 <div>
-                    <button className="setting-button" onClick={displayNfts}>NFTs</button>
+                    <button className="setting-button"   onClick={displayNfts}>NFTs</button>
                     <button className="setting-button" onClick={displayFts}>FTs</button>
                 </div>
                 <div>

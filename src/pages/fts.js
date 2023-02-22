@@ -37,6 +37,9 @@ export default function Fts (props){
         let _balance = (stakeData[0].total_balance/1000000).toFixed(2);
         let value = (currency.value*_balance).toFixed(2);
 
+        let adaChange = props.prices;
+        console.log(adaChange);
+
         let ada24hChange = props.prices.usd24h/100;
         let _adachange24h = ((ada24hChange * currency.value)*100).toFixed(2);
 

@@ -9,6 +9,7 @@ export default function Prices (props) {
     const [adaGBP, setAdaGBP] = useState();
     const [adaBTC, setAdaBTC] = useState();
     const [adaETH, setAdaETH] = useState();
+    const [adaChange, setAdaChange] = useState({usd24h: 0, usd7d:0, usd30d: 0, usd1y: 0});
 
     useEffect(() => {
         const getPrices = async () => { 
@@ -25,13 +26,16 @@ export default function Prices (props) {
             let usd30d = (res.market_data.price_change_percentage_30d_in_currency.usd).toFixed(2);
             let usd1y = (res.market_data.price_change_percentage_1y_in_currency.usd).toFixed(2);
 
+            setAdaChange({usd24h: usd24h, usd7d : usd7d, usd30d : usd30d, usd1y: usd1y});
+
             setAdaUSD(adaUSD);
             setAdaGBP(adaGBP);
             setAdaBTC(adaBTC);
             setAdaETH(adaETH);
 
 
-            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, currency: currency, usd24h: usd24h, usd7d: usd7d, usd30d: usd30d, usd1y:usd1y});
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH,
+                 currency: currency, usd24h: usd24h, usd7d: usd7d, usd30d: usd30d, usd1y:usd1y});
 
             let adaUsdChange = '';
             let adaGbpChange = '';
@@ -149,7 +153,9 @@ export default function Prices (props) {
 
     useEffect(() => {
         function updateCurrency (){
-            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, currency: currency});
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, 
+                usd24h: adaChange.usd24h, usd7d : adaChange.usd7d, usd30d: adaChange.usd30d, usd1y: adaChange.usd1y,
+                 currency: currency});
         }
 
         updateCurrency();
