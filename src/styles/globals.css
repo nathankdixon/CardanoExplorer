@@ -1,13 +1,14 @@
 /* Set the font and color scheme for the entire page */
 body {
-    font-family: 'Modeseven l3n5',sans-serif;
+    font-family: 'Courier New',sans-serif;
     color: #49f500;
     background-color: rgb(0, 0, 0);
     margin: 0 0 0 0;
-  }
+}
   
   /* Style the header */
 header {
+    font-family: 'Courier New',sans-serif;
     display: flex;
     height: 100px;
     padding: 5px 5px 5px 5px;
@@ -25,7 +26,7 @@ header input[type="text"] {
 
 .main-label{
     color: #49f500;
-    font-family: 'Modeseven l3n5',sans-serif;
+    font-family: 'Courier New',sans-serif;
 
     font-size: xx-large;
     width: 20%;
@@ -33,6 +34,7 @@ header input[type="text"] {
 }
 
 .searchForm{
+
     display: flex;
     width: 100%;
     align-items: center;
@@ -41,6 +43,8 @@ header input[type="text"] {
 }
 
 .search-input{
+    font-family: 'Courier New',sans-serif;
+
     background-color: black;
     color:#49f500;
     width: 100%;
@@ -48,7 +52,7 @@ header input[type="text"] {
 }
 
 .search-button{
-
+    font-family: 'Courier New',sans-serif;
     margin: 10px 10px 10px 10px;
     background-color:#000000;
     color:#49f500;
@@ -73,6 +77,8 @@ header input[type="text"] {
 }
 
 .connect-wallet-button{
+    font-family: 'Courier New',sans-serif;
+
     position: relative;
     top: 20px;
     right: 5px;
@@ -139,6 +145,8 @@ header input[type="text"] {
     font-weight: bold;
     background-color:#49f500;
     color:#000000;
+    font-family: 'Courier New',sans-serif;
+
 
 }
   
@@ -172,6 +180,8 @@ header input[type="text"] {
 
 
 .setting-button {
+    font-family: 'Courier New',sans-serif;
+
     display: inline-block;
     cursor: pointer;
     font-weight: bolder;
@@ -208,6 +218,46 @@ header input[type="text"] {
     display: flex;
     color: #49f500;
 }
+
+.active {
+    font-family: 'Courier New',sans-serif;
+
+    display: inline-block;
+    font-weight: bolder;
+    font-size: 15px;
+    height: 100%;
+    padding: 10px 10px 10px 10px;
+
+    background-color: #49f500;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+}
+  
+.inactive {
+    font-family: 'Courier New',sans-serif;
+
+    display: inline-block;
+    font-weight: bolder;
+    font-size: 15px;
+    height: 100%;
+    padding: 10px 10px 10px 10px;
+
+    background-color: black;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.active:hover{
+    background-color: #96f887;
+}
+
+.inactive:hover{
+    background-color:#9fee97;
+    color:black;
+}
+  
 
 .value{
     display: flex;
@@ -250,8 +300,8 @@ header input[type="text"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px, 10px 10px 10px;
-    margin: 10px, 10px 10px 10px;
+    padding: 10px;
+    margin: 10px;
     text-align: center;
     align-items: center;
     color: rgb(255, 255, 255);
@@ -336,6 +386,8 @@ tr:hover {
 }
 
 .searchbar{
+    font-family: 'Courier New',sans-serif;
+
     width:100%;
     padding: 10px 10px 10px 10px;
 }

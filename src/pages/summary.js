@@ -5,7 +5,7 @@ export default function Summary(props){
     const [walletData, setWalletData] = useState({balance: null, total_rewards: null,  available_rewards: null, projects: null, tokens: null, nfts: null, fts:null});
     const [currency, setCurrency] = useState({name: 'ada', value: 1, symbol: '₳'})
     const [adaBalance, setAdaBalance] = useState();
-    const [tokenBalance, setTokenBalance] = useState();
+    const [totalValue, setTotalValue] = useState();
 
     useEffect(() => {
         const getBalance = async () => {
@@ -18,13 +18,12 @@ export default function Summary(props){
                     setCurrency(props.prices.currency);
                     let currency = props.prices.currency.value;
                     let _balance = stakeData[0].total_balance/1000000;
-                    let value = (currency*_balance).toFixed(2);
+                    let value = (currency*_balance);
 
                     let tokenBalance = getTokenBalance(props.tokens.fts);
-
-                    let tokenValue = (currency * tokenBalance).toFixed(2);
-                    setAdaBalance(value);
-                    setTokenBalance(tokenValue);
+                    let totalValue = (currency * (tokenBalance +value));
+                    setAdaBalance(value.toFixed(2));
+                    setTotalValue(totalValue.toFixed(2));
                 }
             }
         }
@@ -34,13 +33,17 @@ export default function Summary(props){
     function getTokenBalance(fts){
         let total = 0;
         for(const element of fts){
+
             let token = element[0];
-            let price = token.current;
-            let value = 0;
-            if(price != -1){
-                value = (price)* (token.quantity/1000000);
+            if(token.current != -1){
+                let price = token.current * (1/props.prices.adaUSD);
+                let value = 0;
+                if(price != -1){
+                    value = (price)* (token.quantity/1000000);
+                }
+                total = total + value;
             }
-            total = total + value;
+
         }
 
         return total;
@@ -69,7 +72,7 @@ export default function Summary(props){
                 Ada Value: <div className="value"><div className="currency">{currency.symbol}</div> {adaBalance}</div>
             </div>
             <div className="summary-item">
-                Token Value: <div className="value"><div className="currency">{currency.symbol}</div> {tokenBalance}</div>
+                Wallet Value: <div className="value"><div className="currency">{currency.symbol}</div> {totalValue}</div>
             </div>
             <div className="summary-item">
                 Tokens:<div className="value">{walletData.tokens}</div>

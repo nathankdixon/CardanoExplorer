@@ -47,9 +47,9 @@ function TokenPage() {
     return (
       <div>
       <header>
-        <label className="main-label">Explorer</label>
+        <label className="main-label">✥ Explorer</label>
         <form className="searchForm" onSubmit={handleSearch}>
-          <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
+          <input type="text" className = "search-input" placeholder="Search for an address or a specific token..."  value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
         <WalletButton stake = {stake}/>

@@ -1,5 +1,4 @@
-import { stakeCredentialOf } from "lucid-cardano";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Fts from "./fts";
 import Nfts from "./nfts";
 import Prices from "./prices";
@@ -9,22 +8,23 @@ export default function Tokens ({tokens}) {
 
     const [prices, setPrices] = useState();
     const [showNfts, setShowNfts] = useState(false);
-    const [nftColor, setNftColor] = useState('#49f500');
-    const [ftColor, setFtColor] = useState('black');
+    const [nftActive, setNftActive] = useState(false);
+    const [ftActive, setFtActive] = useState(true);
 
     function setPriceData(data){
         setPrices(data);
     }
 
     function displayNfts(){
-        
+        setFtActive(false);
+        setNftActive(true);
         setShowNfts(true);
-        setNftColor('black');
     }
 
     function displayFts(){
+        setNftActive(false);
+        setFtActive(true);
         setShowNfts(false);
-        setFtColor('#49f500');
     }
 
 
@@ -35,14 +35,11 @@ export default function Tokens ({tokens}) {
             <Summary tokens = {tokens} prices = {prices}/>
              <nav className="setting-nav">
                 <div>
-                    <button className="setting-button"   onClick={displayNfts}>NFTs</button>
-                    <button className="setting-button" onClick={displayFts}>FTs</button>
+                    <button className= {nftActive ? 'active' : 'inactive'}  onClick={displayNfts}>NFTs</button>
+                    <button className= {ftActive ? 'active' : 'inactive'} onClick={displayFts}>FTs</button>
                 </div>
                 <div>
                     <button className="setting-button" >Search</button>
-                </div>
-                <div>
-                    <button className="setting-button">Filter</button>
                 </div>
              </nav>
              {showNfts ? <Nfts tokens = {tokens} /> : <Fts tokens = {tokens} prices = {prices}/>}

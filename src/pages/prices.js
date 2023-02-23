@@ -16,15 +16,15 @@ export default function Prices (props) {
             let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
             let res = await req.json();
 
-            let adaUSD = (res.market_data.current_price.usd).toFixed(2);
-            let adaGBP = (res.market_data.current_price.gbp).toFixed(2);
-            let adaBTC = (res.market_data.current_price.btc).toFixed(5);
-            let adaETH = (res.market_data.current_price.eth).toFixed(5);
+            let adaUSD = (res.market_data.current_price.usd);
+            let adaGBP = (res.market_data.current_price.gbp);
+            let adaBTC = (res.market_data.current_price.btc);
+            let adaETH = (res.market_data.current_price.eth);
 
-            let usd24h = (res.market_data.price_change_percentage_24h_in_currency.usd).toFixed(2);
-            let usd7d = (res.market_data.price_change_percentage_7d_in_currency.usd).toFixed(2);
-            let usd30d = (res.market_data.price_change_percentage_30d_in_currency.usd).toFixed(2);
-            let usd1y = (res.market_data.price_change_percentage_1y_in_currency.usd).toFixed(2);
+            let usd24h = (res.market_data.price_change_percentage_24h_in_currency.usd);
+            let usd7d = (res.market_data.price_change_percentage_7d_in_currency.usd);
+            let usd30d = (res.market_data.price_change_percentage_30d_in_currency.usd);
+            let usd1y = (res.market_data.price_change_percentage_1y_in_currency.usd);
 
             setAdaChange({usd24h: usd24h, usd7d : usd7d, usd30d : usd30d, usd1y: usd1y});
 

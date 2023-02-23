@@ -42,6 +42,9 @@ function WalletData ({stakeAddress}) {
         //if no stored data, create new
         else{
           stakeData = await createStakeDataFromStakeAddress(stakeAddress);
+          if(handle != ''){
+            stakeData.handle = handle;
+          }
           localStorage.setItem(stakeAddress, JSON.stringify(stakeData));
         }
 

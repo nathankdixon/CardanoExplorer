@@ -30,7 +30,7 @@ function TokenData ({tokenId}) {
             const meta = token.metadata;
             const keys = Object.keys(meta);
             const _ipfs = await token.getIpfsFromMetadata();
-            setImage(<Image className = "main-img" src = {_ipfs} width = {700} height = {700}/>);
+            setImage(<Image className = "main-img" alt= 'no image' src = {_ipfs} width = {700} height = {700}/>);
             setTokendata(meta.name);
             setMetadata(<MetadataTable json = {meta}/>);
           }

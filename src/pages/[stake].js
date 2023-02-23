@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import WalletButton from "./walletButton";
 import WalletData from "./walletData";
 
@@ -44,7 +44,7 @@ function StakePage() {
     return (
       <div>
         <header>
-        <label className="main-label">Explorer</label>
+        <label className="main-label">✥ Explorer</label>
         <form className="searchForm" onSubmit={handleSearch}>
           <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>

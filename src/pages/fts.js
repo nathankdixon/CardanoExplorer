@@ -37,8 +37,10 @@ export default function Fts (props){
         let _balance = (stakeData[0].total_balance/1000000).toFixed(2);
         let value = (currency.value*_balance).toFixed(2);
 
-        let adaChange = props.prices;
-        console.log(adaChange);
+        let ada24hcolor = 'black';
+        let ada7dcolor = 'black';
+        let ada30dcolor = 'black';
+        let ada1ycolor = 'black';
 
         let ada24hChange = props.prices.usd24h/100;
         let _adachange24h = ((ada24hChange * currency.value)*100).toFixed(2);
@@ -53,13 +55,55 @@ export default function Fts (props){
         let _adachange1y = ((ada1yChange * currency.value)*100).toFixed(2);
 
 
+        if(ada24hChange < 0){
+          ada24hcolor = 'red';
+        }
+        else if(ada24hChange == 0){
+          ada24hcolor = 'grey';
+        }
+        else{
+          ada24hcolor = '#49f500';
+        }
+
+        if(ada7dChange < 0){
+          ada7dcolor = 'red';
+        }
+        else if(ada7dChange == 0){
+          ada7dcolor = 'grey';
+        }
+        else{
+          ada7dcolor = '#49f500';
+        }
+
+        if(ada30dChange < 0){
+          ada30dcolor = 'red';
+        }
+        else if(ada30dChange == 0){
+          ada30dcolor = 'grey';
+        }
+        else{
+          ada30dcolor = '#49f500';
+        }
+
+        if(ada1yChange < 0){
+          ada1ycolor = 'red';
+        }
+        else if(ada1yChange == 0){
+          ada1ycolor = 'grey';
+        }
+        else{
+          ada1ycolor = '#49f500';
+        }
+
 
         _display.push(<tr key = 'ada-ft' className="grid-item-ft"><td><img src="/cardano.png" className="ft-img"></img></td>
         <td>ADA</td><td>{_balance} </td>
-        <td>{currency.symbol} {currency.value}</td><td>{_adachange24h}%</td><td>{_adachange7d}%</td>
-        <td>{_adachange30d}%</td>
-        <td>{_adachange1y}%</td>
-        <td><div className="value"><div className="currency">{currency.symbol}</div> {value} </div></td>
+        <td><div className="value"><div className="currency">{currency.symbol}</div>{currency.value}</div></td>
+        <td><div style = {{color: ada24hcolor}}>{_adachange24h}%</div>
+        </td><td><div style={{color: ada7dcolor}}>{_adachange7d}%</div></td>
+        <td><div style={{color: ada30dcolor}}>{_adachange30d}%</div></td>
+        <td><div style={{color: ada1ycolor}}>{_adachange1y}%</div></td>
+        <td><div className="value"><div className="currency">{currency.symbol}</div>{value}</div></td>
         </tr>)
 
 
@@ -85,9 +129,16 @@ export default function Fts (props){
           let _change30d = '-';
           let _change1y = '-';
 
+          let token24hcolor = 'black';
+          let token7dcolor = 'black';
+          let token30dcolor = 'black';
+          let token1ycolor = 'black';
+
           if(token.prices != ''){
 
-            price = ((token.prices.current) * currency.value).toFixed(2);
+            let tokenPriceAda = token.prices.current* 1/(props.prices.adaUSD);
+
+            price = ((tokenPriceAda) * currency.value).toFixed(2);
             value = (price*(token.quantity/1000000)).toFixed(2);
 
             let usd24hChange = token.prices.change24h/100;
@@ -102,15 +153,56 @@ export default function Fts (props){
             let usd1yChange = token.prices.change1y/100;
             _change1y = ((usd1yChange * currency.value)*100).toFixed(2);
 
+            if(usd24hChange > 0){
+              token24hcolor = '#49f500';
+            }
+            else if(usd24hChange == 0){
+              token24hcolor = 'grey';
+            }
+            else{
+              token24hcolor = 'red';
+            }
+  
+            if(usd7dChange > 0){
+              token7dcolor = '#49f500';
+            }
+            else if(usd7dChange == 0){
+              token7dcolor = 'grey';
+            }
+            else{
+              token7dcolor = 'red';
+            }
+  
+            if(usd30dChange > 0){
+              token30dcolor = '#49f500';
+            }
+            else if(usd30dChange == 0){
+              token30dcolor = 'grey';
+            }
+            else{
+              token30dcolor = 'red';
+            }
+  
+            if(usd1yChange > 0){
+              token1ycolor = '#49f500';
+            }
+            else if(usd1yChange == 0){
+              token1ycolor = 'grey';
+            }
+            else{
+              token1ycolor = 'red';
+            }
+
           }
 
-
-
-          _display.push(<tr key = {token.asset_name + 'ftunpriced'} className = "grid-item-ft" 
-            onClick={() => router.push('/token/'+token.policy_id+token.asset_name)}>
+          _display.push(<tr key = {token.asset_name + 'ftunpriced'} className = "grid-item-ft">
             <td><img className='ft-img' src={token.ipfs}></img></td>
-            <td>{name}</td><td>{(token.quantity/ 1000000)}</td><td>{currency.symbol} {price} </td>
-            <td>{_change24h}%</td><td>{_change7d}%</td><td>{_change30d}%</td><td>{_change1y}%</td>
+            <td>{name}</td><td>{(token.quantity/ 1000000)}</td>
+            <td><div className="value"><div className="currency">{currency.symbol}</div>{price}</div></td>
+            <td><div style={{color: token24hcolor}}>{_change24h}%</div></td>
+            <td><div style={{color: token7dcolor}}>{_change7d}%</div></td>
+            <td><div style={{color: token30dcolor}}>{_change30d}%</div></td>
+            <td><div style={{color: token1ycolor}}>{_change1y}%</div></td>
             <td><div className="value"><div className="currency">{currency.symbol}</div>{value}</div></td></tr>);
         }
         let table = <table className="ft-table"><tbody>{_display}</tbody></table>
@@ -135,8 +227,6 @@ export default function Fts (props){
       const res = await req.json();
       return res;
   }
-
-
 
     //returns a grid view of all NFTs grouped by policy
     return (
