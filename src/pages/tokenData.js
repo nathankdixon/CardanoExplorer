@@ -1,31 +1,34 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import MetadataTable from "./metadataTable";
+import Prices from "./prices";
 import Token from "./token";
 
-function TokenData ({tokenId}) {
+function TokenData (props) {
 
     const [tokenData, setTokendata] = useState();
-    const [policyData, setPolicyData] = useState();
     const [metadata, setMetadata] = useState();
     const [floorPrice, setFloorPrice] = useState();
     const [volume, setVolume] = useState();
     const [holderCount, setHolderCount] = useState();
     const [image, setImage] = useState();
+    const [currency, setCurrency] = useState({name: 'ada',value: 1, symbol: '₳'});
 
     useEffect(() => {
         const getTokenData = async () => {
-          if(tokenId == null){
+          if(props == null){
             console.log('tokenID was undefined');
           }
           else{
+            let tokenId = props.tokenId;
+            let currency = props.prices.currency;
+            setCurrency(currency);
             let _tokenData = await loadTokenData(tokenId);
             const token = new Token(_tokenData.asset_name, _tokenData.policy_id , _tokenData.quantity);
             token.metadata = await token.getMetadata();
             let _policyData = await loadPolicyData(token.policy_id);
-
-            setFloorPrice(Math.round(_policyData.floor_price/1000000)+'₳');
-            setVolume(Math.round(_policyData.total_volume/1000000)+'₳');
+            setFloorPrice(((_policyData.floor_price/1000000) * currency.value).toFixed(2));
+            setVolume(((_policyData.total_volume/1000000) * currency.value).toFixed(2));
             setHolderCount(_policyData.asset_holders);
             const meta = token.metadata;
             const keys = Object.keys(meta);
@@ -36,7 +39,7 @@ function TokenData ({tokenId}) {
           }
         }
         getTokenData();
-      }, [tokenId])
+      }, [props])
 
     async function loadTokenData(tokenId){
         const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+tokenId,
@@ -52,14 +55,16 @@ function TokenData ({tokenId}) {
       return res;
     }
 
+
+
     return(
     <div className="token-main">
         <div className="token-name">
             {tokenData}
         </div>
         <div className="policyData">
-            <p className="policy-item">Floor Price: {floorPrice}</p>
-            <p className="policy-item">Collection Volume : {volume}</p>
+            <p className="policy-item">Floor Price: <div className="value">{floorPrice}<div className="currency">{currency.symbol}</div></div></p>
+            <p className="policy-item">Collection Volume : <div className="value">{volume}<div className="currency">{currency.symbol}</div></div></p>
             <p className="policy-item">Number of Holders: {holderCount}</p>
         </div>
         <div className="token-box">

@@ -159,16 +159,19 @@ header input[type="text"] {
 
 .price-nav{
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     border: #49f500 1px solid;
     background-color: #000000;
 }
 
 .price-nav-inner{
     display: flex;
-    justify-content:space-between;
+    justify-content:space-around;
 }
 
+.price-buttons{
+    display: flex;
+}
 
 .price-label {
     display: inline-block;

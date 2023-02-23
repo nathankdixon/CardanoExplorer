@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Header from "../header";
+import Prices from "../prices";
 import TokenData from "../tokenData";
 import WalletButton from "../walletButton";
 
@@ -10,6 +11,8 @@ function TokenPage() {
     const router = useRouter();
     const { stake, tokenId } = router.query;
     const [searchQuery, setSearchQuery] = useState('');
+    const [prices, setPrices] = useState();
+
 
 
     const handleSearch = async  (event) => {
@@ -42,6 +45,9 @@ function TokenPage() {
       const res = await req.json();
       return res[0].stake_address;
     }
+    function setPriceData(data){
+      setPrices(data);
+  }
 
 
     return (
@@ -54,7 +60,8 @@ function TokenPage() {
         </form>
         <WalletButton stake = {stake}/>
       </header>
-        <TokenData tokenId = {tokenId}/>
+        <Prices data ={setPriceData}/>
+        <TokenData tokenId = {tokenId} prices = {prices}/>
       </div>
     );
   }
