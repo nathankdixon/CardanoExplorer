@@ -142,12 +142,22 @@ export default function Fts (props){
           let token30dcolor = 'black';
           let token1ycolor = 'black';
 
+          let quantity = 0;
+
           if(token.prices != ''){
 
             let tokenPriceAda = token.prices.current* 1/(props.prices.adaUSD);
 
+
+            if(token.metadata.ticker == 'LQ'){
+              quantity = token.quantity/1000000;
+            }
+            else{
+              quantity = token.quantity;
+            }
+
             price = ((tokenPriceAda) * currency.value).toFixed(2);
-            value = (price*(token.quantity/1000000)).toFixed(2);
+            value = (price*quantity).toFixed(2);
 
             let usd24hChange = token.prices.change24h/100;
             _change24h = ((usd24hChange * currency.value)*100).toFixed(2);
@@ -209,9 +219,11 @@ export default function Fts (props){
             value = valueAsterisks;
           }
 
+
+
           _display.push(<tr key = {token.asset_name + 'ftunpriced'} className = "grid-item-ft">
             <td><img className='ft-img' src={token.ipfs}></img></td>
-            <td>{name}</td><td>{(token.quantity/ 1000000)}</td>
+            <td>{name}</td><td>{quantity}</td>
             <td><div className="value"><div className="currency">{currency.symbol}</div>{price}</div></td>
             <td><div style={{color: token24hcolor}}>{_change24h}%</div></td>
             <td><div style={{color: token7dcolor}}>{_change7d}%</div></td>

@@ -150,16 +150,16 @@ export default function WalletButton(stake){
                 </div>
 
                 <div className="option">
-                    <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}><img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
+                    <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}>Typhon<img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
                 </div>
                 <div className="option">
-                    <button className="option-button" onClick={() => handleSelect('eternl')}><img className = 'connect-wallet-img' src = '/eternl.png'></img></button>
+                    <button className="option-button" onClick={() => handleSelect('eternl')}>Eternl<img className = 'connect-wallet-img' src = '/eternl.png'></img></button>
                 </div>
                 <div className="option">
-                    <button className="option-button" onClick={() => handleSelect('Nami')}><img className="connect-wallet-img" src="/nami.svg"></img></button>
+                    <button className="option-button" onClick={() => handleSelect('Nami')}>Nami<img className="connect-wallet-img" src="/nami.svg"></img></button>
                 </div>
                 <div className="option">
-                    <button className="option-button" onClick={() => handleSelect('Flint Wallet')}><img className="connect-wallet-img" src="/flint.png"></img></button>
+                    <button className="option-button" onClick={() => handleSelect('Flint Wallet')}>Flint<img className="connect-wallet-img" src="/flint.png"></img></button>
                 </div>
                 <div className="option">
                     <button className="option-button" onClick={() => refreshWallet()}>↺ Refresh</button>

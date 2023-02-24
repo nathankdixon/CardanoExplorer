@@ -16,7 +16,7 @@ function TokenData (props) {
 
     useEffect(() => {
         const getTokenData = async () => {
-          if(props == null || props.prices != null || props.tokenId == null){
+          if(props == null || props.prices == null || props.tokenId == null){
             console.log('tokenID was undefined');
           }
           else{
@@ -65,7 +65,7 @@ function TokenData (props) {
         <div className="policyData">
             <p className="policy-item">Floor Price: <div className="value">{floorPrice}<div className="currency">{currency.symbol}</div></div></p>
             <p className="policy-item">Collection Volume : <div className="value">{volume}<div className="currency">{currency.symbol}</div></div></p>
-            <p className="policy-item">Number of Holders: {holderCount}</p>
+            <p className="policy-item">Number of Holders: <div className="value">{holderCount}</div></p>
         </div>
         <div className="token-box">
             <div className="token-image">{image}</div>
