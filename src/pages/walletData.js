@@ -254,4 +254,3 @@ function WalletData ({stakeAddress}) {
 }
 
 export default WalletData;
-
