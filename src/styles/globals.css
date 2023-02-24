@@ -285,8 +285,9 @@ header input[type="text"] {
 
 }
 .grid-nft{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     text-align: center;
     background-color: #000000;
     color:rgb(255, 255, 255);
@@ -294,8 +295,7 @@ header input[type="text"] {
     border-width: 2px;
     border-style: solid;
     border-radius: 20px;
-    
-    padding: 10px 10px 10px 10px;
+    padding: 20px;
     margin: 20px 20px 20px 20px;
 }
 
@@ -303,8 +303,8 @@ header input[type="text"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
-    margin: 10px;
+    padding: 10px 10px 10px 10px;
+    margin: 20px 20px 20px 20px;
     text-align: center;
     align-items: center;
     color: rgb(255, 255, 255);
@@ -312,6 +312,7 @@ header input[type="text"] {
     border-width: 2px;
     border-color:  #49f500;
     border-radius: 10px;
+
     width: 300px;
     height: 370px;
     background-color: rgba(0, 0, 0, 0.674);
@@ -321,8 +322,8 @@ header input[type="text"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
-    margin: 10px;
+    padding: 10px 10px 10px 10px;
+    margin: 20px 20px 20px 20px;
     text-align: center;
     align-items: center;
     color: rgb(255, 255, 255);
@@ -330,20 +331,21 @@ header input[type="text"] {
     border-width: 2px;
     border-color:  #49f500;
     border-radius: 10px;
+    box-shadow: 2px 2px 20px 5px #4af50092;
     width: 300px;
     height: 370px;
     background-color: rgba(0, 0, 0, 0.674);
 }
 
 .grid-item:hover{
-    background-color:#333333ba;
+    background-color:rgba(255, 255, 255, 0.232);
     cursor: pointer;
     transition: transform 0.3s;
     transform: scale(1.05);
 }
     
 .grid-item-collection:hover{
-    background-color:#333333ba;
+    background-color:#ffffff30;
     cursor: pointer;
     transition: transform 0.3s;
     transform: scale(1.05);

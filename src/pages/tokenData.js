@@ -16,7 +16,7 @@ function TokenData (props) {
 
     useEffect(() => {
         const getTokenData = async () => {
-          if(props == null){
+          if(props == null || props.prices != null || props.tokenId == null){
             console.log('tokenID was undefined');
           }
           else{
