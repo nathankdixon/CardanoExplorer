@@ -5,6 +5,7 @@
     --third-color: #ffffff;
 
     --main-font: 'Courier New', sans-serif;
+    --radius : 10px;
     
 }
 
@@ -68,7 +69,7 @@ header input[type="text"] {
     font-weight: bold;
     border-color: white;
     border-width: 2px;
-    border-radius: 2px;
+    border-radius: var(--radius);
     object-fit: cover;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -91,7 +92,7 @@ header input[type="text"] {
     top: 20px;
     right: 5px;
     border-style: solid;    
-    border-radius: 2px;
+    border-radius: var(--radius);
     border-style: solid;
     border-color: var(--third-color);
     text-align: center;
