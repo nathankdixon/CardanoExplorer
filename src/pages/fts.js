@@ -34,8 +34,15 @@ export default function Fts (props){
 
         let stakeData = await getAccountInfoFromKoios(props.tokens.stake);
         let currency = props.prices.currency;
+        let prices = props.prices;
         let _balance = (stakeData[0].total_balance/1000000).toFixed(2);
         let value = (currency.value*_balance).toFixed(2);
+
+        if(prices.privacy == true){
+          let valueNum = (value).toString();
+          let valueAsterisks = "*".repeat(valueNum.length);
+          value = valueAsterisks;
+        }
 
         let ada24hcolor = 'black';
         let ada7dcolor = 'black';
@@ -95,6 +102,7 @@ export default function Fts (props){
           ada1ycolor = '#49f500';
         }
 
+        //ada FT
 
         _display.push(<tr key = 'ada-ft' className="grid-item-ft"><td><img src="/cardano.png" className="ft-img"></img></td>
         <td>ADA</td><td>{_balance} </td>
@@ -193,6 +201,12 @@ export default function Fts (props){
               token1ycolor = 'red';
             }
 
+          }
+          
+          if(prices.privacy == true){
+            let valueNum = (value).toString();
+            let valueAsterisks = "*".repeat(valueNum.length);
+            value = valueAsterisks;
           }
 
           _display.push(<tr key = {token.asset_name + 'ftunpriced'} className = "grid-item-ft">

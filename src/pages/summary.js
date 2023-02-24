@@ -16,14 +16,28 @@ export default function Summary(props){
                      tokens: props.tokens.tokenNumber, nfts: props.tokens.nfts.length, fts: props.tokens.fts.length})
                 if(props.prices != null){
                     setCurrency(props.prices.currency);
+                    let prices = props.prices;
                     let currency = props.prices.currency.value;
                     let _balance = stakeData[0].total_balance/1000000;
                     let value = (currency*_balance);
 
                     let tokenBalance = getTokenBalance(props.tokens.fts);
                     let totalValue = (currency * (tokenBalance +value));
-                    setAdaBalance(value.toFixed(2));
-                    setTotalValue(totalValue.toFixed(2));
+
+                    if(prices.privacy == true){
+
+                        let adaValueNum = (value.toFixed(2)).toString();
+                        let totalValueNum = (totalValue.toFixed(2)).toString();
+                        let adaAsterisks = "*".repeat(adaValueNum.length);
+                        let tokenAsterisks = "*".repeat(totalValueNum.length);
+                        setAdaBalance(adaAsterisks);
+                        setTotalValue(tokenAsterisks);
+                    }
+                    else{
+                        setAdaBalance(value.toFixed(2));
+                        setTotalValue(totalValue.toFixed(2));
+                    }
+
                 }
             }
         }

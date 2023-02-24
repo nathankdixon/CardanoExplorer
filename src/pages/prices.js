@@ -10,6 +10,7 @@ export default function Prices (props) {
     const [adaBTC, setAdaBTC] = useState();
     const [adaETH, setAdaETH] = useState();
     const [adaChange, setAdaChange] = useState({usd24h: 0, usd7d:0, usd30d: 0, usd1y: 0});
+    const [privacy, setPrivacy] = useState(true);
 
     useEffect(() => {
         const getPrices = async () => { 
@@ -35,7 +36,7 @@ export default function Prices (props) {
 
 
             props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH,
-                 currency: currency, usd24h: usd24h, usd7d: usd7d, usd30d: usd30d, usd1y:usd1y});
+                 currency: currency, usd24h: usd24h, usd7d: usd7d, usd30d: usd30d, usd1y:usd1y, privacy: privacy});
 
             let adaUsdChange = '';
             let adaGbpChange = '';
@@ -155,14 +156,23 @@ export default function Prices (props) {
         function updateCurrency (){
             props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, 
                 usd24h: adaChange.usd24h, usd7d : adaChange.usd7d, usd30d: adaChange.usd30d, usd1y: adaChange.usd1y,
-                 currency: currency});
+                 currency: currency, privacy: privacy});
         }
 
         updateCurrency();
     }, [currency])
 
-    const changeCurrency = (_currency) => {
+    useEffect(() => {
+        function updatePrivacy (){
+            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, 
+                usd24h: adaChange.usd24h, usd7d : adaChange.usd7d, usd30d: adaChange.usd30d, usd1y: adaChange.usd1y,
+                 currency: currency, privacy: privacy});
+        }
 
+        updatePrivacy();
+    }, [privacy])
+
+    const changeCurrency = (_currency) => {
 
         if(_currency.name == 'eth'){
             setCurrency({name: 'ada',value: 1, symbol: '₳'});
@@ -200,11 +210,16 @@ export default function Prices (props) {
         }
     }
 
+    const changePrivacy = (privacy) => {
+        setPrivacy(!privacy);
+    }
+
     return(<nav className="price-nav">
         {prices}
         <div className="price-buttons">
             <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:{granularity}</button>
             <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:{currency.symbol}</button>
+            <button className="setting-button" onClick={() => changePrivacy(privacy)}>Privacy Mode</button>
         </div>
     </nav>
     )
