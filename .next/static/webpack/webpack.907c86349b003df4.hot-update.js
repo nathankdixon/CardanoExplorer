@@ -9,115 +9,9 @@
  */
 self["webpackHotUpdate_N_E"]("webpack",{},
 /******/ function(__webpack_require__) { // webpackRuntimeModules
-/******/ /* webpack/runtime/async module */
-/******/ !function() {
-/******/ 	var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
-/******/ 	var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
-/******/ 	var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
-/******/ 	var resolveQueue = function(queue) {
-/******/ 		if(queue && !queue.d) {
-/******/ 			queue.d = 1;
-/******/ 			queue.forEach(function(fn) { fn.r--; });
-/******/ 			queue.forEach(function(fn) { fn.r-- ? fn.r++ : fn(); });
-/******/ 		}
-/******/ 	}
-/******/ 	var wrapDeps = function(deps) { return deps.map(function(dep) {
-/******/ 		if(dep !== null && typeof dep === "object") {
-/******/ 			if(dep[webpackQueues]) return dep;
-/******/ 			if(dep.then) {
-/******/ 				var queue = [];
-/******/ 				queue.d = 0;
-/******/ 				dep.then(function(r) {
-/******/ 					obj[webpackExports] = r;
-/******/ 					resolveQueue(queue);
-/******/ 				}, function(e) {
-/******/ 					obj[webpackError] = e;
-/******/ 					resolveQueue(queue);
-/******/ 				});
-/******/ 				var obj = {};
-/******/ 				obj[webpackQueues] = function(fn) { fn(queue); };
-/******/ 				return obj;
-/******/ 			}
-/******/ 		}
-/******/ 		var ret = {};
-/******/ 		ret[webpackQueues] = function() {};
-/******/ 		ret[webpackExports] = dep;
-/******/ 		return ret;
-/******/ 	}); };
-/******/ 	__webpack_require__.a = function(module, body, hasAwait) {
-/******/ 		var queue;
-/******/ 		hasAwait && ((queue = []).d = 1);
-/******/ 		var depQueues = new Set();
-/******/ 		var exports = module.exports;
-/******/ 		var currentDeps;
-/******/ 		var outerResolve;
-/******/ 		var reject;
-/******/ 		var promise = new Promise(function(resolve, rej) {
-/******/ 			reject = rej;
-/******/ 			outerResolve = resolve;
-/******/ 		});
-/******/ 		promise[webpackExports] = exports;
-/******/ 		promise[webpackQueues] = function(fn) { queue && fn(queue), depQueues.forEach(fn), promise["catch"](function() {}); };
-/******/ 		module.exports = promise;
-/******/ 		body(function(deps) {
-/******/ 			currentDeps = wrapDeps(deps);
-/******/ 			var fn;
-/******/ 			var getResult = function() { return currentDeps.map(function(d) {
-/******/ 				if(d[webpackError]) throw d[webpackError];
-/******/ 				return d[webpackExports];
-/******/ 			}); }
-/******/ 			var promise = new Promise(function(resolve) {
-/******/ 				fn = function() { resolve(getResult); };
-/******/ 				fn.r = 0;
-/******/ 				var fnQueue = function(q) { q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))); };
-/******/ 				currentDeps.map(function(dep) { dep[webpackQueues](fnQueue); });
-/******/ 			});
-/******/ 			return fn.r ? promise : getResult();
-/******/ 		}, function(err) { (err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue); });
-/******/ 		queue && (queue.d = 0);
-/******/ 	};
-/******/ }();
-/******/ 
-/******/ /* webpack/runtime/ensure chunk */
-/******/ !function() {
-/******/ 	__webpack_require__.f = {};
-/******/ 	// This file contains only the entry chunk.
-/******/ 	// The chunk loading function for additional chunks
-/******/ 	__webpack_require__.e = function(chunkId) {
-/******/ 		return Promise.all(Object.keys(__webpack_require__.f).reduce(function(promises, key) {
-/******/ 			__webpack_require__.f[key](chunkId, promises);
-/******/ 			return promises;
-/******/ 		}, []));
-/******/ 	};
-/******/ }();
-/******/ 
-/******/ /* webpack/runtime/get javascript chunk filename */
-/******/ !function() {
-/******/ 	// This function allow to reference async chunks
-/******/ 	__webpack_require__.u = function(chunkId) {
-/******/ 		// return url for filenames based on template
-/******/ 		return "static/chunks/" + chunkId + ".js";
-/******/ 	};
-/******/ }();
-/******/ 
 /******/ /* webpack/runtime/getFullHash */
 /******/ !function() {
-/******/ 	__webpack_require__.h = function() { return "2afb2ae7e56e3370"; }
-/******/ }();
-/******/ 
-/******/ /* webpack/runtime/relative url */
-/******/ !function() {
-/******/ 	__webpack_require__.U = function RelativeURL(url) {
-/******/ 		var realUrl = new URL(url, "x:/");
-/******/ 		var values = {};
-/******/ 		for (var key in realUrl) values[key] = realUrl[key];
-/******/ 		values.href = url;
-/******/ 		values.pathname = url.replace(/[?#].*/, "");
-/******/ 		values.origin = values.protocol = "";
-/******/ 		values.toString = values.toJSON = function() { return url; };
-/******/ 		for (var key in values) Object.defineProperty(this, key, { enumerable: true, configurable: true, value: values[key] });
-/******/ 	};
-/******/ 	__webpack_require__.U.prototype = URL.prototype;
+/******/ 	__webpack_require__.h = function() { return "2408290fc08bf0c3"; }
 /******/ }();
 /******/ 
 /******/ /* webpack/runtime/jsonp chunk loading */
@@ -131,44 +25,7 @@ self["webpackHotUpdate_N_E"]("webpack",{},
 /******/ 		"webpack": 0
 /******/ 	};
 /******/ 	
-/******/ 	__webpack_require__.f.j = function(chunkId, promises) {
-/******/ 			// JSONP chunk loading for javascript
-/******/ 			var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
-/******/ 			if(installedChunkData !== 0) { // 0 means "already installed".
-/******/ 	
-/******/ 				// a Promise means "currently loading".
-/******/ 				if(installedChunkData) {
-/******/ 					promises.push(installedChunkData[2]);
-/******/ 				} else {
-/******/ 					if("webpack" != chunkId) {
-/******/ 						// setup Promise in chunk cache
-/******/ 						var promise = new Promise(function(resolve, reject) { installedChunkData = installedChunks[chunkId] = [resolve, reject]; });
-/******/ 						promises.push(installedChunkData[2] = promise);
-/******/ 	
-/******/ 						// start chunk loading
-/******/ 						var url = __webpack_require__.p + __webpack_require__.u(chunkId);
-/******/ 						// create error before stack unwound to get useful stacktrace later
-/******/ 						var error = new Error();
-/******/ 						var loadingEnded = function(event) {
-/******/ 							if(__webpack_require__.o(installedChunks, chunkId)) {
-/******/ 								installedChunkData = installedChunks[chunkId];
-/******/ 								if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
-/******/ 								if(installedChunkData) {
-/******/ 									var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 									var realSrc = event && event.target && event.target.src;
-/******/ 									error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
-/******/ 									error.name = 'ChunkLoadError';
-/******/ 									error.type = errorType;
-/******/ 									error.request = realSrc;
-/******/ 									installedChunkData[1](error);
-/******/ 								}
-/******/ 							}
-/******/ 						};
-/******/ 						__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 					} else installedChunks[chunkId] = 0;
-/******/ 				}
-/******/ 			}
-/******/ 	};
+/******/ 	// no chunk on demand loading
 /******/ 	
 /******/ 	// no prefetching
 /******/ 	

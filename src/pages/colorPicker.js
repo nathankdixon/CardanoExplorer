@@ -36,9 +36,6 @@ export default function ColorPicker(props) {
 
   }, []);
 
-  useEffect(() => {
-    props.data({color1: color1, color2:color2, color3:color3});
-  }, [color1, color2, color3])
 
   const handleChange1 = (event) => {
     setColor1(event.target.value);

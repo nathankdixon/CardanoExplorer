@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import ColorPicker from "./colorPicker";
 import WalletButton from "./walletButton";
 import WalletData from "./walletData";
 
@@ -9,6 +10,8 @@ function StakePage() {
     const router = useRouter();
     const { stake } = router.query;
     const [searchQuery, setSearchQuery] = useState('');
+    const [prices, setPrices] = useState();
+
 
     const handleSearch = async  (event) => {
       event.preventDefault();
@@ -41,6 +44,10 @@ function StakePage() {
       return res[0].stake_address;
     }
 
+    function setPriceData(data){
+      setPrices(data);
+  }
+
     return (
       <div>
         <header>
@@ -49,6 +56,8 @@ function StakePage() {
           <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
+        <ColorPicker data={setPriceData}/>
+
         <WalletButton stake = {stake}/>
       </header>
         <div className="tokenList"><WalletData stakeAddress={stake}/></div>

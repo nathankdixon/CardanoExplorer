@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import ColorPicker from "../colorPicker";
 import Header from "../header";
 import Prices from "../prices";
 import TokenData from "../tokenData";
@@ -58,6 +59,7 @@ function TokenPage() {
           <input type="text" className = "search-input" placeholder="Search for an address or a specific token..."  value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
+        <ColorPicker data={setPriceData}/>
         <WalletButton stake = {stake}/>
       </header>
         <Prices data ={setPriceData}/>
