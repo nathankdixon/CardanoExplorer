@@ -15,6 +15,7 @@ export default function Nfts ({tokens}){
       }
     }, [tokens]);
 
+
     const showTokens = (nfts) => {
       let _display = [];
       if(nfts == null){
@@ -53,6 +54,7 @@ export default function Nfts ({tokens}){
           else{
             path = tokens.stake;
           }
+
 
           if(nfts[policy].length > 1){
             _display.push(

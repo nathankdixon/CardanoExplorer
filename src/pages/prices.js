@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import ColorPicker from "./colorPicker";
 
 export default function Prices (props) {
 
@@ -10,6 +11,7 @@ export default function Prices (props) {
     const [adaBTC, setAdaBTC] = useState();
     const [adaETH, setAdaETH] = useState();
     const [adaChange, setAdaChange] = useState({usd24h: 0, usd7d:0, usd30d: 0, usd1y: 0});
+    const [colors, setColors] = useState();
     const [privacy, setPrivacy] = useState(true);
 
     useEffect(() => {
@@ -214,9 +216,14 @@ export default function Prices (props) {
         setPrivacy(!privacy);
     }
 
+    function setColorData(data){
+        setColors(data);
+    }
+
     return(<nav className="price-nav">
         {prices}
         <div className="price-buttons">
+            <ColorPicker data={setColorData} stake={props.tokens}/>
             <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:{granularity}</button>
             <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:{currency.symbol}</button>
             <button className="setting-button" onClick={() => changePrivacy(privacy)}>Privacy Mode</button>

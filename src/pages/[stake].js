@@ -10,7 +10,6 @@ function StakePage() {
     const router = useRouter();
     const { stake } = router.query;
     const [searchQuery, setSearchQuery] = useState('');
-    const [prices, setPrices] = useState();
 
 
     const handleSearch = async  (event) => {
@@ -56,8 +55,6 @@ function StakePage() {
           <input type="text" className = "search-input" placeholder="Search for an address or a specific token..." value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
           <button type="submit" className="search-button">Search</button>
         </form>
-        <ColorPicker data={setPriceData}/>
-
         <WalletButton stake = {stake}/>
       </header>
         <div className="tokenList"><WalletData stakeAddress={stake}/></div>

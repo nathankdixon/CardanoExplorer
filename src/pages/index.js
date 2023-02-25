@@ -2,9 +2,7 @@ import { useState} from "react";
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Wallet from "./walletData";
-import { Blockfrost, Lucid } from "lucid-cardano";
-import Header from "./header";
+import {  Lucid } from "lucid-cardano";
 
 const Home = () => {
 

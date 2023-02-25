@@ -31,7 +31,7 @@ export default function Tokens ({tokens}) {
     
     return (
         <div className="wallet">
-            <Prices data ={setPriceData}/>
+            <Prices tokens = {tokens} data ={setPriceData}/>
             <Summary tokens = {tokens} prices = {prices}/>
              <nav className="setting-nav">
                 <div>

@@ -143,10 +143,7 @@ export default function WalletButton(stake){
         { showDropdown && (
             <div className="options">
                 <div className="option">
-                    <button className="option-button" onClick={() => router.push('/')}>Home ⌂</button>
-                </div>
-                <div className="option">
-                    <button className="option-button" onClick={() => router.push('/'+stake.stake)}>My Wallet</button>
+                    <button className="option-button" onClick={() => router.push('/'+stake.stake)}>My Wallet ⌂</button>
                 </div>
 
                 <div className="option">
