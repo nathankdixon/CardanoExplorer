@@ -1,40 +1,36 @@
 import { Lucid } from "lucid-cardano";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import ColorPicker from "./colorPicker";
 
-export default function WalletButton(stake){
+export default function WalletButton(props){
 
     const [buttonText, setButtonText] = useState('Connect Wallet');
     const [showDropdown, setShowDropdown] = useState(false);
+    const [colors, setColors] = useState();
+
     const router = useRouter();
 
 
-
+    // checks browser local storage for wallet data of key : stake on each page load.
+    // used to pass stake address to
     useEffect(() => {
         function checkStorage(){
-            if(stake.stake == null){
-            }
-            else if(stake.stake != null){
-                if(localStorage.getItem(stake.stake)){
-                    setButtonText((stake.stake).substring(0,9));
-                }
-                else if (localStorage.getItem(stake.handle)){
-                    setButtonText(stake.handle);
-                }
-                else{
-                    setButtonText((stake.stake).substring(0,9));
-                }
+            if(props.stake == null){
+                //base case
             }
             else{
-                setButtonText((stake.stake).substring(0,9));
+                // stake = router query
+                // stake.stake = query as string
+                // button text to identify wallet
+                setButtonText((props.stake).substring(0,9));
             }
-
         }
-        console.log(stake.stake);
         checkStorage();
-    }, [stake])
+    }, [props])
 
     async function getStakeFromAddressKoios(address){
+        // returns stake address from base address
         const req = await fetch('https://api.koios.rest/api/v0/address_info', {
           method: 'POST',
           headers: {
@@ -51,33 +47,37 @@ export default function WalletButton(stake){
       }
     
       const getAddressFromHandle = async (handle) => {
+        // code from ada handle webnsite
+        // uses blockfrost to get address of handle location
+
         let policyID = 'f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a';
         
         // A blank Handle name should always be ignored.
         if (handle.length === 0) {
-          // Handle error.
+            return null;
         }
-      
-        // Convert handleName to hex encoding.
-        let assetName = Buffer.from(handle).toString('hex');
-      
-        const data = await fetch(
-          `https://cardano-mainnet.blockfrost.io/api/v0/assets/${policyID}${assetName}/addresses`,
-          {
-            headers: {
-              // Your Blockfrost API key
-              project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
-              'Content-Type': 'application/json'
-            }
-          }
-        ).then(res => res.json());
+        else{
+            // Convert handleName to hex encoding.
+            let assetName = Buffer.from(handle).toString('hex');
         
-        let stake = await getStakeFromAddressKoios(data[0].address);
-        return stake;
+            const data = await fetch(
+            `https://cardano-mainnet.blockfrost.io/api/v0/assets/${policyID}${assetName}/addresses`,
+            {
+                headers: {
+                // Your Blockfrost API key
+                project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
+                'Content-Type': 'application/json'
+                }
+            }
+            ).then(res => res.json());
+            
+            let stake = await getStakeFromAddressKoios(data[0].address);
+            return stake;
+        }
       }
 
-
     const handleSelect = async (wallet) => {
+        // used to show dropdown options list 
         setShowDropdown(false);
         let stake = await getStakeAddressFromWallet(wallet);
         router.push(`/${stake}`);
@@ -85,6 +85,9 @@ export default function WalletButton(stake){
     }
 
     async function getStakeAddressFromWallet(wallet){
+
+        // connects to wallet using cip-30 
+        // uses lucid to get return address
         const lucid = await Lucid.new();
         var api = '';
     
@@ -112,32 +115,54 @@ export default function WalletButton(stake){
     }
 
     const refreshWallet = async () => {
-        let stakeAddy = '';
+
+        // removes stake data from local storage
+        // refreshes page
+         // loads new token data from blockfrost /koios
+        let stakeAdd = '';
 
         if(stake.stake.startsWith('$')){
-            stakeAddy = await getAddressFromHandle(stake.stake.slice(1));
+            stakeAdd = await getAddressFromHandle(props.stake.slice(1));
         }
         else{
-            stakeAddy = stake.stake;
+            stakeAdd = props.stake;
         }
-        localStorage.removeItem(stakeAddy);
-        router.reload();
+        if(stakeAddy != null){
+            localStorage.removeItem(stakeAdd);
+            router.reload();
+        }
+        else{
+            //r refresh error
+        }
     }
 
     const disconnectWallet = async () => {
-        let stakeAddy = '';
+
+        // removes stake data from local storage
+        // routes to start page
+        let stakeAdd = '';
         if(stake.stake.startsWith('$')){
-            stakeAddy = await getAddressFromHandle(stake.stake.slice(1));
+            stakeAdd = await getAddressFromHandle(props.stake.slice(1));
+
         }
         else{
-        stakeAddy = stake.stake;    
+            stakeAdd = props.stake;
         }
 
-        localStorage.removeItem(stakeAddy);
-        router.push('/');
+        if(stakeAdd != null){
+            localStorage.removeItem(stakeAdd);
+            router.push('/');
+        }
+        else{
+            // disconnect  error
+        }
     }
 
+    function setColorData(data){
+        setColors(data);
+    }
 
+    // need options to still be present but hidden so color picker will work
     return(<div className="connect-wallet">
         <button className="connect-wallet-button" onClick={showOptions}>{buttonText}</button>
         { showDropdown && (
@@ -145,7 +170,6 @@ export default function WalletButton(stake){
                 <div className="option">
                     <button className="option-button" onClick={() => router.push('/'+stake.stake)}>My Wallet ⌂</button>
                 </div>
-
                 <div className="option">
                     <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}>Typhon<img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
                 </div>
@@ -164,8 +188,12 @@ export default function WalletButton(stake){
                 <div className="option">
                     <button className="option-button" onClick={() => disconnectWallet()}>✗ Disconnect</button>
                 </div>
+                <div className="option">
+                </div>
             </div>
         )}
+                <ColorPicker data={setColorData} stake={props}/>
+
         </div>
     );
 }

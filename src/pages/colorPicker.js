@@ -15,8 +15,6 @@ export default function ColorPicker(props) {
   
       if(localStorage.getItem(stakeAddress)){
           let data = JSON.parse(localStorage.getItem(stakeAddress));
-          console.log(data);
-
           if(data.colors == null || data.colors.color1 == ''){
 
             console.log('setting from css');
@@ -72,14 +70,13 @@ export default function ColorPicker(props) {
     let secondColor = getComputedStyle(document.documentElement).getPropertyValue('--second-color').trim();
     let thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--third-color').trim();
 
-    let data = JSON.parse(localStorage.getItem(props.stake.stake));
+    let data = JSON.parse(localStorage.getItem(props.stake));
 
     data.colors = {color1: mainColor, color2:secondColor, color3:thirdColor};
 
     props.data(data.colors);
 
     localStorage.setItem(props.stake, JSON.stringify(data));
-    console.log(data);
 
   }
 

@@ -1,1 +1,0 @@
-{"c":["pages/_app","webpack"],"r":["pages/[stake]/[tokenId]"],"m":["./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=%2FUsers%2Fnathan%2FDesktop%2Fexplorer%2Fsrc%2Fpages%2F%5Bstake%5D%2F%5BtokenId%5D.js&page=%2F%5Bstake%5D%2F%5BtokenId%5D!","./src/pages/[stake]/[tokenId].js","./src/pages/metadataTable.js","./src/pages/tokenData.js"]}
