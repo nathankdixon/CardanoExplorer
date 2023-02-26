@@ -8,6 +8,7 @@ export default function WalletButton(props){
     const [buttonText, setButtonText] = useState('Connect Wallet');
     const [showDropdown, setShowDropdown] = useState(false);
     const [colors, setColors] = useState();
+    const [isVisable, setIsVisable] = useState(false);
 
     const router = useRouter();
 
@@ -162,13 +163,17 @@ export default function WalletButton(props){
         setColors(data);
     }
 
+    function showMenu(){
+        setIsVisable(!isVisable);
+    }
+
     // need options to still be present but hidden so color picker will work
     return(<div className="connect-wallet">
-        <button className="connect-wallet-button" onClick={showOptions}>{buttonText}</button>
-        { showDropdown && (
+        <button className="connect-wallet-button" onClick={showMenu}>{buttonText}</button>
+        <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}}>
             <div className="options">
                 <div className="option">
-                    <button className="option-button" onClick={() => router.push('/'+stake.stake)}>My Wallet ⌂</button>
+                    <button className="option-button" onClick={() => router.push('/'+props.stake)}>My Wallet ⌂</button>
                 </div>
                 <div className="option">
                     <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}>Typhon<img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
@@ -188,12 +193,10 @@ export default function WalletButton(props){
                 <div className="option">
                     <button className="option-button" onClick={() => disconnectWallet()}>✗ Disconnect</button>
                 </div>
-                <div className="option">
-                </div>
             </div>
-        )}
-                <ColorPicker data={setColorData} stake={props}/>
+            <ColorPicker data={setColorData} stake={props}/>
 
+        </div>
         </div>
     );
 }

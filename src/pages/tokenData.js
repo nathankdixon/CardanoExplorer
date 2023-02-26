@@ -25,78 +25,81 @@ function TokenData (props) {
           else{
 
             if(prices != null){
+              // from url in [token].js
               let tokenId = props.tokenId;
-              console.log(prices);
-  
+              
+              // current selected currency
               let currency = prices.currency;
               setCurrency(currency);
+
+              // fetch asset data from blockfrost
               let _tokenData = await loadTokenData(tokenId);
-              const token = new Token(_tokenData.asset_name, _tokenData.policy_id , _tokenData.quantity);
-              token.metadata = await token.getMetadata();
-              let _policyData = await loadPolicyData(token.policy_id);
-              setFloorPrice(((_policyData.floor_price/1000000) * currency.value).toFixed(2));
-              setVolume(((_policyData.total_volume/1000000) * currency.value).toFixed(2));
-              setHolderCount(_policyData.asset_holders);
-              const meta = token.metadata;
-              const keys = Object.keys(meta);
-              const _ipfs = await token.getIpfsFromMetadata();
-              setImage(<Image className = "main-img" alt= 'no image' src = {_ipfs} width = {700} height = {700}/>);
-              setTokendata(meta.name);
-              setMetadata(<MetadataTable json = {meta}/>);
+
+              if(_tokenData != null){
+                const token = new Token(_tokenData.asset_name, _tokenData.policy_id , _tokenData.quantity);
+                let meta = await token.getMetadata();
+
+                if(meta != null){
+                  token.metadata = meta;
+                  const keys = Object.keys(meta);
+
+                  // metadata displayed in table
+                  setMetadata(<MetadataTable json = {meta}/>);
+
+                  // nft name
+                  setTokendata(meta.name);
+                }
+                const _ipfs = await token.getIpfsFromMetadata();
+
+                // nft image
+                setImage(<Image className = "main-img" alt= 'no image' src = {_ipfs} width = {700} height = {700}/>);
+
+                // fetch collection data from openCNFT
+                let _policyData = await loadPolicyData(token.policy_id);
+
+                if(_policyData != null){
+                  setFloorPrice(((_policyData.floor_price/1000000) * currency.value).toFixed(2));
+                  setVolume(((_policyData.total_volume/1000000) * currency.value).toFixed(2));
+                  setHolderCount(_policyData.asset_holders);
+                }
+
+              }
+
             }
 
           }
         }
         getTokenData();
-      }, [props])
+      }, [props, prices])
 
-      useEffect(() => {
-        const getTokenData = async () => {
-          if(props == null){
-            console.log('tokenID was undefined');
-          }
-          else{
 
-            if(prices != null){
-              let tokenId = props.tokenId;
-              console.log(prices);
-  
-              let currency = prices.currency;
-              setCurrency(currency);
-              let _tokenData = await loadTokenData(tokenId);
-              const token = new Token(_tokenData.asset_name, _tokenData.policy_id , _tokenData.quantity);
-              token.metadata = await token.getMetadata();
-              let _policyData = await loadPolicyData(token.policy_id);
-              setFloorPrice(((_policyData.floor_price/1000000) * currency.value).toFixed(2));
-              setVolume(((_policyData.total_volume/1000000) * currency.value).toFixed(2));
-              setHolderCount(_policyData.asset_holders);
-              const meta = token.metadata;
-              const keys = Object.keys(meta);
-              const _ipfs = await token.getIpfsFromMetadata();
-              setImage(<Image className = "main-img" alt= 'no image' src = {_ipfs} width = {700} height = {700}/>);
-              setTokendata(meta.name);
-              setMetadata(<MetadataTable json = {meta}/>);
-            }
-          }
-        }
-        getTokenData();
-
-      }, [prices])
-
+    // fetch token metadata from blockfrost
     async function loadTokenData(tokenId){
+      try{
         const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+tokenId,
         {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
         const res = await data.json();
         return res;
+      }catch(error){
+        return null;
+      }
+
       }
       
+    // fetch collection data from openCNFT by poliy Id
     async function loadPolicyData(policy){
-      const data = await fetch('https://api.opencnft.io/1/policy/'+policy,
-      {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-      const res = await data.json();
-      return res;
+      try{
+        const data = await fetch('https://api.opencnft.io/1/policy/'+policy,
+        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+        const res = await data.json();
+        return res;
+      }catch(error){
+        return null;
+      }
+
     }
 
+    // price component callback
     function setPriceData(data){
       setPrices(data);
     }

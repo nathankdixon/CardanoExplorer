@@ -2,89 +2,112 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function Nfts ({tokens}){
+// returns a flex box of nft showing image, name and quantity
+export default function Nfts (props){
 
     const [display, setDisplay] = useState([]);
     const router = useRouter();
 
     useEffect(() => {
-      if(tokens != null){
-        let nfts = tokens.nfts;
-        showTokens(nfts);
+      if(props.tokens != null){
+        showTokens(props.tokens.nfts);
 
       }
-    }, [tokens]);
+    }, [props]);
 
 
     const showTokens = (nfts) => {
+      // array of table items to be added to display
       let _display = [];
       if(nfts == null){
+
+        // no nfts present in wallet
         _display.push(<div className="grid-item">No NFTs :/</div>);
       }
       else{
+        // show no nft text
         if(nfts.length == 0){
           _display.push(<div style={{fontWeight: 'bold'}}>No NFTs :/</div>);
         }
-        let policies = Object.keys(nfts);
-        for(const policy of policies){
-          let token = nfts[policy][0];
+        else{
 
-          let name = token.metadata.name;
-          let collection = '';
+          // adds the first item in policy to the table
+          let policies = Object.keys(nfts);
+          let nftsGrid = addNftsToGrid(nfts, policies);
 
-          if(token.metadata.collection != null){
-            collection = token.metadata.collection;
-          }
-          else if(token.metadata.Collection != null){
-            collection = token.metadata.Collection;
-          }
-          else if(token.metadata.project != null){
-            collection = token.metadata.project;
-          }
-          else if(token.metadata.Project != null){
-            collection = token.metadata.Project;
-          }
-          else{
-          }
-
-          let path = '';
-          if(tokens.handle != null){
-            path = tokens.handle;
-          }
-          else{
-            path = tokens.stake;
-          }
+          _display.push(nftsGrid);
+        }
 
 
-          if(nfts[policy].length > 1){
-            _display.push(
-            <div key = {token.asset_name + 'nft'} className = "grid-item-collection" onClick = {() => showTokensFromPolicy(nfts[policy])}>
-              <Image className="grid-img" src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
-                <div className="grid-item-title">{name}</div>
-                <div className="grid-item-text">{collection}</div>
-                <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
-              </div>);
-          }
-          else{
-            _display.push(
-            <div key = {token.asset_name + 'nft'} className = "grid-item" onClick = {() => router.push('/'+path+'/'+token.policy_id+token.asset_name)}>
-              <Image className='grid-img' src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
-              <div className="grid-item-info">
-                <div className="grid-item-title">{name}</div>
-                <div className="grid-item-text" >{collection}</div>
-                <div className="grid-item-text" >Quantity: {nfts[policy].length}</div>
-              </div>
-              </div>);
+      }
+      setDisplay(_display);
+    }
 
-          }
+    // finds name, collection and image from first token in policy
+    // adds to html table
+    function addNftsToGrid(nfts, policies){
+
+      let grid = [];
+
+      for(const policy of policies){
+        let token = nfts[policy][0];
+
+        let name = token.metadata.name;
+        let collection = '';
+
+        if(token.metadata.collection != null){
+          collection = token.metadata.collection;
+        }
+        else if(token.metadata.Collection != null){
+          collection = token.metadata.Collection;
+        }
+        else if(token.metadata.project != null){
+          collection = token.metadata.project;
+        }
+        else if(token.metadata.Project != null){
+          collection = token.metadata.Project;
+        }
+        else{
+        }
+
+        let path = '';
+        if(token.handle != null){
+          path = props.tokens.handle;
+        }
+        else{
+          path = props.tokens.stake;
+        }
+
+
+        if(nfts[policy].length > 1){
+          grid.push(
+          <div key = {token.asset_name + 'nft'} className = "grid-item-collection" onClick = {() => showTokensFromPolicy(nfts[policy])}>
+            <Image className="grid-img" src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
+              <div className="grid-item-title">{name}</div>
+              <div className="grid-item-text">{collection}</div>
+              <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
+            </div>);
+        }
+        else{
+          grid.push(
+          <div key = {token.asset_name + 'nft'} className = "grid-item" onClick = {() => router.push('/'+path+'/'+token.policy_id+token.asset_name)}>
+            <Image className='grid-img' src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
+            <div className="grid-item-info">
+              <div className="grid-item-title">{name}</div>
+              <div className="grid-item-text" >{collection}</div>
+              <div className="grid-item-text" >Quantity: {nfts[policy].length}</div>
+            </div>
+            </div>);
 
         }
 
       }
-      setDisplay(_display);
+
+      return grid;
 
     }
 
+    // upon clicking a collection image, the nfts from that collection replaces the grid
     function showTokensFromPolicy(policy){
         let _display = [];
         
@@ -109,11 +132,11 @@ export default function Nfts ({tokens}){
           }
 
           let path = '';
-          if(tokens.handle != null){
-            path = tokens.handle;
+          if(props.tokens.handle != null){
+            path = props.tokens.handle;
           }
           else{
-            path = tokens.stake;
+            path = props.tokens.stake;
           }
 
           _display.push(

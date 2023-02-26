@@ -3,7 +3,7 @@
     --main-color: #2fe6fe;
     --second-color:#073b55;
     --third-color: #ffffff;
-    --fourth-color: #000000;
+    --fourth-color: #dfdfdf8c;
     --main-font: 'Courier New', sans-serif;
     --radius : 10px;
     
@@ -115,12 +115,13 @@ header input[type="text"] {
 
 .colors{
     display: flex;
+    flex-direction: column;
 
 }
 
 .color-selector{
 
-    height: 48px;
+    height: 33px;
     padding: 5px;
     background-color: var(--main-color);
 }
@@ -152,8 +153,21 @@ header input[type="text"] {
 
   }
 
+.option-color{
+}
 
-  
+.options-color{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 365px;
+    right: 80px;    
+    width: 30px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
 .option {
     display: flex;
     justify-content: space-between;
@@ -198,7 +212,6 @@ header input[type="text"] {
 .price-nav-inner{
     display: flex;
 
-
 }
 
 .price-buttons{
@@ -218,7 +231,7 @@ header input[type="text"] {
 
 .setting-button {
     font-family: var(--main-font);
-
+    border: var(--third-color) 1px solid;
     display: inline-block;
     cursor: pointer;
     font-weight: bolder;

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+// allows the user to set the 3 main colors on page
 export default function ColorPicker(props) {
   const [color1, setColor1] = useState('');
   const [color2, setColor2] = useState('');
@@ -13,11 +14,13 @@ export default function ColorPicker(props) {
       let secondColor = '';
       let thirdColor = '';
   
+      // checks storage for saved colors
       if(localStorage.getItem(stakeAddress)){
           let data = JSON.parse(localStorage.getItem(stakeAddress));
           if(data.colors == null || data.colors.color1 == ''){
 
-            console.log('setting from css');
+
+            // if no colors in storage, get colors from global.css
             mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
             secondColor = getComputedStyle(document.documentElement).getPropertyValue('--second-color').trim();
             thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--third-color').trim();
@@ -28,8 +31,7 @@ export default function ColorPicker(props) {
           }
           else{
 
-            console.log('setting from local');
-
+            // if colors found in storage, use them
             document.documentElement.style.setProperty('--main-color', data.colors.color1);
             document.documentElement.style.setProperty('--second-color', data.colors.color2);
             document.documentElement.style.setProperty('--third-color', data.colors.color3);
@@ -66,6 +68,8 @@ export default function ColorPicker(props) {
   };
 
   function saveColors(){
+
+    // saves color data into local storage so same colors are used on resume
     let mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
     let secondColor = getComputedStyle(document.documentElement).getPropertyValue('--second-color').trim();
     let thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--third-color').trim();
@@ -81,31 +85,37 @@ export default function ColorPicker(props) {
   }
 
   return (
-    <div className='color-picker'>
-      <div className='colors'>
-      <input
-        type="color"
-        className='color-selector'
-        id="color-selector1"
-        value={color1}
-        onChange={handleChange1}
-        />
+    <div className='options-color'>
+      <div className='option-color'>
         <input
-        type="color"
-        className='color-selector'
-        id="color-selector2"
-        value={color2}
-        onChange={handleChange2}
-      />
+            type="color"
+            className='option-button'
+            id="color-selector1"
+            value={color1}
+            onChange={handleChange1}
+            />
+      </div>
+      <div className='option-color'>
         <input
-        type="color"
-        className='color-selector'
-        id="color-selector3"
-        value={color3}
-        onChange={handleChange3}
-      />
-    </div>
-      <button className='setting-button' onClick={saveColors}>Save Colors</button>
+            type="color"
+            className='option-button'
+            id="color-selector3"
+            value={color3}
+            onChange={handleChange3}
+          />
+      </div>
+      <div className='option-color'>
+        <input
+            type="color"
+            className='option-button'
+            id="color-selector2"
+            value={color2}
+            onChange={handleChange2}
+          />
+      </div>
+      <div className='option'>
+        <button className='option-button' onClick={saveColors}>Save Colors</button>
+      </div>
     </div>
 
   );
