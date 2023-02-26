@@ -6,11 +6,16 @@ import Summary from "./summary";
 
 export default function Wallet (props) {
 
+    // market data from coingecko from prices component
     const [prices, setPrices] = useState();
+
+    // used to switch between showing nfts and fts
     const [showNfts, setShowNfts] = useState(false);
     const [nftActive, setNftActive] = useState(false);
     const [ftActive, setFtActive] = useState(true);
 
+    // callback from prices component
+    // returns ada price info to be used by 'Fts' component
     function setPriceData(data){
         setPrices(data);
     }

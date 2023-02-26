@@ -1,27 +1,38 @@
 import { useEffect, useState } from "react"
-import ColorPicker from "./colorPicker";
 
 export default function Prices (props) {
 
+    // time interval for price change datat
     const [granularity, setGranularity] = useState('24 hours');
+
+    // current currency
     const [currency, setCurrency] = useState({name: 'ada', value: 1, symbol: '₳'});
+
+    // displayed ada prices
     const [adaUSD, setAdaUSD] = useState();
     const [adaGBP, setAdaGBP] = useState();
     const [adaBTC, setAdaBTC] = useState();
     const [adaETH, setAdaETH] = useState();
 
+    // displayed price change
     const [adaUsdChange, setAdaUsdChange] = useState(0);
     const [adaGbpChange, setAdaGbpChange] = useState(0);
     const [adaBtcChange, setAdaBtcChange] = useState(0);
     const [adaEthChange, setAdaEthChange] = useState(0);
 
+    // displayed price change colors
     const [usdColor, setUsdColor] = useState('black');
     const [gbpColor, setGbpColor] = useState('black');
     const [btcColor, setBtcColor] = useState('black');
     const [ethColor, setEthColor] = useState('black');
 
+    // json request of ADA market data
     const [gecko, setGecko] = useState(null);
+
+    // ada price change - used by Fts
     const [adaChange, setAdaChange] = useState({usd24h: 0, usd7d:0, usd30d: 0, usd1y: 0});
+
+    // privacy option to '*' sensitive option -- defaults to on (true)
     const [privacy, setPrivacy] = useState(true);
 
     // runs on first page load
@@ -123,7 +134,7 @@ export default function Prices (props) {
 
 
     // change currency of all values in app - usd, gbp, ada, eth, btc
-    const changeCurrency = (_currency) => {
+    function changeCurrency (_currency) {
 
         let newCurrency = '';
         if(_currency.name == 'eth'){
@@ -151,7 +162,7 @@ export default function Prices (props) {
     }
 
     // change time period of price change data - 24h, 7d, 30d or 1 year
-    const increaseGranularity = (granularity) => {
+    function increaseGranularity (granularity){
         if(gecko != null){
 
             let adausdchange = '';
@@ -250,7 +261,7 @@ export default function Prices (props) {
     }
 
     // privacy option to '*' any sensitive info
-    const changePrivacy = (privacy) => {
+    function changePrivacy (privacy) {
         
         props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH, 
             usd24h: adaChange.usd24h, usd7d : adaChange.usd7d, usd30d: adaChange.usd30d, usd1y: adaChange.usd1y,

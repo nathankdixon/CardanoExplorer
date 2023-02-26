@@ -121,13 +121,13 @@ export default function WalletButton(props){
          // loads new token data from blockfrost /koios
         let stakeAdd = '';
 
-        if(stake.stake.startsWith('$')){
+        if(props.stake.startsWith('$')){
             stakeAdd = await getAddressFromHandle(props.stake.slice(1));
         }
         else{
             stakeAdd = props.stake;
         }
-        if(stakeAddy != null){
+        if(stakeAdd != null){
             localStorage.removeItem(stakeAdd);
             router.reload();
         }
