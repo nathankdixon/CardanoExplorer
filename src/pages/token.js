@@ -66,7 +66,7 @@ export default class Token{
 
         // fetch asset metadata from blockfrost using concat of policy and name
         const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.policy_id+this.asset_name,
-        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh'}});
+        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
 
 
         // some nft authors use the 'metadata' tag to store metadata

@@ -6,6 +6,10 @@ export default function ColorPicker(props) {
   const [color2, setColor2] = useState('');
   const [color3, setColor3] = useState('');
 
+  const [buttonText, setButtonText] = useState('Save Colors');
+  const [buttonColor, setButtonColor] = useState();
+
+
   useEffect(() => {
 
     if(props.stake != null){
@@ -82,6 +86,13 @@ export default function ColorPicker(props) {
 
     localStorage.setItem(props.stake, JSON.stringify(data));
 
+    setButtonText('Saved!');
+
+    setTimeout(() => {
+      // Reset the button text after 1 second
+      setButtonText("Save Colors");
+    }, 1000);
+
   }
 
   return (
@@ -96,16 +107,7 @@ export default function ColorPicker(props) {
             />
       </div>
       <div className='option-color'>
-        <input
-            type="color"
-            className='option-button'
-            id="color-selector3"
-            value={color3}
-            onChange={handleChange3}
-          />
-      </div>
-      <div className='option-color'>
-        <input
+      <input
             type="color"
             className='option-button'
             id="color-selector2"
@@ -113,8 +115,17 @@ export default function ColorPicker(props) {
             onChange={handleChange2}
           />
       </div>
+      <div className='option-color'>
+      <input
+            type="color"
+            className='option-button'
+            id="color-selector3"
+            value={color3}
+            onChange={handleChange3}
+          />
+      </div>
       <div className='option'>
-        <button className='option-button' onClick={saveColors}>Save Colors</button>
+        <button className='option-button' onClick={saveColors}>{buttonText}</button>
       </div>
     </div>
 

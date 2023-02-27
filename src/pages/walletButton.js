@@ -5,8 +5,7 @@ import ColorPicker from "./colorPicker";
 
 export default function WalletButton(props){
 
-    const [buttonText, setButtonText] = useState('Connect Wallet');
-    const [showDropdown, setShowDropdown] = useState(false);
+    const [buttonText, setButtonText] = useState('Connect') ;
     const [colors, setColors] = useState();
     const [isVisable, setIsVisable] = useState(false);
 
@@ -79,9 +78,8 @@ export default function WalletButton(props){
 
     const handleSelect = async (wallet) => {
         // used to show dropdown options list 
-        setShowDropdown(false);
         let stake = await getStakeAddressFromWallet(wallet);
-        router.push(`/${stake}`);
+        router.push(`/wallet/${stake}`);
   
     }
 
@@ -109,10 +107,6 @@ export default function WalletButton(props){
         let stake = await lucid.wallet.rewardAddress();
         return stake;
     
-    }
-
-    function showOptions(){
-        setShowDropdown(!showDropdown);
     }
 
     const refreshWallet = async () => {
@@ -164,13 +158,17 @@ export default function WalletButton(props){
     }
 
     function showMenu(){
-        setIsVisable(!isVisable);
+        setIsVisable(true);
+    }
+
+    function hideMenu(){
+        setIsVisable(false);
     }
 
     // need options to still be present but hidden so color picker will work
     return(<div className="connect-wallet">
-        <button className="connect-wallet-button" onClick={showMenu}>{buttonText}</button>
-        <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}}>
+        <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu}>{buttonText}</button>
+        <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} onMouseEnter={showMenu} onMouseLeave={hideMenu}>
             <div className="options">
                 <div className="option">
                     <button className="option-button" onClick={() => router.push('/'+props.stake)}>My Wallet ⌂</button>
@@ -195,8 +193,7 @@ export default function WalletButton(props){
                 </div>
             </div>
             <ColorPicker data={setColorData} stake={props}/>
-
-        </div>
+            </div>
         </div>
     );
 }

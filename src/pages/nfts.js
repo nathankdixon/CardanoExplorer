@@ -15,7 +15,6 @@ export default function Nfts (props){
       }
     }, [props]);
 
-
     const showTokens = (nfts) => {
       // array of table items to be added to display
       let _display = [];
@@ -43,69 +42,91 @@ export default function Nfts (props){
       setDisplay(_display);
     }
 
-    // finds name, collection and image from first token in policy
-    // adds to html table
-    function addNftsToGrid(nfts, policies){
-
+    function copyText(event, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        // Update the button text to "Copied!"
+        const button = event.target;
+        event.target.innerText = "Copied";
+        setTimeout(() => {
+          // Reset the button text after 1 second
+          button.textContent = "Copy";
+        }, 1000);
+      });
+    }
+    
+    function addNftsToGrid(nfts, policies) {
       let grid = [];
-
-      for(const policy of policies){
+    
+      for (const policy of policies) {
         let token = nfts[policy][0];
-
-        let name = token.metadata.name;
+    
         let collection = '';
-
-        if(token.metadata.collection != null){
-          collection = token.metadata.collection;
-        }
-        else if(token.metadata.Collection != null){
-          collection = token.metadata.Collection;
-        }
-        else if(token.metadata.project != null){
-          collection = token.metadata.project;
-        }
-        else if(token.metadata.Project != null){
-          collection = token.metadata.Project;
-        }
-        else{
-        }
-
+    
+        collection = (token.policy_id);
+    
         let path = '';
-        if(token.handle != null){
+        if (token.handle != null) {
           path = props.tokens.handle;
-        }
-        else{
+        } else {
           path = props.tokens.stake;
         }
-
-
-        if(nfts[policy].length > 1){
+    
+        if (nfts[policy].length > 1) {
           grid.push(
-          <div key = {token.asset_name + 'nft'} className = "grid-item-collection" onClick = {() => showTokensFromPolicy(nfts[policy])}>
-            <Image className="grid-img" src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
-              <div className="grid-item-title">{name}</div>
-              <div className="grid-item-text">{collection}</div>
+            <div
+              key={token.asset_name + 'nft'}
+              className="grid-item-collection"
+            >
+              <Image
+                className="grid-img"
+                src={token.ipfs}
+                alt="failed to load image"
+                width={270}
+                height={270}
+                onClick={() => showTokensFromPolicy(nfts[policy])}
+              />
+              <div className="grid-item-text">
+                Policy: {collection.substring(0, 7)}...
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, collection)}
+                >
+                  Copy
+                </button>
+              </div>
               <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
-            </div>);
-        }
-        else{
-          grid.push(
-          <div key = {token.asset_name + 'nft'} className = "grid-item" onClick = {() => router.push('/'+path+'/'+token.policy_id+token.asset_name)}>
-            <Image className='grid-img' src={token.ipfs} alt = 'failed to load image' width={270} height={270}/>
-            <div className="grid-item-info">
-              <div className="grid-item-title">{name}</div>
-              <div className="grid-item-text" >{collection}</div>
-              <div className="grid-item-text" >Quantity: {nfts[policy].length}</div>
             </div>
-            </div>);
+          );
+        } else {
+          grid.push(
+            <div key={token.asset_name + 'nft'} className="grid-item">
+              <Image
+                className="grid-img"
+                src={token.ipfs}
+                alt="failed to load image"
+                width={270}
+                height={270}
+                onClick={() => router.push('/' + path + '/' + token.policy_id + token.asset_name)}
+              />
+                <div className="grid-item-text">
+                Policy: {collection.substring(0, 7)}...
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, collection)}
+                >
+                  Copy
+                </button>
+              </div>
+              <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
 
+            </div>
+          );
         }
-
       }
-
+    
       return grid;
-
     }
+    
 
     // upon clicking a collection image, the nfts from that collection replaces the grid
     function showTokensFromPolicy(policy){
@@ -113,23 +134,9 @@ export default function Nfts (props){
         
         for(const token of policy){
 
-          let name = token.metadata.name;
           let collection = '';
-
-          if(token.metadata.collection != null){
-            collection = token.metadata.collection;
-          }
-          else if(token.metadata.Collection != null){
-            collection = token.metadata.Collection;
-          }
-          else if(token.metadata.project != null){
-            collection = token.metadata.project;
-          }
-          else if(token.metadata.Project != null){
-            collection = token.metadata.Project;
-          }
-          else{
-          }
+    
+          collection = (token.policy_id);
 
           let path = '';
           if(props.tokens.handle != null){
@@ -145,8 +152,16 @@ export default function Nfts (props){
           alt = 'failed to load image'/>
             <div className="grid-item-info">
             <div className="grid-item-title">{name}</div>
-            <div className="grid-item-text" >{collection}</div>
-              </div>
+            <div className="grid-item-text">
+                  Policy: {collection.substring(0, 7)}...
+                  <button
+                    className="policy-button"
+                    onClick={(e) => copyText(e, collection)}
+                  >
+                    Copy
+                  </button>
+                </div>
+          </div>
           </div>);
         }
         setDisplay(_display);
@@ -155,7 +170,7 @@ export default function Nfts (props){
     //returns a grid view of all NFTs grouped by policy
     return (
       <div>
-        <nav><button className="setting-button" onClick={() => showTokens(tokens.nfts)}>Show All</button></nav>
+        <nav><button className="setting-button" onClick={() => showTokens(props.tokens.nfts)}>Show All</button></nav>
         <div className="grid-nft">{display}</div>
       </div>
 

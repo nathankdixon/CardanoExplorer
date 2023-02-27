@@ -358,7 +358,7 @@ header input[type="text"] {
     border-width: 2px;
     border-color:  var(--main-color);
     border-radius: 10px;
-
+    box-shadow: 2px 2px 20px 5px var(--main-color);
     width: 300px;
     height: 370px;
     background-color: var(--second-color);
@@ -398,6 +398,25 @@ header input[type="text"] {
     transform: scale(1.05);
 }
 
+.policy-button{
+    background-color:inherit;
+    font-size: inherit;
+
+    text-decoration: underline;
+    color: var(--third-color);
+    border: none;
+    font-family: var(--main-font);
+}
+
+.policy-button:hover{
+    background-color:var(--fourth-color);
+    cursor: pointer;
+}
+  
+.policy-info{
+    display: flex;
+    justify-content: space-between;
+}
 
 
 .grid-item-info{
@@ -569,7 +588,6 @@ tr:hover {
 
 .metadata{
     display: flex;
-    width: 50%;
     font-size: large;
     color: var(--third-color);
     padding: 10px 10px 10px 10px;
@@ -579,7 +597,6 @@ tr:hover {
 .token-box{
     display: flex;
     width: 100%;
-
 }
 
 
