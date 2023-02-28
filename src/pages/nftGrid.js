@@ -26,19 +26,22 @@ export default function NftGrid(props){
         let grid = [];
 
       
-        for (let i=0; i<nfts.length; i++) {
-          let token = nfts[i];
+        for (const element of nfts) {
+         let token = element;
          let name = token.asset_name;
+         let ipfs = '/black.jpeg'
+
+         ipfs = token.ipfs;
 
           grid.push(
             <div key={token.asset_name + 'nft'} className="grid-item">
               <Image
                 className="grid-img"
-                src={token.ipfs}
+                src={ipfs}
                 alt="failed to load image"
                 width={270}
                 height={270}
-                onClick={() => router.push('/token/' + token.policy_id + token.asset_name)}
+                onClick={() => router.push('/token/' + token.policy_id + token.asset_name+'?stake='+props.stake)}
               />
                 <div className="grid-item-text">
                 Asset Name: {name.substring(0, 7)}...
@@ -50,5 +53,5 @@ export default function NftGrid(props){
         return grid;
       }
 
-    return(<div className="grid-nft"><div>owned nfts:</div>{display}</div>)
+    return(<div className="grid-nft"><label>Your NFTs</label>{display}</div>)
 }

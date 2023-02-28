@@ -171,7 +171,7 @@ export default function WalletButton(props){
         <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} onMouseEnter={showMenu} onMouseLeave={hideMenu}>
             <div className="options">
                 <div className="option">
-                    <button className="option-button" onClick={() => router.push('/'+props.stake)}>My Wallet ⌂</button>
+                    <button className="option-button" onClick={() => router.push('/wallet/'+props.stake)}>My Wallet ⌂</button>
                 </div>
                 <div className="option">
                     <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}>Typhon<img className = 'connect-wallet-img' src="/typhon.svg"></img></button>

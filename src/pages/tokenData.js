@@ -1,6 +1,6 @@
 import { assetPrefix } from "next.config";
 import Image from "next/image";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState} from "react";
 import MetadataTable from "./metadataTable";
 import Policy from "./policy";
 import Prices from "./prices";
@@ -8,13 +8,13 @@ import Token from "./token";
 
 function TokenData (props) {
 
-  const [display, setDisplay] = useState();
-  const [tokenName, setTokenName] = useState();
-  const [image, setImage] = useState();
+  const [ipfs, setIpfs] = useState('/black.jpeg');
   const [metadata, setMetadata] = useState();
-  const [tokenInfo, setTokenInfo] = useState();
-  const [data, setData] = useState();
+  const [data, setData] = useState({name: '', policy:'',created:'', assetName:'', fingerprint:'', rarityRank:'',rarityScore:'',
+                              statisticalRank:'', statisticalScore:''});
   const [policy, setPolicy] = useState();
+  const [prices, setPrices] = useState();
+  const [tokenInfo, setTokenInfo] = useState();
 
     useEffect(() => {
         const getTokenData = async () => {
@@ -36,39 +36,45 @@ function TokenData (props) {
                 setPolicy(token.policy_id);
 
                 let _assetData = await getCnftAssetData(props.assetId);
-                let createdData = _assetData.created_at;
-                let fingerprint = _assetData.fingerprint;
+                let createdData = (_assetData.created_at).substring(0,10);
+                let fingerprint = (_assetData.fingerprint).substring(0,10);
                 let name = _assetData.name;
                 let rarityRank = _assetData.rarity_rank;
                 let rarityScore = _assetData.rarity_score;
                 let statisticalRank = _assetData.statistical_rank;
                 let statisticalScore = _assetData.statistical_score;
 
-                setData(<div><div>created at: {createdData}</div><div>fingerprint: {fingerprint}</div>
-                <div>name: {name}</div><div>rarity rank: {rarityRank}</div>
-                <div>rarity score : {rarityScore}</div>
-                <div>rarity rank: {rarityRank}</div>
-                <div>statistical rank: {statisticalRank}</div>
-                <div>statistical score: {statisticalScore}</div>
-                <div>asset name :{token.asset_name}</div>
-                <div>policy id: {(token.policy_id).substring(0,9)}...</div></div>);
+                let obj = {name: name, policy: token.policy_id, created: createdData, assetName: token.asset_name,
+                  fingerprint: fingerprint, rarityRank: rarityRank, rarityScore:  rarityScore,
+                statisticalRank: statisticalRank, statisticalScore}
+                
+                setData(obj);
 
+                let price = prices;
+                let ipfs = '';
+                if(token.metadata != null){
+                  ipfs = token.getIpfsFromMetadata();
+                  token.ipfs = ipfs;
+                }
+
+                let txs = await getPrevTxs(assetId);
 
                 // metadata displayed in table
-                setMetadata(<MetadataTable json = {token.metadata}/>);
-                // nft name
-                setTokenName(token.metadata.name);
+                setMetadata(JSON.stringify(token.metadata));
+                
 
-                // nft image
-                setImage(<Image className = "main-img" alt= 'no image' src = {token.ipfs} width = {700} height = {700}/>);
+                if(token.ipfs != null){
+                  // nft image
+                  setIpfs(token.ipfs);
+                }
+
              }
 
           }
         }
         getTokenData();
       }, [props])
-
-    
+      
 
 
     async function createToken(assetData){
@@ -80,10 +86,7 @@ function TokenData (props) {
       let tokenMetadata = await token.getMetadata();
       token.metadata = tokenMetadata;
 
-      if(tokenMetadata != null){
-        let ipfs = token.getIpfsFromMetadata();
-        token.ipfs = ipfs;
-      }
+
 
       return token;
     }
@@ -132,17 +135,40 @@ function TokenData (props) {
       }
     }
 
+    function setPriceData(data){
+      setPrices(data);
+    }
+
     return(
       <div className="token-main">
-        <Policy policy = {policy}/>
-        <div className="token-name">
-            {tokenName}
+        <Prices data = {setPriceData}/>
+        <Policy policy = {policy} prices = {prices}/>
+          <div className="token-box">
+              <div className="token-image"><Image className = "main-img" alt= 'no image' src = {ipfs} width = {500} height = {500}/></div>
+              <div className="token-data">
+                <div className="token-data-item">
+                Name: {data.name}
+                </div>
+                <div className="token-data-item">
+                Created: {data.created}
+                </div>
+                <div className="token-data-item">
+                Fingerprint: {data.fingerprint}
+                </div>
+                <div className="token-data-item">
+                Rarity Rank: {data.rarityRank}
+                </div>
+                <div className="token-data-item">
+                Statistical Rank: {data.statisticalRank}
+                </div>
+                <div className="token-data-item">
+                Asset Name: {data.assetName}
+                </div>
+              </div>
         </div>
-        <div className="token-box">
-            <div className="token-image">{image}</div>
-            <div className="token-data">{data}</div>
-        </div>
-        <div className="metadata">{metadata}</div>
+        <div className="metadata">Metadata: <br/>{metadata}</div>
+
+
     </div>)
 }
 export default TokenData;

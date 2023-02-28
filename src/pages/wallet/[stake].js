@@ -13,7 +13,7 @@ function StakePage() {
       <div>
         <header>
         <label className="main-label">✥ Explorer</label>
-        <SearchBar />
+        <SearchBar stake={stake}/>
         <WalletButton stake = {stake}/>
       </header>
         <div className="tokenList"><WalletData stakeAddress={stake}/></div>

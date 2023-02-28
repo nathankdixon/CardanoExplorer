@@ -64,12 +64,7 @@ export default function Nfts (props){
     
         collection = (token.policy_id);
     
-        let path = '';
-        if (token.handle != null) {
-          path = props.tokens.handle;
-        } else {
-          path = props.tokens.stake;
-        }
+        let path = 'token';
     
         if (nfts[policy].length > 1) {
           grid.push(
@@ -106,7 +101,7 @@ export default function Nfts (props){
                 alt="failed to load image"
                 width={270}
                 height={270}
-                onClick={() => router.push('/' + path + '/' + token.policy_id + token.asset_name)}
+                onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}
               />
                 <div className="grid-item-text">
                 Policy: {collection.substring(0, 7)}...
@@ -138,20 +133,13 @@ export default function Nfts (props){
     
           collection = (token.policy_id);
 
-          let path = '';
-          if(props.tokens.handle != null){
-            path = props.tokens.handle;
-          }
-          else{
-            path = props.tokens.stake;
-          }
+          let path = 'token';
 
           _display.push(
-          <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name)}>
-            <img className="grid-img" src= {token.ipfs}
-          alt = 'failed to load image'/>
+          <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}>
+            <Image className="grid-img" src= {token.ipfs}
+          alt = 'failed to load image' width={270} height={270}/>
             <div className="grid-item-info">
-            <div className="grid-item-title">{name}</div>
             <div className="grid-item-text">
                   Policy: {collection.substring(0, 7)}...
                   <button

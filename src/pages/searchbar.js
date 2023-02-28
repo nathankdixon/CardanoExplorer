@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function SearchBar(){
+export default function SearchBar(props){
 
     const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
-
 
     const handleSearch = async  (event) => {
         event.preventDefault();
@@ -22,7 +21,7 @@ export default function SearchBar(){
           }
         }
         else if(searchQuery.length > 2){
-          router.push(`/token/${searchQuery}`);
+          router.push(`/token/${searchQuery}/?stake=`+props.stake);
         }
         else{
             // bad input
