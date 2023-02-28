@@ -45,7 +45,7 @@ const Home = () => {
       let stake = await getStakeAddressFromWallet(wallet);
 
       if(stake!= null){
-        router.push(`/${stake}`);
+        router.push(`/wallet/${stake}`);
       }
     }
 

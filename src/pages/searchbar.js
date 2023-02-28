@@ -13,12 +13,12 @@ export default function SearchBar(){
         if(searchQuery.startsWith('add')){
           let stakeAddress = await getStakeFromAddressKoios(searchQuery);
           if(stakeAddress != null){
-            router.push(`/${stakeAddress}`);
+            router.push(`/wallet/${stakeAddress}`);
           }
         }
         else if (searchQuery.startsWith('stake') || searchQuery.startsWith('$')){
           if(searchQuery.length >2){
-            router.push(`/${searchQuery}`);
+            router.push(`/wallet/${searchQuery}`);
           }
         }
         else if(searchQuery.length > 2){
