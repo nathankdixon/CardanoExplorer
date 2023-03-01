@@ -22,9 +22,21 @@ function PolicyData (props) {
           }
           else{
             console.log(props.stake + '- ' +props.policy);
+            let stakeAddress = props.stake;
+            if(stakeAddress.startsWith('$')){
+              let stake = await getAddressFromHandle(stakeAddress.slice(1));
+              if(stake != null){
+                stakeAddress = stake;
+                console.log(stakeAddress);
+              }
+              else{
+                console.log('wallet error');
+              }
+            }
+            
             let tokens = [];
 
-            let assets = await getAssetsOfPolicyFromKoios(props.stake, props.policy);
+            let assets = await getAssetsOfPolicyFromKoios(stakeAddress, props.policy);
 
             for(let i =0;i<assets.length;i++){
               let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
@@ -91,7 +103,7 @@ function PolicyData (props) {
 
       console.log(res);
       
-      let stake = await getStakeFromAddressKoios(data[0].address);
+      let stake = await getStakeFromAddressKoios(res[0].address);
       return stake;
     }catch(error){
       console.log(error);
