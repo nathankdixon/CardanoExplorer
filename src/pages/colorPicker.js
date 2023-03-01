@@ -97,7 +97,7 @@ export default function ColorPicker(props) {
 
   return (
     <div className='options-color'>
-      <div className='option-color'>
+      <div className='option'>
         <input
             type="color"
             className='option-button'
@@ -106,7 +106,7 @@ export default function ColorPicker(props) {
             onChange={handleChange1}
             />
       </div>
-      <div className='option-color'>
+      <div className='option'>
       <input
             type="color"
             className='option-button'
@@ -115,7 +115,7 @@ export default function ColorPicker(props) {
             onChange={handleChange2}
           />
       </div>
-      <div className='option-color'>
+      <div className='option'>
       <input
             type="color"
             className='option-button'

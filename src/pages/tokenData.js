@@ -11,7 +11,7 @@ function TokenData (props) {
   const [ipfs, setIpfs] = useState('/black.jpeg');
   const [metadata, setMetadata] = useState();
   const [data, setData] = useState({name: '', policy:'',created:'', assetName:'', fingerprint:'', rarityRank:'',rarityScore:'',
-                              statisticalRank:'', statisticalScore:''});
+                              statisticalRank:'', statisticalScore:'', assetId:''});
   const [policy, setPolicy] = useState();
   const [prices, setPrices] = useState();
   const [tokenInfo, setTokenInfo] = useState();
@@ -51,7 +51,7 @@ function TokenData (props) {
 
                 let obj = {name: decryptName, policy: token.policy_id, created: createdData, assetName: token.asset_name,
                   fingerprint: fingerprint, rarityRank: rarityRank, rarityScore:  rarityScore,
-                statisticalRank: statisticalRank, statisticalScore, assetId: props.assetId};
+                statisticalRank: statisticalRank, statisticalScore, assetId: assetId};
                 
                 setData(obj);
 

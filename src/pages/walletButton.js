@@ -167,12 +167,9 @@ export default function WalletButton(props){
 
     // need options to still be present but hidden so color picker will work
     return(<div className="connect-wallet">
-        <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu}>{buttonText}</button>
+        <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu} onClick={() => router.push('/wallet/'+props.stake)}>{buttonText}</button>
         <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} onMouseEnter={showMenu} onMouseLeave={hideMenu}>
             <div className="options">
-                <div className="option">
-                    <button className="option-button" onClick={() => router.push('/wallet/'+props.stake)}>My Wallet ⌂</button>
-                </div>
                 <div className="option">
                     <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}>Typhon<img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
                 </div>

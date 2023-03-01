@@ -160,7 +160,7 @@ header input[type="text"] {
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: 365px;
+    top: 325px;
     right: 80px;    
     width: 30px;
     text-align: center;
