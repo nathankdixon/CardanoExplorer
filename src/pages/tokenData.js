@@ -164,28 +164,13 @@ function TokenData (props) {
               <div className="token-image"><Image className = "main-img" alt= 'no image' src = {ipfs} width = {500} height = {500}/></div>
               <div className="token-data">
                 <div className="token-data-item">
-                Name: {data.name}
+                Name: <div className="value">{data.name}</div>
                 </div>
                 <div className="token-data-item">
-                Created: {data.created}
+                Created: <div className="value">{data.created}</div>
                 </div>
                 <div className="token-data-item">
-                Fingerprint: {(data.fingerprint).substring(0,20)}...   
-                <button
-                  className="policy-button"
-                  onClick={(e) => copyText(e, data.fingerprint)}
-                >
-                  Copy
-                </button>
-                </div>
-                <div className="token-data-item">
-                Rarity Rank: {data.rarityRank}
-                </div>
-                <div className="token-data-item">
-                Statistical Rank: {data.statisticalRank}
-                </div>
-                <div className="token-data-item">
-                Asset Id: {(data.assetId).substring(0,20)}...   
+                Asset Id: <div className="value">{(data.assetId).substring(0,10)}...</div>
                 <button
                   className="policy-button"
                   onClick={(e) => copyText(e, data.assetId)}
@@ -193,6 +178,23 @@ function TokenData (props) {
                   Copy
                 </button>
               </div>
+
+                <div className="token-data-item">
+                Rarity Rank: <div className="value">{data.rarityRank}</div>
+                </div>
+                <div className="token-data-item">
+                Statistical Rank: <div className="value">{data.statisticalRank}</div>
+                </div>
+                <div className="token-data-item">
+                Fingerprint: <div className="value">{(data.fingerprint).substring(0,15)}...</div>
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, data.fingerprint)}
+                >
+                  Copy
+                </button>
+                </div>
+
               </div>
         </div>
         <div className="metadata">Metadata: <br/>{metadata}</div>

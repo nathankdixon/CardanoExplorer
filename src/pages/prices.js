@@ -294,7 +294,7 @@ export default function Prices (props) {
             </div>
         </nav>
         <div className="price-buttons">
-            <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:<div className="currency">{granularity}</div></button>
+            <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:<div className="value">{granularity}</div></button>
             <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:<div className="currency">{currency.symbol}</div></button>
             <button className="setting-button" onClick={() => changePrivacy(privacy)}>Privacy Mode</button>
         </div>

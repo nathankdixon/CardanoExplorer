@@ -310,9 +310,9 @@ header input[type="text"] {
   
 
 .value{
-    display: flex;
+
     padding: 0px 10px 0px 10px;
-    color:var(--main-color);
+    color:var(--third-color);
 }
 
 .currency{
@@ -539,6 +539,8 @@ tr:hover {
 }
 
 .token-data-item{
+    display: flex;
+    flex-direction: row;
     font-size: x-large;
     font-weight: bold;
 }
@@ -559,8 +561,8 @@ tr:hover {
     font-weight: bold;
     display: flex;
     justify-content: space-between;
-    background-color: var(--second-color);
-    color:var(--main-color);
+    background-color: var(--main-color);
+    color:var(--second-color);
     border: var(--third-color) 2px solid;
     border-radius: 20px;
     margin: 10px 10px 10px 10px;

@@ -110,7 +110,7 @@ export default function Policy(props){
               <Image src = {display.thumbnail} width={100} height={100} alt='no img' className="policy-thumbnail"/>
             </div>
             <div className="policy-item-info">
-                Policy: {(display.policy).substring(0,9)}...   
+                Policy: <div className="value">{(display.policy).substring(0,9)}...   </div>
                 <button
                   className="policy-button"
                   onClick={(e) => copyText(e, display.policy)}
@@ -119,13 +119,13 @@ export default function Policy(props){
                 </button>
               </div>
             <div className="policy-item-info">
-            Supply:{display.supply}
+            Supply:<div className='value'>{display.supply}</div>
             </div>
             <div className="policy-item-info">
-            Volume: <div className="currency">{currency.symbol}</div>{display.volume}m
+            Volume: <div className="value"><div className="currency">{currency.symbol}</div>{display.volume}m</div>
             </div>
             <div className="policy-item-info">
-            Floor Price: <div className="currency">{currency.symbol}</div>{display.floorPrice}
+            Floor Price: <div className="value"><div className="currency">{currency.symbol}</div>{display.floorPrice}</div>
             </div>
           </div>)
 }
