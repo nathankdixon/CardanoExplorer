@@ -1,4 +1,5 @@
 import { Lucid } from "lucid-cardano";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ColorPicker from "./colorPicker";
@@ -167,7 +168,8 @@ export default function WalletButton(props){
 
     // need options to still be present but hidden so color picker will work
     return(<div className="connect-wallet">
-        <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu} onClick={() => router.push('/wallet/'+props.stake)}>{buttonText}</button>
+        <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu} 
+        onClick={() => router.push('/wallet/'+props.stake)}><Image src={'/wallet.svg'} width={30} height={30}/>{buttonText}</button>
         <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} onMouseEnter={showMenu} onMouseLeave={hideMenu}>
             <div className="options">
                 <div className="option">

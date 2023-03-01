@@ -104,8 +104,12 @@ header input[type="text"] {
     margin: 0px 10px 10px 10px;
     font-size: larger;
     font-weight: bold;
-    width: 150px;
+    width: 170px;
     height: 60px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .color-picker{
