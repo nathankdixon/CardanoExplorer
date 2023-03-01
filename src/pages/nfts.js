@@ -60,9 +60,9 @@ export default function Nfts (props){
       for (const policy of policies) {
         let token = nfts[policy][0];
     
-        let collection = '';
+        let policyId = '';
     
-        collection = (token.policy_id);
+        policyId = (token.policy_id);
     
         let path = 'token';
     
@@ -81,10 +81,10 @@ export default function Nfts (props){
                 onClick={() => showTokensFromPolicy(nfts[policy])}
               />
               <div className="grid-item-text">
-                Policy: {collection.substring(0, 7)}...
+                Policy: {policyId.substring(0, 7)}...
                 <button
                   className="policy-button"
-                  onClick={(e) => copyText(e, collection)}
+                  onClick={(e) => copyText(e, policyId)}
                 >
                   Copy
                 </button>
@@ -104,10 +104,10 @@ export default function Nfts (props){
                 onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}
               />
                 <div className="grid-item-text">
-                Policy: {collection.substring(0, 7)}...
+                Policy: {policyId.substring(0, 7)}...
                 <button
                   className="policy-button"
-                  onClick={(e) => copyText(e, collection)}
+                  onClick={(e) => copyText(e, policyId)}
                 >
                   Copy
                 </button>
@@ -129,9 +129,9 @@ export default function Nfts (props){
         
         for(const token of policy){
 
-          let collection = '';
+          let policyId = '';
     
-          collection = (token.policy_id);
+          policyId = (token.policy_id);
 
           let path = 'token';
 
@@ -141,10 +141,10 @@ export default function Nfts (props){
           alt = 'failed to load image' width={270} height={270}/>
             <div className="grid-item-info">
             <div className="grid-item-text">
-                  Policy: {collection.substring(0, 7)}...
+                  Policy: {policyId.substring(0, 7)}...
                   <button
                     className="policy-button"
-                    onClick={(e) => copyText(e, collection)}
+                    onClick={(e) => copyText(e, policyId)}
                   >
                     Copy
                   </button>

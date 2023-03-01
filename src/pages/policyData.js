@@ -38,8 +38,8 @@ function PolicyData (props) {
 
             let assets = await getAssetsOfPolicyFromKoios(stakeAddress, props.policy);
 
-            for(let i =0;i<assets.length;i++){
-              let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
+            for(const element of assets){
+              let token = new Token(element.asset_name, element.policy_id, element.quantity);
               token.metadata = await token.getMetadata();
 
               if(token.metadata != null){
@@ -115,14 +115,6 @@ function PolicyData (props) {
   // no asset limit on how many assets gets returned on one request
   // koios, blockfrost is limited by 100 results per page
   async function getAssetsOfPolicyFromKoios(stakeAddress, policy){
-
-    console.log(stakeAddress);
-
-    if(stakeAddress.startsWith('$')){
-      stakeAddress = await getAddressFromHandle(props.stake);
-    }
-
-    console.log(stakeAddress);
 
     let assets = [];
     try{

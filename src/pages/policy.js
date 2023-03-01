@@ -15,6 +15,9 @@ export default function Policy(props){
               let currency = props.prices.currency;
               setCurrency(currency);
 
+              let originalString = Buffer.from(props.policy, 'hex').toString();
+              console.log(originalString);
+
                 let floorPrice = ((policyData.floor_price/1000000)*currency.value).toFixed(2);
                 let holders = policyData.asset_holders;
                 let supply = policyData.asset_minted;
@@ -89,14 +92,32 @@ export default function Policy(props){
         }
       }
 
+      function copyText(event, text) {
+        navigator.clipboard.writeText(text).then(() => {
+          // Update the button text to "Copied!"
+          const button = event.target;
+          event.target.innerText = "Copied";
+          setTimeout(() => {
+            // Reset the button text after 1 second
+            button.textContent = "Copy";
+          }, 1000);
+        });
+      }
+
 
     return(<div className="policy-info">
             <div className="policy-item-info">
               <Image src = {display.thumbnail} width={100} height={100} alt='no img' className="policy-thumbnail"/>
             </div>
             <div className="policy-item-info">
-            Policy: {(display.policy).substring(0,9)}...
-            </div>
+                Policy: {(display.policy).substring(0,9)}...   
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, display.policy)}
+                >
+                  Copy
+                </button>
+              </div>
             <div className="policy-item-info">
             Supply:{display.supply}
             </div>

@@ -53,12 +53,13 @@ export default function Collection(props){
                     let token = new Token(assetName, policy, tokens[0][i].quantity);
                     token.metadata = await token.getMetadata();
 
-                    let name = '';
+                    let decryptName = Buffer.from(assetName, 'hex').toString();
+
+
                     let ipfs = '/black.jpeg';
                     if(token.metadata != null){
                         token.ipfs = token.getIpfsFromMetadata();
                         ipfs = token.ipfs;
-                        name = token.metadata.name;
                     }
 
                     display.push(        
@@ -71,8 +72,16 @@ export default function Collection(props){
                       height={270}
                       onClick={() => router.push('/token/' + token.policy_id + token.asset_name+'?stake='+props.stake)}
                     />
-                      <div className="grid-item-text">
-                      Name: {name.substring(0, 7)}...
+                      <div className="grid-item-text">{decryptName}
+                    </div>
+                        <div className="grid-item-text">
+                            Asset Name: {assetName.substring(0, 7)}...
+                            <button
+                            className="policy-button"
+                            onClick={(e) => copyText(e, assetName)}
+                            >
+                            Copy
+                        </button>
                     </div>
                   </div>);
                 }
@@ -82,6 +91,18 @@ export default function Collection(props){
         }
         func();
     }, [tokens, minItems])
+
+    function copyText(event, text) {
+        navigator.clipboard.writeText(text).then(() => {
+          // Update the button text to "Copied!"
+          const button = event.target;
+          event.target.innerText = "Copied";
+          setTimeout(() => {
+            // Reset the button text after 1 second
+            button.textContent = "Copy";
+          }, 1000);
+        });
+      }
 
     // fetch token metadata from blockfrost
     async function loadTokenData(policy, page){

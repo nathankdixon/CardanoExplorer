@@ -22,14 +22,29 @@ export default function NftGrid(props){
         func();
     }, [props])
 
+    function copyText(event, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        // Update the button text to "Copied!"
+        const button = event.target;
+        event.target.innerText = "Copied";
+        setTimeout(() => {
+          // Reset the button text after 1 second
+          button.textContent = "Copy";
+        }, 1000);
+      });
+    }
+
     function addNftsToGrid(nfts) {
         let grid = [];
 
       
         for (const element of nfts) {
          let token = element;
-         let name = token.asset_name;
+         let assetName = token.asset_name;
          let ipfs = '/black.jpeg'
+
+         let decryptName = Buffer.from(assetName, 'hex').toString();
+
 
          ipfs = token.ipfs;
 
@@ -44,7 +59,16 @@ export default function NftGrid(props){
                 onClick={() => router.push('/token/' + token.policy_id + token.asset_name+'?stake='+props.stake)}
               />
                 <div className="grid-item-text">
-                Asset Name: {name.substring(0, 7)}...
+                {decryptName}
+              </div>
+              <div className="grid-item-text">
+                Asset Name: {assetName.substring(0, 7)}...
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, assetName)}
+                >
+                  Copy
+                </button>
               </div>
             </div>
           );

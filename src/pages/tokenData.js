@@ -37,16 +37,21 @@ function TokenData (props) {
 
                 let _assetData = await getCnftAssetData(props.assetId);
                 let createdData = (_assetData.created_at).substring(0,10);
-                let fingerprint = (_assetData.fingerprint).substring(0,10);
-                let name = _assetData.name;
+                let fingerprint = (_assetData.fingerprint);
+                let assetName = _assetData.name;
                 let rarityRank = _assetData.rarity_rank;
                 let rarityScore = _assetData.rarity_score;
                 let statisticalRank = _assetData.statistical_rank;
                 let statisticalScore = _assetData.statistical_score;
 
-                let obj = {name: name, policy: token.policy_id, created: createdData, assetName: token.asset_name,
+
+                let decryptName = Buffer.from(token.asset_name, 'hex').toString();
+                console.log(decryptName);
+
+
+                let obj = {name: decryptName, policy: token.policy_id, created: createdData, assetName: token.asset_name,
                   fingerprint: fingerprint, rarityRank: rarityRank, rarityScore:  rarityScore,
-                statisticalRank: statisticalRank, statisticalScore}
+                statisticalRank: statisticalRank, statisticalScore, assetId: props.assetId};
                 
                 setData(obj);
 
@@ -74,6 +79,18 @@ function TokenData (props) {
         }
         getTokenData();
       }, [props])
+
+      function copyText(event, text) {
+        navigator.clipboard.writeText(text).then(() => {
+          // Update the button text to "Copied!"
+          const button = event.target;
+          event.target.innerText = "Copied";
+          setTimeout(() => {
+            // Reset the button text after 1 second
+            button.textContent = "Copy";
+          }, 1000);
+        });
+      }
       
 
 
@@ -153,7 +170,13 @@ function TokenData (props) {
                 Created: {data.created}
                 </div>
                 <div className="token-data-item">
-                Fingerprint: {data.fingerprint}
+                Fingerprint: {(data.fingerprint).substring(0,20)}...   
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, data.fingerprint)}
+                >
+                  Copy
+                </button>
                 </div>
                 <div className="token-data-item">
                 Rarity Rank: {data.rarityRank}
@@ -162,8 +185,14 @@ function TokenData (props) {
                 Statistical Rank: {data.statisticalRank}
                 </div>
                 <div className="token-data-item">
-                Asset Name: {data.assetName}
-                </div>
+                Asset Id: {(data.assetId).substring(0,20)}...   
+                <button
+                  className="policy-button"
+                  onClick={(e) => copyText(e, data.assetId)}
+                >
+                  Copy
+                </button>
+              </div>
               </div>
         </div>
         <div className="metadata">Metadata: <br/>{metadata}</div>
