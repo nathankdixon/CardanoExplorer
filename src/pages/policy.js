@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react"
 
 export default function Policy(props){
@@ -106,26 +107,32 @@ export default function Policy(props){
 
 
     return(<div className="policy-info">
-            <div className="policy-item-info">
-              <Image src = {display.thumbnail} width={100} height={100} alt='no img' className="policy-thumbnail"/>
+            <div className="policy-section">
+              <div className="policy-item-info">
+                  Policy: <div className="value">{(display.policy).substring(0,14)}...</div><Link className = 'policy-link' href={'/token/'+display.policy+'?stake='+props.stake}>View</Link>
+                  <button
+                    className="policy-button"
+                    onClick={(e) => copyText(e, display.policy)}
+                  >
+                    Copy
+                  </button>
+                </div>
             </div>
-            <div className="policy-item-info">
-                Policy: <div className="value">{(display.policy).substring(0,9)}...   </div>
-                <button
-                  className="policy-button"
-                  onClick={(e) => copyText(e, display.policy)}
-                >
-                  Copy
-                </button>
+            <div className="policy-section-item">
+              <div className="policy-item-info">
+                <Image src = {display.thumbnail} width={100} height={100} alt='no img' className="policy-thumbnail"/>
               </div>
-            <div className="policy-item-info">
-            Supply:<div className='value'>{display.supply}</div>
+
+              <div className="policy-item-info">
+              Supply:<div className='value'>{display.supply}</div>
+              </div>
+              <div className="policy-item-info">
+              Volume: <div className="value"><div className="currency">{currency.symbol}</div>{display.volume}m</div>
+              </div>
+              <div className="policy-item-info">
+              Floor Price: <div className="value"><div className="currency">{currency.symbol}</div>{display.floorPrice}</div>
+              </div>
             </div>
-            <div className="policy-item-info">
-            Volume: <div className="value"><div className="currency">{currency.symbol}</div>{display.volume}m</div>
             </div>
-            <div className="policy-item-info">
-            Floor Price: <div className="value"><div className="currency">{currency.symbol}</div>{display.floorPrice}</div>
-            </div>
-          </div>)
+              )
 }

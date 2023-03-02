@@ -39,8 +39,10 @@ export default function NftGrid(props){
 
       
         for (const element of nfts) {
+         let policy = props.policy;
          let token = element;
          let assetName = token.asset_name;
+         let assetId = policy+assetName;
          let ipfs = '/black.jpeg'
 
          let decryptName = Buffer.from(assetName, 'hex').toString();
@@ -62,10 +64,10 @@ export default function NftGrid(props){
                 {decryptName}
               </div>
               <div className="grid-item-text">
-                Asset Name: {assetName.substring(0, 7)}...
+                Asset Name: {assetName.substring(15)}...
                 <button
                   className="policy-button"
-                  onClick={(e) => copyText(e, assetName)}
+                  onClick={(e) => copyText(e, assetId)}
                 >
                   Copy
                 </button>

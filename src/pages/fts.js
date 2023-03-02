@@ -52,10 +52,6 @@ export default function Fts (props){
     }, [props]);
 
 
-    function addColumnNamesToDisplay(){
-
-    }
-
     // adds all fungible tokens with price, price changes and values to the table
     function adddTokenInfoToDisplay(currency, prices){
 

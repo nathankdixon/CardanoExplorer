@@ -12,9 +12,16 @@ const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   
     // gets stake address from wallet using cip-30 and lucid
+    // @params - the name of the wallet to connect to e.g. 'Nami' or 'Typhon Wallet'
+    // @returns - the stake address of the connected wallet
     async function getStakeAddressFromWallet(wallet){
       try{
+        // instantiates Lucid - a javascript framework which encapsulates the CIP-30 Dapp Connector
         const lucid = await Lucid.new();
+
+        // api here is set to the requested wallet
+        // the user is promted to connect the wallet to the site
+        // if the user clicks 'connect', wallet data can be fetched
         var api = '';
     
         if(wallet == 'Typhon Wallet'){
@@ -29,8 +36,9 @@ const Home = () => {
         if(wallet == 'Flint Wallet'){
           api = await window.cardano.flint.enable();
         }
-        
         lucid.selectWallet(api);
+
+        // reward address (a.k.a stake address) is fetched from the wallet api
         let stake = await lucid.wallet.rewardAddress();
         return stake;
       }catch(error){

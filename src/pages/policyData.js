@@ -28,27 +28,29 @@ function PolicyData (props) {
               if(stake != null){
                 stakeAddress = stake;
                 console.log(stakeAddress);
+
+              let tokens = [];
+
+              let assets = await getAssetsOfPolicyFromKoios(stakeAddress, props.policy);
+
+              for(const element of assets){
+                let token = new Token(element.asset_name, element.policy_id, element.quantity);
+                token.metadata = await token.getMetadata();
+
+                if(token.metadata != null){
+                  let ipfs = token.getIpfsFromMetadata();
+                  token.ipfs = ipfs;
+                }
+                tokens.push(token);
+                }
+                setTokens(tokens);
               }
               else{
                 console.log('wallet error');
               }
             }
             
-            let tokens = [];
 
-            let assets = await getAssetsOfPolicyFromKoios(stakeAddress, props.policy);
-
-            for(const element of assets){
-              let token = new Token(element.asset_name, element.policy_id, element.quantity);
-              token.metadata = await token.getMetadata();
-
-              if(token.metadata != null){
-                let ipfs = token.getIpfsFromMetadata();
-                token.ipfs = ipfs;
-              }
-              tokens.push(token);
-            }
-            setTokens(tokens);
 
           }
         }
@@ -153,9 +155,9 @@ function PolicyData (props) {
     return(<div>
         <Prices data = {setPriceData}/>
         <label>Policy Info</label>
-        <Policy policy = {props.policy} prices={prices}/>
+        <Policy policy = {props.policy} prices={prices} stake ={props.stake}/>
         <label>Your Wallet</label>
-        <NftGrid nfts = {tokens} stake={props.stake}/>
+        <NftGrid nfts = {tokens} policy = {props.policy}stake={props.stake}/>
         <Collection policy = {props.policy} stake={props.stake}/>
     </div>)
 }

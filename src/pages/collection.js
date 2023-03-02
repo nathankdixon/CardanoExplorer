@@ -9,7 +9,7 @@ export default function Collection(props){
     const [display, setDisplay] = useState();
     const [tokens, setTokens] = useState();
     const [minItems, setMinItems] = useState(0);
-    const [maxItems, setMaxItems] = useState(10);
+    const [maxItems, setMaxItems] = useState(20);
 
     const router = useRouter();
 
@@ -75,10 +75,10 @@ export default function Collection(props){
                       <div className="grid-item-text">{decryptName}
                     </div>
                         <div className="grid-item-text">
-                            Asset Name: {assetName.substring(0, 7)}...
+                            Asset ID: {assetName.substring(0,10)}...
                             <button
                             className="policy-button"
-                            onClick={(e) => copyText(e, assetName)}
+                            onClick={(e) => copyText(e, assetId)}
                             >
                             Copy
                         </button>
