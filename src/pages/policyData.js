@@ -24,30 +24,29 @@ function PolicyData (props) {
             console.log(props.stake + '- ' +props.policy);
             let stakeAddress = props.stake;
             if(stakeAddress.startsWith('$')){
-              let stake = await getAddressFromHandle(stakeAddress.slice(1));
-              if(stake != null){
-                stakeAddress = stake;
-                console.log(stakeAddress);
+              stakeAddress = await getAddressFromHandle(stakeAddress.slice(1));
+
+            }
+            if(stakeAddress != null){
 
               let tokens = [];
 
               let assets = await getAssetsOfPolicyFromKoios(stakeAddress, props.policy);
 
-              for(const element of assets){
-                let token = new Token(element.asset_name, element.policy_id, element.quantity);
-                token.metadata = await token.getMetadata();
+            for(const element of assets){
+              let token = new Token(element.asset_name, element.policy_id, element.quantity);
+              token.metadata = await token.getMetadata();
 
-                if(token.metadata != null){
-                  let ipfs = token.getIpfsFromMetadata();
-                  token.ipfs = ipfs;
-                }
-                tokens.push(token);
-                }
-                setTokens(tokens);
+              if(token.metadata != null){
+                let ipfs = token.getIpfsFromMetadata();
+                token.ipfs = ipfs;
               }
-              else{
-                console.log('wallet error');
+              tokens.push(token);
               }
+              setTokens(tokens);
+            }
+            else{
+              console.log('wallet error');
             }
             
 

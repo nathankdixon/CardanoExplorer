@@ -159,7 +159,7 @@ function TokenData (props) {
     return(
       <div className="token-main">
         <Prices data = {setPriceData}/>
-        <Policy policy = {policy} prices = {prices}/>
+        <Policy policy = {policy} prices = {prices} stake = {props.stake}/>
           <div className="token-box">
               <div className="token-image"><Image className = "main-img" alt= 'no image' src = {ipfs} width = {500} height = {500}/></div>
               <div className="token-data">
