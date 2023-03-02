@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -81,7 +82,8 @@ export default function Nfts (props){
                 onClick={() => showTokensFromPolicy(nfts[policy])}
               />
               <div className="grid-item-text">
-                Policy: {policyId.substring(0, 7)}...
+                Policy: {policyId.substring(0, 7)}...<br/>
+                <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>View</Link>
                 <button
                   className="policy-button"
                   onClick={(e) => copyText(e, policyId)}
@@ -104,7 +106,8 @@ export default function Nfts (props){
                 onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}
               />
                 <div className="grid-item-text">
-                Policy: {policyId.substring(0, 7)}...
+                Policy: {policyId.substring(0, 7)}...<br/>
+                <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>View</Link>
                 <button
                   className="policy-button"
                   onClick={(e) => copyText(e, policyId)}
