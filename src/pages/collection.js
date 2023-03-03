@@ -41,18 +41,12 @@ export default function Collection(props){
     
                 }
                 // display matches
-                if(matches.length != 0 && matches.length >3){
-                    let display = [];
+                if(matches.length != 0 && matches.length >1){
 
-                    for(const element of matches){
-                        let assetName = (element.asset).substring(56);
-                        decodedAsset = Buffer.from(assetName, 'hex').toString();
+                    setDisplayedAssets(<div className="value">{matches.length} matches</div>)
 
-                        display.push(<div key = {decodedAsset} className="grid-item-ft">{decodedAsset} - {assetName} - <Link href={'/token/'+element.asset+'?stake='+props.stake}>View</Link></div>)
-                    }
-                    setDisplayedAssets(display);
                 }
-                else if(matches.length <=3 && matches.length != 0){
+                else if(matches.length ==1){
                     let display = []
                     for(const element of matches){
                         
@@ -81,18 +75,20 @@ export default function Collection(props){
                         <Image className="grid-img" src= {token.ipfs}
                         alt = 'failed to load image' width={270} height={270}/>
                         <div className="grid-item-info">
-                        <div className="grid-item-text">{decodedAsset}
-                          <button
+                        <div className="grid-item-text">{decodedAsset}</div>
+                        <div className="grid-item-text">
+                        <button
                             className="policy-button"
                             onClick={(e) => copyText(e, token.asset_name)}
                           >
                             Copy
                           </button>
                           <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+element.asset}>JPG.store</Link>
+                        </div>
+
         
                         </div>
         
-                  </div>
                   </div>);
                     }
 
@@ -164,8 +160,10 @@ export default function Collection(props){
                         <Image className="grid-img" src= {token.ipfs}
                         alt = 'failed to load image' width={270} height={270}/>
                         <div className="grid-item-info">
+                        <div className="grid-item-text" style={{fontWeight: "bolder"}}>
+                            {decodedAsset}
+                         </div>
                         <div className="grid-item-text">
-                          {decodedAsset}
                           <button
                             className="policy-button"
                             onClick={(e) => copyText(e, token.asset_name)}
