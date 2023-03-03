@@ -6,7 +6,7 @@ export default function ColorPicker(props) {
   const [color2, setColor2] = useState('');
   const [color3, setColor3] = useState('');
 
-  const [buttonText, setButtonText] = useState('Save Colors');
+  const [buttonText, setButtonText] = useState('Save Theme');
   const [buttonColor, setButtonColor] = useState();
 
 

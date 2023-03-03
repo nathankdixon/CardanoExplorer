@@ -1,5 +1,6 @@
 import { getDisplayName } from "next/dist/shared/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react"
 
@@ -60,17 +61,15 @@ export default function NftGrid(props){
                 height={270}
                 onClick={() => router.push('/token/' + token.policy_id + token.asset_name+'?stake='+props.stake)}
               />
-                <div className="grid-item-text">
+                <div className="grid-item-text" style={{fontWeight: "bolder"}}>
                 {decryptName}
               </div>
               <div className="grid-item-text">
-                Asset Name: {assetName.substring(15)}...
-                <button
-                  className="policy-button"
-                  onClick={(e) => copyText(e, assetId)}
-                >
+                Asset Name: ..{assetName.slice(-7)}
+                <button className="policy-button" onClick={(e) => copyText(e, assetId)}>
                   Copy
                 </button>
+                <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+assetId}>JPG.store</Link>
               </div>
             </div>
           );

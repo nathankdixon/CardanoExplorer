@@ -1,7 +1,7 @@
 import { assetPrefix } from "next.config";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState} from "react";
-import MetadataTable from "./metadataTable";
 import Policy from "./policy";
 import Prices from "./prices";
 import Token from "./token";
@@ -194,6 +194,8 @@ function TokenData (props) {
                   Copy
                 </button>
                 </div>
+                <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+data.assetId}>JPG.store</Link>
+
 
               </div>
         </div>

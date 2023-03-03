@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 import Token from "./token";
-import Nfts from "./nfts";
-import Fts from "./fts";
-import Tokens from "./wallet";
-import { headers } from "next.config";
 import Wallet from "./wallet";
 
 
@@ -12,7 +8,7 @@ function WalletData (props) {
   const [isLoading, setisLoading] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [loadingInfo, setLoadingInfo] = useState();
-  const [stakeData, setStakeData] = useState({stake: null, tokenNumber: null, projectNumber: null, nfts: null, fts: null});
+  const [walletData, setWalletData] = useState({stake: null, tokenNumber: null, projectNumber: null, nfts: null, fts: null});
 
   useEffect(() => {
     const getTokens = async () =>{
@@ -43,24 +39,24 @@ function WalletData (props) {
         }
 
         // used to store and retrieve wallet information in local storage
-        let stakeData = '';
+        let walletData = '';
 
         //if stake data exist in storage -- get it
         if(localStorage.getItem(stakeAddress)){
-          stakeData = JSON.parse(localStorage.getItem(stakeAddress));
+          walletData = JSON.parse(localStorage.getItem(stakeAddress));
         }
 
         //if no stored data, create new and store it with stake address as key
         else{
-          stakeData = await createStakeDataFromStakeAddress(stakeAddress);
+          walletData = await createWalletDataFromStakeAddress(stakeAddress);
 
-          if(stakeData != null){
-            localStorage.setItem(stakeAddress, JSON.stringify(stakeData));
+          if(walletData != null){
+            localStorage.setItem(stakeAddress, JSON.stringify(walletData));
           }
         }
 
         // loading icon
-        setStakeData(stakeData);
+        setWalletData(walletData);
         setisLoading('done');
         setIsVisible(false);
         setIsVisibleGrid(true);
@@ -72,14 +68,14 @@ function WalletData (props) {
 
 
 
-  async function createStakeDataFromStakeAddress(stake){
+  async function createWalletDataFromStakeAddress(stake){
 
-    let stakeData = '';
+    let walletData = '';
     let assets = await getAssetsFromKoios(stake);
 
     //no assets
     if(assets.length == 0 || assets == null){
-      stakeData = {stake : stake, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
+      walletData = {stake : stake, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
     }
     else{
       //assets, create new stake data
@@ -101,13 +97,13 @@ function WalletData (props) {
         let _fungObj = sortTokenFungibilities(_policies);
 
         // wallet data object which is stored in local storage for quick retrieval
-        stakeData = {stake: stake, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: _fungObj.nfts, fts: _fungObj.fts};
+        walletData = {stake: stake, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: _fungObj.nfts, fts: _fungObj.fts};
 
       }catch(error){
         return null;
       }
     }
-    return stakeData;
+    return walletData;
 
   }
 
@@ -286,7 +282,7 @@ function WalletData (props) {
 
   return(
     <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>
-      <Wallet tokens = {stakeData}/>
+      <Wallet data = {walletData}/>
     </div>
   );
 }

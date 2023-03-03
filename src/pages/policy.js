@@ -16,8 +16,6 @@ export default function Policy(props){
               let currency = props.prices.currency;
               setCurrency(currency);
 
-              let originalString = Buffer.from(props.policy, 'hex').toString();
-              console.log(originalString);
 
                 let floorPrice = ((policyData.floor_price/1000000)*currency.value).toFixed(2);
                 let holders = policyData.asset_holders;
@@ -108,8 +106,8 @@ export default function Policy(props){
 
     return(<div className="policy-info">
             <div className="policy-section">
-              <div className="policy-item-info">
-                  Policy: <div className="value">{(display.policy).substring(0,14)}...</div><Link className = 'policy-link' href={'/token/'+display.policy+'?stake='+props.stake}>View</Link>
+              <div className="policy-item-info">Policy: 
+                  <Link className = 'policy-button' href={'/token/'+display.policy+'?stake='+props.stake}><div className="policy-value">{(display.policy)}</div></Link>
                   <button
                     className="policy-button"
                     onClick={(e) => copyText(e, display.policy)}
@@ -122,7 +120,6 @@ export default function Policy(props){
               <div className="policy-item-info">
                 <Image src = {display.thumbnail} width={100} height={100} alt='no img' className="policy-thumbnail"/>
               </div>
-
               <div className="policy-item-info">
               Supply:<div className='value'>{display.supply}</div>
               </div>

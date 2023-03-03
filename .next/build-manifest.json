@@ -29,11 +29,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/token/[policy].js"
-    ],
-    "/wallet/[stake]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/wallet/[stake].js"
     ]
   },
   "ampFirstPages": []

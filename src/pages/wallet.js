@@ -36,18 +36,18 @@ export default function Wallet (props) {
     
     return (
         <div className="wallet">
-            <Prices tokens = {props.tokens} data ={setPriceData}/>
-            <Summary tokens = {props.tokens} prices = {prices}/>
+            <Prices tokens = {props.data} data ={setPriceData}/>
+            <Summary tokens = {props.data} prices = {prices}/>
              <nav className="setting-nav">
                 <div>
                     <button className= {nftActive ? 'active' : 'inactive'}  onClick={displayNfts}>NFTs</button>
-                    <button className= {ftActive ? 'active' : 'inactive'} onClick={displayFts}>FTs</button>
+                    <button className= {ftActive ? 'active' : 'inactive'} onClick={displayFts}>Coins</button>
                 </div>
                 <div>
                     <button className="setting-button" >Search</button>
                 </div>
              </nav>
-             {showNfts ? <Nfts tokens = {props.tokens} /> : <Fts tokens = {props.tokens} prices = {prices}/>}
+             {showNfts ? <Nfts tokens = {props.data} /> : <Fts tokens = {props.data} prices = {prices}/>}
         </div>
     )
 }

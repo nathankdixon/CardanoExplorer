@@ -8,6 +8,8 @@ export default function Nfts (props){
 
     const [display, setDisplay] = useState([]);
     const router = useRouter();
+    const [searchQuery, setSearchQuery] = useState('');
+
 
     useEffect(() => {
       if(props.tokens != null){
@@ -81,9 +83,8 @@ export default function Nfts (props){
                 height={270}
                 onClick={() => showTokensFromPolicy(nfts[policy])}
               />
-              <div className="grid-item-text">
-                Policy: {policyId.substring(0, 7)}...<br/>
-                <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>View</Link>
+              <div className="grid-item-text">Policy: 
+                <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>...{policyId.slice(-7)}<br/></Link>
                 <button
                   className="policy-button"
                   onClick={(e) => copyText(e, policyId)}
@@ -105,15 +106,15 @@ export default function Nfts (props){
                 height={270}
                 onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}
               />
-                <div className="grid-item-text">
-                Policy: {policyId.substring(0, 7)}...<br/>
-                <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>View</Link>
+                <div className="grid-item-text">Asset Id: ...
+                <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>{(token.asset_name).slice(-7)}<br/></Link>
                 <button
                   className="policy-button"
-                  onClick={(e) => copyText(e, policyId)}
+                  onClick={(e) => copyText(e, token.asset_name)}
                 >
                   Copy
                 </button>
+                <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+token.asset_name}>JPG.store</Link>
               </div>
               <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
 
@@ -144,24 +145,35 @@ export default function Nfts (props){
           alt = 'failed to load image' width={270} height={270}/>
             <div className="grid-item-info">
             <div className="grid-item-text">
-                  Policy: {policyId.substring(0, 7)}...
+                  Asset ID: ...{(token.asset_name).slice(-7)}
                   <button
                     className="policy-button"
-                    onClick={(e) => copyText(e, policyId)}
+                    onClick={(e) => copyText(e, token.asset_name)}
                   >
                     Copy
                   </button>
+                  <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+token.asset_name}>JPG.store</Link>
+
                 </div>
+
           </div>
           </div>);
         }
         setDisplay(_display);
     }
+    const handleSearch = async  (event) => {
+      event.preventDefault();
+  }
 
     //returns a grid view of all NFTs grouped by policy
     return (
       <div>
-        <nav><button className="setting-button" onClick={() => showTokens(props.tokens.nfts)}>Show All</button></nav>
+        <nav className="policy-search"><button className="setting-button" onClick={() => showTokens(props.tokens.nfts)}>Show All</button>
+        <form className="searchForm" onSubmit={handleSearch}>
+                    <input type="text" className = "search-input" placeholder="Search for an address or a specific token..."  value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}/>
+                    <button type="submit" className="search-button">Search</button>
+            </form>
+        </nav>
         <div className="grid-nft">{display}</div>
       </div>
 
