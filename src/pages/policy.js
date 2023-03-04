@@ -33,7 +33,7 @@ export default function Policy(props){
         func();
     }, [props])
 
-           // if metadata has been fetched
+    // if metadata has been fetched
     // find the ipfs link under 'image' metadata tag and store it
     function getIpfs(ipfs){
       // convert all ipfs formats to the a searchable format that can be fetched in a <img> tag

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import Collection from "./collection";
-import NftGrid from "./nftGrid";
 import Policy from "./policy";
+import PolicyCollection from "./policyCollection";
+import PolicyOwned from "./policyOwned";
 import Prices from "./prices";
 import Token from "./token";
 
+// this component is used to display data for a policy id
+// it returns policy information, owned token from policy, and all nfts in collection which can be searched through
 function PolicyData (props) {
 
     const [policy, setPolicy] = useState();
@@ -21,7 +23,6 @@ function PolicyData (props) {
             console.log('policy undefined');
           }
           else{
-            console.log(props.stake + '- ' +props.policy);
             let stakeAddress = props.stake;
             if(stakeAddress.startsWith('$')){
               stakeAddress = await getAddressFromHandle(stakeAddress.slice(1));
@@ -101,8 +102,6 @@ function PolicyData (props) {
         });
 
       let res = await data.json();
-
-      console.log(res);
       
       let stake = await getStakeFromAddressKoios(res[0].address);
       return stake;
@@ -156,8 +155,8 @@ function PolicyData (props) {
         <label>Policy Info</label>
         <Policy policy = {props.policy} prices={prices} stake ={props.stake}/>
         <label>Your Wallet</label>
-        <NftGrid nfts = {tokens} policy = {props.policy}stake={props.stake}/>
-        <Collection policy = {props.policy} stake={props.stake}/>
+        <PolicyOwned nfts = {tokens} policy = {props.policy}stake={props.stake}/>
+        <PolicyCollection policy = {props.policy} stake={props.stake}/>
     </div>)
 }
 export default PolicyData;

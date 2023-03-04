@@ -106,7 +106,7 @@ export default function Nfts (props){
                 height={270}
                 onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}
               />
-                <div className="grid-item-text">Asset Id: ...
+                <div className="grid-item-text">
                 <Link className = 'policy-button' href={'/token/'+token.policy_id+'?stake='+props.tokens.stake}>{(token.asset_name).slice(-7)}<br/></Link>
                 <button
                   className="policy-button"
@@ -136,27 +136,24 @@ export default function Nfts (props){
           let policyId = '';
     
           policyId = (token.policy_id);
+          let decryptName = Buffer.from(token.asset_name, 'hex').toString();
+
 
           let path = 'token';
 
           _display.push(
-          <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}>
-            <Image className="grid-img" src= {token.ipfs}
-          alt = 'failed to load image' width={270} height={270}/>
+          <div key = {token.asset_name + 'poly'} className = "grid-item" 
+          onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}>
+            <Image className="grid-img" src= {token.ipfs} alt = 'failed to load image' width={270} height={270}/>
             <div className="grid-item-info">
-            <div className="grid-item-text">
-                  Asset ID: ...{(token.asset_name).slice(-7)}
-                  <button
-                    className="policy-button"
-                    onClick={(e) => copyText(e, token.asset_name)}
-                  >
-                    Copy
-                  </button>
+              <div className="grid-item-text" style={{fontWeight: "bolder"}}>
+                {decryptName}
+              </div>
+              <div className="grid-item-text">
+                <button className="policy-button"onClick={(e) => copyText(e, token.asset_name)}>Copy</button>
                   <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+token.asset_name}>JPG.store</Link>
-
                 </div>
-
-          </div>
+            </div>
           </div>);
         }
         setDisplay(_display);

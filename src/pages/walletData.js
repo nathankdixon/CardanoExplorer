@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Token from "./token";
-import Wallet from "./wallet";
+import WalletDisplay from "./walletDisplay";
 
 
 function WalletData (props) {
@@ -65,7 +65,6 @@ function WalletData (props) {
     }
     getTokens();
   }, [props]);
-
 
 
   async function createWalletDataFromStakeAddress(stake){
@@ -282,7 +281,7 @@ function WalletData (props) {
 
   return(
     <div style={{ visibility: isVisibleGrid ? 'visible' : 'hidden' }}>
-      <Wallet data = {walletData}/>
+      <WalletDisplay data = {walletData}/>
     </div>
   );
 }

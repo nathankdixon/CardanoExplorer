@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 
+
 export default function Prices (props) {
 
     // time interval for price change datat
