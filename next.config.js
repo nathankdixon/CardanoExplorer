@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -10,7 +9,9 @@ const nextConfig = {
       topLevelAwait: true,
       layers: true
     };
+
     return config;
   },
 };
+
 module.exports = nextConfig;
