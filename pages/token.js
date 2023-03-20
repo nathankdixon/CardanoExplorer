@@ -104,36 +104,6 @@ export default class Token {
     } catch{
     }
   }
-
-  async ipfsToBase64() {
-    if (!this.ipfs) {
-      return;
-    }
-    else if(this.ipfs.startsWith('data')){
-      this.image = this.ipfs;
-      return;
-    }
-    else{
-      try {
-        const response = await fetch(this.ipfs);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-  
-        const blob = await response.blob();
-        this.image = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      } catch {
-        console.log(this.ipfs);
-      }
-    }
-
-
-  }
   
 
   async getPrice() {

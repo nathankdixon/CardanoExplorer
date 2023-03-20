@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Delegation from "./delagation";
 import Fts from "./fts";
 import Home from "./home";
 import Nfts from "./nfts";
 import Summary from "./summary";
 import Token from "./token";
 import Transaction from "./transactions";
-import WalletButton from "./walletButton";
 
 
 function WalletData (props) {
@@ -18,7 +18,6 @@ function WalletData (props) {
   const [walletData, setWalletData] = useState({stake: null, tokenNumber: 0, projectNumber: 0, nfts: [], fts: []});
   const [stakeAddress, setStakeAddress] = useState(null);
   const [loadedTokens, setLoadedTokens] = useState('-');
-  const [loadedImages, setLoadedImages] = useState('-');
 
   const router = useRouter();
 
@@ -44,16 +43,18 @@ function WalletData (props) {
   useEffect(() => {
     const getWalletData = async () => {
       if(stakeAddress != null){
-        console.log('stake address: '+stakeAddress);
-
-        console.log('wallet data not found in local storage');
-        setLoadedTokens('loading');
         let walletData = '';
-        walletData = await createWalletDataFromStake(stakeAddress);
-        // localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+
+        if(localStorage.getItem(stakeAddress) != null){
+          walletData = JSON.parse(localStorage.getItem(stakeAddress));
+        }
+        else{
+          walletData = await createWalletDataFromStake(stakeAddress);
+           localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+
+        }
         setWalletData(walletData);
-        setLoadedTokens('done');
-        console.log(walletData);
+        setLoadedTokens('scroll to view wallet')
 
 
       }
@@ -85,7 +86,6 @@ function WalletData (props) {
       try{
         // list of 'token' objects with assgined attributes
         let _tokens = await createTokens(assets);
-        setLoadedTokens('done');
 
         // total number of tokens - used in summary
         let _tokenNumber = _tokens.length;
@@ -306,6 +306,10 @@ function WalletData (props) {
           <span><Image src={'/cardanocoin.png'} height={50} width={50} alt='coin'/></span>
           <span className="tooltip">Coins</span>
         </span>
+        <span className="wallet-button" id='del' onClick={() => scrollToSection('delegation')}>
+          <span>Pool</span>
+          <span className="tooltip">Delegation</span>
+        </span>
         <span className="wallet-button" id='t' onClick={() => scrollToSection('txs')}>
           <span><Image src={'/txs.png'} height={50} width={50} alt='txs'/></span>
           <span className="tooltip">Transactions</span>
@@ -314,7 +318,7 @@ function WalletData (props) {
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
           <Home/>
-          <div>Tokens: {loadedTokens}</div>
+          <div>{loadedTokens}</div>
         </section>
         <section className="wallet-data-content-item" id="wallet" >
           <Summary data={walletData} />
@@ -328,6 +332,9 @@ function WalletData (props) {
         <div className="wallet-data-content-item" >
           <Fts data={walletData} />
         </div>
+        </section>
+        <section className="wallet-data-content-item" id="delegation">
+          <Delegation data={walletData} />
         </section>
         <section className="wallet-data-content-item" id="txs">
           <Transaction data={walletData}/>

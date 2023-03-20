@@ -108,7 +108,7 @@ export default function WalletButton(props){
         // used to show dropdown options list 
         let stake = await getStakeAddressFromWallet(wallet);
         if(stake != null){
-            router.push(`/wallet/${stake}`);
+            router.push(`/${stake}`);
         }
         else{
             console.log('wallet error');

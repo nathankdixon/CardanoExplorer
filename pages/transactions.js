@@ -29,17 +29,12 @@ export default function Transactions(props){
 
  
     //                     let token = new Token(assetName, policy, element.quantity);
-    //                     let metadata = await token.getMetadata();
-    
-    //                     if(metadata != null){
-    //                         let ipfs = token.getIpfsFromMetadata();
-    //                         token.ipfs = ipfs;
-    //                     }
-
+    //                     await token.fetchTokenData();
 
     //                     const req = await fetch("https://cardano-mainnet.blockfrost.io/api/v0/assets/"+unit+"/transactions",
     //                     {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
     //                     let res = await req.json();
+    //                     console.log(res);
 
                         
     //                     let lasttx = res[0];

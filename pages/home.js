@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Blocks from "./blocks";
 import Prices from "./prices";
 import SearchBar from "./searchbar";
 import WalletButton from "./walletButton";
@@ -28,5 +29,6 @@ export default function Home(props){
                     <WalletButton/>
                 </header>
                 <Prices data={setPriceData}/>
+                <Blocks />
             </div>)
 }

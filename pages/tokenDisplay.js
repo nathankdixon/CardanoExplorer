@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Policy from "./policy";
 import Prices from "./prices";
+import SearchBar from "./searchbar";
+import WalletButton from "./walletButton";
 
 export default function TokenDisplay(props){
 
@@ -28,7 +30,8 @@ export default function TokenDisplay(props){
 
     return(
         <div className="token-main">
-            <Prices data = {setPriceData}/>
+            <SearchBar/>
+            <WalletButton/>
             <Policy policy = {props.data.token.policy_id} prices = {prices} stake = {props.stake}/>
                 <div className="token-box">
                     <div className="token-image">

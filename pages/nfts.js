@@ -2,62 +2,54 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import CollectionCard from "./collectionCard";
 
 // returns a flex box of nft showing image, name and quantity
 export default function Nfts (props){
 
     const [display, setDisplay] = useState("NFTs");
+    const [showing, setShowing] = useState("Wallet");
+    const [backButton, setBackButton] = useState();
+    const [info, setInfo] = useState();
     const router = useRouter();
-    const [searchQuery, setSearchQuery] = useState('');
-
 
     useEffect(() => {
-      if(props.data != null){
-        let display = [];
-
-        if(props.data.nfts.length != 0){
-          for(const element of props.data.nfts){
-            let policy = element;
-            let token = policy[0];
-            display.push(<div key= {token.asset_name + 'nft'} className="grid-item" onClick={() => router.push('/'+token.policy_id+'?stake='+props.data.stake)}>
-                          <Image src={token.ipfs} width={150} height={150} alt={token.asset_name}/>
-                          </div>)
-          }
-
+      function setGrid(){
+        let grid = [];
+        setInfo("Collections: " + props.data.nfts.length);
+        for(const element of props.data.nfts){
+          let policy = element;
+          grid.push(<Image className="grid-item" key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
         }
-        else{
-          display.push(<div className="grid-item" key={'empty'}>No NFTs :/</div>);
-          // if nfts are present in wallet
-        }
-        setDisplay(display);
+        setDisplay(grid);
       }
-    }, [props.data]);
+      setGrid();
+    }, [props.data])
 
-    const showTokens = (nfts) => {
-      // array of table items to be added to display
-      let _display = [];
-      if(nfts == null){
+    function showWallet(){
+      scrollToSection("nfts");
+      setBackButton();
+      let grid = [];
+      setInfo("Collections: " + props.data.nfts.length);
 
-        // no nfts present in wallet
-        _display.push(<div className="grid-item">No NFTs :/</div>);
+      for(const element of props.data.nfts){
+        let policy = element;
+        grid.push(<Image className="grid-item"  key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
       }
-      else{
-        // show no nft text
-        if(nfts.length == 0){
-          _display.push(<div style={{fontWeight: 'bold'}}>No NFTs :/</div>);
-        }
-        else{
+      setDisplay(grid);
 
-          // adds the first item in policy to the table
-          let policies = Object.keys(nfts);
-          let nftsGrid = addNftsToGrid(nfts, policies);
+    }
 
-          _display.push(nftsGrid);
-        }
-
-
+    function showCollection(policy){
+      scrollToSection("nfts");
+      setInfo("Showing Policy: " + policy[0].policy_id + " with " + policy.length + " NFTs" );
+      setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
+      let grid = [];
+      for(const element of policy){
+        grid.push(<Image className="grid-item" key = {element.asset_name} src={element.ipfs} alt={element.asset_name} width={200} height={200} onClick={() => router.push('/'+element.policy_id+element.asset_name)}/>);
       }
-      setDisplay(_display);
+      setShowing("Back");
+      setDisplay(grid);
     }
 
     function copyText(event, text) {
@@ -71,117 +63,20 @@ export default function Nfts (props){
         }, 1000);
       });
     }
-    
-    function addNftsToGrid(nfts, policies) {
-      let grid = [];
-    
-      for (const policy of policies) {
-        let token = nfts[policy][0];
-    
-        let policyId = '';
-    
-        policyId = (token.policy_id);
-    
-        let path = 'asset';
-    
-        if (nfts[policy].length > 1) {
-          grid.push(
-            <div
-              key={token.asset_name + 'nft'}
-              className="grid-item-collection"
-            >
-              <Image
-                className="grid-img"
-                src={token.ipfs}
-                alt="failed to load image"
-                width={270}
-                height={270}
-                onClick={() => showTokensFromPolicy(nfts[policy])}
-              />
-              <div className="grid-item-text">Policy: 
-                <Link className = 'policy-button' href={'/'+token.policy_id+'?stake='+props.data.stake}>...{policyId.slice(-7)}<br/></Link>
-                <button
-                  className="policy-button"
-                  onClick={(e) => copyText(e, policyId)}
-                >
-                  Copy
-                </button>
-              </div>
-              <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
-            </div>
-          );
-        } else {
-          grid.push(
-            <div key={token.asset_name + 'nft'} className="grid-item">
-              <Image
-                className="grid-img"
-                src={token.ipfs}
-                alt="failed to load image"
-                width={270}
-                height={270}
-                onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.data.stake)}
-              />
-                <div className="grid-item-text">
-                <Link className = 'policy-button' href={'/asset/'+token.policy_id+'?stake='+props.data.stake}>{(token.asset_name).slice(-7)}<br/></Link>
-                <button
-                  className="policy-button"
-                  onClick={(e) => copyText(e, token.asset_name)}
-                >
-                  Copy
-                </button>
-                <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+token.asset_name}>JPG.store</Link>
-              </div>
-              <div className="grid-item-text">Quantity: {nfts[policy].length}</div>
-
-            </div>
-          );
-        }
-      }
-    
-      return grid;
-    }
-    
-
-    // upon clicking a collection image, the nfts from that collection replaces the grid
-    function showTokensFromPolicy(policy){
-        let _display = [];
-        
-        for(const token of policy){
-
-          let policyId = '';
-    
-          policyId = (token.policy_id);
-          let decryptName = Buffer.from(token.asset_name, 'hex').toString();
-
-
-          let path = 'asset';
-
-          _display.push(
-          <div key = {token.asset_name + 'poly'} className = "grid-item" 
-          onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.tokens.stake)}>
-            <Image className="grid-img" src= {token.ipfs} alt = 'failed to load image' width={270} height={270}/>
-            <div className="grid-item-info">
-              <div className="grid-item-text" style={{fontWeight: "bolder"}}>
-                {decryptName}
-              </div>
-              <div className="grid-item-text">
-                <button className="policy-button"onClick={(e) => copyText(e, token.asset_name)}>Copy</button>
-                  <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+token.asset_name}>JPG.store</Link>
-                </div>
-            </div>
-          </div>);
-        }
-        setDisplay(_display);
-    }
-    const handleSearch = async  (event) => {
-      event.preventDefault();
-    }
+    const scrollToSection = (id) => {
+      const element = document.getElementById(id);
+      element.scrollIntoView({ behavior: "smooth" });
+    };
 
     //returns a grid view of all NFTs grouped by policy
     return (
-      <div className="grid-nft">
+      <div className="nfts">
+        <nav>{info}{backButton}</nav>
+        <div className="grid-nft">
         {display}
       </div>
+      </div>
+
 
     )
 }

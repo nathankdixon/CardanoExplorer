@@ -65,6 +65,8 @@ export default function Fts (props){
             <td>Price</td><td>24h</td><td>7d</td><td>30d</td><td>1y</td>
             <td>Value</td></tr>);
 
+            console.log(props.data.fts)
+
 
           for(let i =0; i < props.data.fts.length; i++){
             let coin = props.data.fts[i][0];        

@@ -283,9 +283,11 @@ export default function Prices (props) {
 
 
     return(<div className="price-nav">
-        <div className="price-nav-header">
-            <div className="price-nav-header-title">Cardano Prices</div>
+        <div className="crypto-prices">
+            <h1 style={{color:"white"}}>Top 5 Cryptocurrencies</h1>
         </div>
+        <div className="cardano-prices" style={{color: "black"}}>
+            <h1>Cardano Prices</h1>
             <div className="out-price">
                 <div className="price-label">ADA/USD ${adaUSD}</div>
                 <div className="price-label" style={{color: usdColor}}>({adaUsdChange}%)</div>
@@ -305,6 +307,7 @@ export default function Prices (props) {
                 <div className="price-label">ADA/BTC ₿{adaBTC}</div>
                 <div className="price-label" style={{color: btcColor}}>({adaBtcChange}%)</div>
             </div>
+        </div>
     </div>
     )
 }

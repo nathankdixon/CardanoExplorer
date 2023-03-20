@@ -25,19 +25,18 @@ function Query(){
         const assetIdPattern = /^[a-fA-F0-9]{64}$/;
     
         if (query) {
-          if (stake == null) {
-            if (stakeAddressPattern.test(query)) {
-              setDisplay(<WalletData stake={query} />);
-            }
-          } else {
-            if (policyIdPattern.test(query)) {
-              setDisplay(<PolicyData policy={query} stake={stake} />);
-            } else if (assetIdPattern.test(query)) {
-              setDisplay(<AssetData assetId={query} stake={stake} />);
-            }
+
+          let item = query;
+
+          if(item.startsWith('stake')){
+            setDisplay(<WalletData stake={query} />);
           }
-        } else {
-          setDisplay("invalid policy Id or assetID");
+          else if(item.length == 56){
+            setDisplay(<PolicyData policy={query}/>);
+          }
+          else{
+            setDisplay(<AssetData assetId={query} />);
+          }
         }
       }
       checkIfPolicyOrAsset();

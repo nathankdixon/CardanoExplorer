@@ -14,7 +14,8 @@ export default function Summary(props){
     // total wallet value = ada value + tokens value
     const [totalValue, setTotalValue] = useState();
 
-    const [display, setDisplay] = useState('Summary');
+    const [stakeInformation, setStakeInformation] = useState('Summary');
+    const [poolInformation, setPoolInformation] = useState('Summary');
 
     // useEffect(() => {
     //     const getSummaryInfo = async () => {
@@ -90,29 +91,32 @@ export default function Summary(props){
 
     
 
-    // useEffect(() => {
-    //     const getSummaryInfo = async () => {
-    //         if(props != null){
+    useEffect(() => {
+        const getSummaryInfo = async () => {
+            if(props.data.stake != null){
 
-    //             let adaBalance = await getAccountBalance(props.data.stake);
-    //             let tokenBalance = getTokenBalance(props.data.fts);
+                let stakeInfo = await getStakeInfo(props.data.stake);
+                let tokenBalance = getTokenBalance(props.data.fts);
 
-    //             setDisplay(
-    //                 <table className="stake-info">
-    //                     <tbody>
-    //                         <tr className="stake-info-item"><td>Balance: </td><td><span style={{color: 'green'}}> {(adaBalance/1000000).toFixed(2)} ADA </span></td></tr>
-    //                         <tr className="stake-info-item"><td>Tokens: </td><td><span style={{color: 'purple'}}>{props.data.tokenNumber}</span></td></tr>
-    //                         <tr className="stake-info-item"><td>NFTs:</td><td><span style={{color: 'orange'}}>{props.data.nfts.length}</span></td></tr>
-    //                         <tr className="stake-info-item"><td>Coins:</td><td><span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></td></tr>
-    //                         <tr className="stake-info-item"><td>Token Balance:</td><td><span style={{color: 'red'}}>{(tokenBalance).toFixed(2)} ADA</span></td></tr>
-    //                     </tbody>
-    //               </table>
-    //             );
+                setStakeInformation(
+                    <table className="stake-info">
+                        <tbody>
+                            <tr className="stake-info-item"><td>Balance: </td><td><span style={{color: 'green'}}> {(stakeInfo.balance/1000000).toFixed(2)} ADA </span></td></tr>
+                            <tr className="stake-info-item"><td>Tokens: </td><td><span style={{color: 'purple'}}>{props.data.tokenNumber}</span></td></tr>
+                            <tr className="stake-info-item"><td>NFTs:</td><td><span style={{color: 'orange'}}>{props.data.nfts.length}</span></td></tr>
+                            <tr className="stake-info-item"><td>Coins:</td><td><span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></td></tr>
+                            <tr className="stake-info-item"><td>Token Balance:</td><td><span style={{color: 'red'}}>{(tokenBalance).toFixed(2)} ADA</span></td></tr>
+                            <tr className="stake-info-item"><td>Total Rewards:</td><td><span style={{color: 'blue'}}>{(stakeInfo.rewards)/1000000} ADA</span></td></tr>
+                            <tr className="stake-info-item"><td>Available Rewards:</td><td><span style={{color: 'blue'}}>{(stakeInfo.availableRewards)/1000000} ADA</span></td></tr>
+                            <tr className="stake-info-item"><td>top coin, top collection, last 5 nft txs, </td><td><span style={{color: 'blue'}}></span></td></tr>
+                        </tbody>
+                  </table>
+                );
                 
-    //         }
-    //     }   
-    //     getSummaryInfo();
-    // },[props.data])
+            }
+        }   
+        getSummaryInfo();
+    },[props.data])
 
 
     // returns estimated total value of fungible tokens from coingecko prices in ADA
@@ -136,7 +140,7 @@ export default function Summary(props){
     }
 
     // requests account info from stake address from koios api -- ada balance used
-    async function getAccountBalance(stakeAddress){
+    async function getStakeInfo(stakeAddress){
         try{
             const req = await fetch('https://api.koios.rest/api/v0/account_info', {
                 method: 'POST',
@@ -151,7 +155,12 @@ export default function Summary(props){
               });
           
           const res = await req.json();
-          return res[0].total_balance;
+
+          let pool = res[0].delegated_pool;
+          let rewards = res[0].rewards;
+          let availableRewards = res[0].rewards_available;
+          let balance = res[0].total_balance;
+          return {pool: pool, rewards: rewards, availableRewards: availableRewards, balance: balance};
         }catch(error){
             return null;
         }
@@ -164,8 +173,8 @@ export default function Summary(props){
     // total value
 
     return (
-        <div>
-            {display}
+        <div className="summary">
+            <div className="stake-information">{stakeInformation}</div>
         </div>
     )
 }

@@ -41,10 +41,7 @@ function AssetData (props) {
                 let txData = await getTxData(txHash);
                 console.log(txData)
 
-                
-
-
-
+              
                 let decryptName = Buffer.from(token.asset_name, 'hex').toString();
                 
                 let data = {token: token, assetId: assetId, name: decryptName, created: createdData,
@@ -67,16 +64,7 @@ function AssetData (props) {
       let quantity = assetData.quantity;
 
       let token = new Token(assetName, policy, quantity);
-      let tokenMetadata = await token.getMetadata();
-      token.metadata = tokenMetadata;
-      let ipfs = '';
-
-      if(token.metadata != null){
-        ipfs = token.getIpfsFromMetadata();
-        if(ipfs != null){
-          token.ipfs = ipfs;
-        }
-      }
+      token.fetchTokenData();
       return token;
     }
 
