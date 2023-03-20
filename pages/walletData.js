@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Fts from "./fts";
+import Home from "./home";
 import Nfts from "./nfts";
 import Summary from "./summary";
 import Token from "./token";
@@ -15,16 +16,16 @@ function WalletData (props) {
   const [isVisible, setIsVisible] = useState(false);
   const [loadingInfo, setLoadingInfo] = useState();
   const [walletData, setWalletData] = useState({stake: null, tokenNumber: 0, projectNumber: 0, nfts: [], fts: []});
+  const [stakeAddress, setStakeAddress] = useState(null);
+  const [loadedTokens, setLoadedTokens] = useState('-');
+  const [loadedImages, setLoadedImages] = useState('-');
 
   const router = useRouter();
 
   useEffect(() => {
     const getTokens = async () =>{
 
-      if(props.stake != undefined){
-          //loading icon
-          setisLoading('fetching');
-          setIsVisible(true);
+      if(props.stake != null){
   
           // props passed from [stake].js
           let stakeAddress = props.stake;
@@ -33,49 +34,43 @@ function WalletData (props) {
             let stake = await getAddressFromHandle(stakeAddress.slice(1));
             stakeAddress = stake;
           }
-          else if(stakeAddress[0] == ('s')){
-            // do nothing
-          }
-          else{
-            console.log('invalid stake address');
-            stakeAddress = null;
-          }
+          setStakeAddress(stakeAddress);
 
-          if(stakeAddress != null){
-            // used to store and retrieve wallet information in local storage
-            let walletData = '';
-            walletData = await createWalletDataFromStake(stakeAddress);
-            console.log(walletData);
-    
-            // //if stake data exist in storage -- get it
-            // if(localStorage.getItem(stakeAddress)){
-            //   walletData = JSON.parse(localStorage.getItem(stakeAddress));
-            // }
-    
-            // //if no stored data, create new and store it with stake address as key
-            // else{
-    
-            //   if(walletData != null){
-            //     localStorage.setItem(stakeAddress, JSON.stringify(walletData));
-            //   }
-            // }
-    
-            setWalletData(walletData);
-            // loading icon
-            setisLoading('done');
-            setIsVisible(false);
-          }
-          else{
-            setisLoading('error');
-          }
       }
     }
     getTokens();
   }, [props.stake]);
 
+  useEffect(() => {
+    const getWalletData = async () => {
+      if(stakeAddress != null){
+        console.log('stake address: '+stakeAddress);
+
+        console.log('wallet data not found in local storage');
+        setLoadedTokens('loading');
+        let walletData = '';
+        walletData = await createWalletDataFromStake(stakeAddress);
+        // localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+        setWalletData(walletData);
+        setLoadedTokens('done');
+        console.log(walletData);
+
+
+      }
+    }
+    getWalletData();
+  }, [stakeAddress]);
+
 
   // creates savable wallet data object
   // which gets stored in local storage
+
+  // stake address
+  // number of tokens
+  // number of projects
+  // list of nfts
+  // list of fts
+  // 
   async function createWalletDataFromStake(stake){
 
     let walletData = '';
@@ -90,6 +85,7 @@ function WalletData (props) {
       try{
         // list of 'token' objects with assgined attributes
         let _tokens = await createTokens(assets);
+        setLoadedTokens('done');
 
         // total number of tokens - used in summary
         let _tokenNumber = _tokens.length;
@@ -115,27 +111,6 @@ function WalletData (props) {
     return walletData;
 
   }
-
-    // this method fetches the stake address for any given base address.
-    // it uses a Blockfrost API which returns data for specific addresses.
-
-    // @param - a base address, containing the stake key for its wallet.
-    // @return a stake address, an account address which can be used to fetch data for its corresponding wallet
-    async function getStakeFromAddress(address){
-      try{
-        // fetch data relating to address
-        const req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+address, 
-          {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-
-          // JSON returned contains stake address for given base address.
-          const res = await req.json();
-          return res.stake_address;
-      }catch(error){ 
-          // handle error
-          return null;
-      }
-
-    }
 
   // returns base address from handle
   const getAddressFromHandle = async (handle) => {
@@ -180,6 +155,15 @@ function WalletData (props) {
 
   }
 
+  async function getStakeFromAddress(addresss){
+    let req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+addresss,
+    {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+
+    let res = await req.json();
+
+    return res.stake_address;
+  }
+
   // no asset limit on how many assets gets returned on one request
   // koios, blockfrost is limited by 100 results per page
   async function getAssetsFromKoios(stakeAddress){
@@ -214,8 +198,9 @@ function WalletData (props) {
     const _tokens = [];
 
     for(let i =0; i<assets.length;i++){
-      setLoadingInfo('Loading tokens: '+i + ' of ' +assets.length)
+      setLoadedTokens('loading '+i+'/'+assets.length);
       let quantity = 1;
+
 
       if(assets[i].decimals != 0){
         quantity = assets[i].quantity / (10**(assets[i].decimals));
@@ -223,26 +208,11 @@ function WalletData (props) {
 
       let token = new Token(assets[i].asset_name, assets[i].policy_id, quantity);
 
-      // return data under 'onchain_metadata' or 'metadata'
-      token.metadata = await token.getMetadata();
+      await token.fetchTokenData();
+      await token.getPrice();
 
-      // returns price data if available on CoinGecko
-      let prices = await token.getPrice();
-
-      if(prices != ''){
-        token.prices = prices;
-      }
-      else{
-        token.prices = '';
-        token.current = -1;
-      }
-
-      //fetch  ipfs image from metadatat
-      if(token.metadata != null){
-        let ipfs = token.getIpfsFromMetadata(); 
-        token.ipfs = ipfs;
-       _tokens.push(token);
-      }
+      console.log(token);
+      _tokens.push(token);
     }
 
     // list of 'token' objects sorted by price attribute
@@ -343,24 +313,20 @@ function WalletData (props) {
       </div>
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
-          <h1 className="wallet-data-content-item">Welcome to Cardano NFT Explorer</h1>
-          <WalletButton stake = {props.stake} />
-          <button onClick={() => scrollToSection('wallet')} className="scroll-button">Scroll<Image src={'/scroll.png'} height={50} width={50} alt ='scroll' className="scroll-image"/></button>
+          <Home/>
+          <div>Tokens: {loadedTokens}</div>
         </section>
         <section className="wallet-data-content-item" id="wallet" >
           <Summary data={walletData} />
-          <button onClick={() => scrollToSection('nfts')} className="scroll-button">NFTs<Image src={'/scroll.png'} height={50} width={50} alt ='scroll' className="scroll-image"/></button>
         </section>
         <section className="wallet-data-content-item" id="nfts" >
           <div className="wallet-data-content-item">
             <Nfts data={walletData} />
-            <button onClick={() => scrollToSection('fts')} className="scroll-button">Coins<Image src={'/scroll.png'} height={50} width={50} alt ='scroll' className="scroll-image"/></button>
           </div>
         </section>
         <section className="wallet-data-content-item" id="fts">
         <div className="wallet-data-content-item" >
           <Fts data={walletData} />
-          <button onClick={() => scrollToSection('txs')} className="scroll-button">Transactions<Image src={'/scroll.png'} height={50} width={50} alt ='scroll' className="scroll-image"/></button>
         </div>
         </section>
         <section className="wallet-data-content-item" id="txs">

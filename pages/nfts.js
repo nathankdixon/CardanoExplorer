@@ -16,10 +16,10 @@ export default function Nfts (props){
         let display = [];
 
         if(props.data.nfts.length != 0){
-          for(let i = 0; i < props.data.nfts.length; i++){
-            let policy = props.data.nfts[i];
+          for(const element of props.data.nfts){
+            let policy = element;
             let token = policy[0];
-            display.push(<div key= {token.asset_name + 'nft'} className="grid-item" onClick={() => router.push('/asset/'+token.policy_id+token.asset_name)}>
+            display.push(<div key= {token.asset_name + 'nft'} className="grid-item" onClick={() => router.push('/'+token.policy_id+'?stake='+props.data.stake)}>
                           <Image src={token.ipfs} width={150} height={150} alt={token.asset_name}/>
                           </div>)
           }
@@ -99,7 +99,7 @@ export default function Nfts (props){
                 onClick={() => showTokensFromPolicy(nfts[policy])}
               />
               <div className="grid-item-text">Policy: 
-                <Link className = 'policy-button' href={'/asset/'+token.policy_id+'?stake='+props.data.stake}>...{policyId.slice(-7)}<br/></Link>
+                <Link className = 'policy-button' href={'/'+token.policy_id+'?stake='+props.data.stake}>...{policyId.slice(-7)}<br/></Link>
                 <button
                   className="policy-button"
                   onClick={(e) => copyText(e, policyId)}

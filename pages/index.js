@@ -65,7 +65,7 @@ const Index = () => {
       let stake = await getStakeAddressFromWallet(wallet);
 
       if(stake!= null){
-        router.push(`/wallet/${stake}#wallet`);
+        router.push(`/${stake}`);
       }
       else{
         setisLoading('error');

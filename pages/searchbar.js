@@ -28,7 +28,7 @@ export default function SearchBar(props){
           let stakeAddress = await getStakeFromAddress(searchQuery);
           // redirect user to wallet page with wallet identifying stake address
           if(stakeAddress != null){
-            router.push(`/wallet/${stakeAddress}`);
+            router.push(`/${stakeAddress}`);
           }
           else{
             console.log('not a valid address, not stake address found');
@@ -44,17 +44,17 @@ export default function SearchBar(props){
 
             // route to wallet page with handle or stake address
             // stake address is fetched from handle on wallet page
-            router.push(`/wallet/${searchQuery}`);
+            router.push(`/${searchQuery}`);
           }
         }
         else{
           // if neither of above, inputted text may be 'asset ID'
           // then route to token page with 'assetID' and stake address if wallet is connected.
           if(props.stake != null){
-            router.push(`/asset/${searchQuery}/?stake=`+props.stake);
+            router.push(`/${searchQuery}/?stake=`+props.stake);
           }
           else{
-            router.push(`/asset/${searchQuery}`);
+            router.push(`/${searchQuery}`);
           }
         }
       }

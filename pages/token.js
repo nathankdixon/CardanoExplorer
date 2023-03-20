@@ -1,53 +1,24 @@
-export default class Token{
+const blockfrostFetch = async (endpoint) => {
+  const baseURL = 'https://cardano-mainnet.blockfrost.io/api/v0/';
+  const projectId = 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh';
+  const response = await fetch(baseURL + endpoint, {
+    headers: {
+      project_id: projectId,
+      'cache-control': 'max-age=31536000',
+    },
+  });
 
-    // nfts and fts are of type token and have these three attributes
-    // when list of assets in wallet is fetched, only simple metadata is paired
-    constructor(asset_name, policy_id, quantity){
-        this.asset_name = asset_name;
-        this.policy_id = policy_id;
-        this.quantity = quantity; 
-    }
-
-    // fetches token metadata from asset id
-    // is customised by the author according to metadata standards
-    async getMetadata(){
-      try{
-
-        // fetch asset metadata from blockfrost using concat of policy and name
-        const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/'+this.policy_id+this.asset_name,
-        {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-
-
-        // some nft authors use the 'metadata' tag to store metadata
-        // 'on_chain_metadata' is also used instead
-        let response = await data.json();
-        if(response != null){
-          if(response.onchain_metadata != null){
-            this.metadata = response.onchain_metadata;
-            return response.onchain_metadata;
-          }
-          else if(response.metadata != null){
-            this.metadata = response.metadata;
-            return response.metadata;
-          }
-          else{
-            return null;
-          }
-        }
-        else{
-          return null;
-        }
-      }catch(error){
-        return null;
-      }
-        
-    }
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data from Blockfrost API: ${response.statusText}`);
+  }
+  return await response.json();
+};
 
     // if metadata has been fetched
     // find the ipfs link under 'image' metadata tag and store it
-    getIpfsFromMetadata(){
-      const keys = Object.keys(this.metadata);
-      const values = Object.values(this.metadata);
+const getIpfsFromMetadata = (metadata) =>{
+      const keys = Object.keys(metadata);
+      const values = Object.values(metadata);
       let ipfs = "";
       for(let i=0;i<keys.length;i++){
 
@@ -102,58 +73,102 @@ export default class Token{
     
     }
 
-        // returns price data for the token from coin gecko
-    // if available
-    async getPrice(){
 
-      // coin ids fetched from downloaded json 
-      let request = await fetch('/coin-gecko.json');
-      let geckoData = await request.json();
-      let ticker = '';
 
-      // get ticker to find id in json doc
-      try{
-        ticker = this.metadata.ticker;
-      }catch(error){
-        ticker = null;
-      }
+export default class Token {
+  constructor(asset_name, policy_id, quantity) {
+    this.asset_name = asset_name;
+    this.policy_id = policy_id;
+    this.quantity = quantity;
+    this.onchain_metadata = null;
+    this.metadata = null;
+    this.txs = null;
+    this.ipfs = null;
+    this.prices = null;
+    this.image = null;
+  }
 
-      // match ticker to id
-      if(ticker != null){
-        let foundGeckoCoin  = geckoData.find(item => item.symbol == ticker.toLowerCase());
-        if(foundGeckoCoin != null){
-          this.id = foundGeckoCoin.id;
-        }
-        else{
-          this.id = null;
-        }
-      }
+  async fetchTokenData() {
+    try {
+      const assetId = this.policy_id + this.asset_name;
+      const [metadataRes, txsRes] = await Promise.all([
+        blockfrostFetch(`assets/${assetId}`),
+        blockfrostFetch(`assets/${assetId}/transactions`),
+      ]);
 
-      // if found id, then price data exists on coin gecko
-      // fetch price data to be used in Fts
-      let prices = '';
-      if(this.id != null){
-        let req = await fetch('https://api.coingecko.com/api/v3/coins/'+this.id);
-        let res = await req.json();
-        
-        // get price data and price change data
-        // used in fts
-        if(res.asset_platform_id == 'cardano'){
-          let _currentPrice = res.market_data.current_price.usd.toFixed(2);
-          let _24change = res.market_data.price_change_percentage_24h.toFixed(2);
-          let _7dchange = res.market_data.price_change_percentage_7d.toFixed(2);
-          let _30dchange = res.market_data.price_change_percentage_30d.toFixed(2);
-          let _1ychange = res.market_data.price_change_percentage_1y.toFixed(2);
-          this.prices = {current : _currentPrice, change24h: _24change, change7d: _7dchange,
-                    change30d : _30dchange, change1y: _1ychange};
-        }
-      }
-      else{
-        this.prices = null;
-      }
-      return this.prices;
+      this.onchain_metadata = metadataRes.onchain_metadata || null;
+      this.metadata = metadataRes.metadata || null;
+      this.txs = txsRes || null;
+
+      this.ipfs = getIpfsFromMetadata(this.onchain_metadata || {});
+    } catch{
     }
-}
+  }
+
+  async ipfsToBase64() {
+    if (!this.ipfs) {
+      return;
+    }
+    else if(this.ipfs.startsWith('data')){
+      this.image = this.ipfs;
+      return;
+    }
+    else{
+      try {
+        const response = await fetch(this.ipfs);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const blob = await response.blob();
+        this.image = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      } catch {
+        console.log(this.ipfs);
+      }
+    }
 
 
+  }
+  
 
+  async getPrice() {
+    if (this.quantity === 1) {
+      console.log('Not fungible');
+      return;
+    }try {
+      const request = await fetch('/coin-gecko.json');
+      const geckoData = await request.json();
+      const ticker = this.metadata?.ticker;
+    
+      if (!ticker) {
+        return;
+      }
+    
+      const foundGeckoCoin = geckoData.find(item => item.symbol === ticker.toLowerCase());
+      if (!foundGeckoCoin) {
+        return;
+      }
+    
+      const req = await fetch(`https://api.coingecko.com/api/v3/coins/${foundGeckoCoin.id}`);
+      const res = await req.json();
+    
+      if (res.asset_platform_id === 'cardano') {
+        const priceData = res.market_data;
+        this.prices = {
+          current: priceData.current_price.usd.toFixed(2),
+          change24h: priceData.price_change_percentage_24h.toFixed(2),
+          change7d: priceData.price_change_percentage_7d.toFixed(2),
+          change30d: priceData.price_change_percentage_30d.toFixed(2),
+          change1y: priceData.price_change_percentage_1y.toFixed(2),
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching price data:', error);
+    }
+  }
+}    

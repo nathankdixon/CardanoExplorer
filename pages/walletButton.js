@@ -29,13 +29,6 @@ export default function WalletButton(props){
                     stake = props.stake;
                 }
                 setStake(stake);
-
-
-                if(localStorage.getItem(stake)){
-                    let walletData = JSON.parse(localStorage.getItem(stake));
-                    console.log(walletData);
-                }
-                setButtonText((props.stake).substring(0,8));
             }
         }
         checkStorage();
@@ -273,8 +266,7 @@ export default function WalletButton(props){
                     <button className="option-button" onClick={() => disconnectWallet()}>✗ Disconnect</button>
                 </div>
             </div>
-            <ColorPicker data={setColorData} stake={stake}/>
-            </div>
         </div>
+    </div>
     );
 }

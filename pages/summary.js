@@ -90,29 +90,29 @@ export default function Summary(props){
 
     
 
-    useEffect(() => {
-        const getSummaryInfo = async () => {
-            if(props.data.stake != null ){
+    // useEffect(() => {
+    //     const getSummaryInfo = async () => {
+    //         if(props != null){
 
-                let adaBalance = await getAccountBalance(props.data.stake);
-                let tokenBalance = getTokenBalance(props.data.fts);
+    //             let adaBalance = await getAccountBalance(props.data.stake);
+    //             let tokenBalance = getTokenBalance(props.data.fts);
 
-                setDisplay(
-                    <table className="stake-info">
-                        <tbody>
-                            <tr className="stake-info-item"><td>Balance: </td><td><span style={{color: 'green'}}> {(adaBalance/1000000).toFixed(2)} ADA </span></td></tr>
-                            <tr className="stake-info-item"><td>Tokens: </td><td><span style={{color: 'purple'}}>{props.data.tokenNumber}</span></td></tr>
-                            <tr className="stake-info-item"><td>NFTs:</td><td><span style={{color: 'orange'}}>{props.data.nfts.length}</span></td></tr>
-                            <tr className="stake-info-item"><td>Coins:</td><td><span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></td></tr>
-                            <tr className="stake-info-item"><td>Token Balance:</td><td><span style={{color: 'red'}}>{(tokenBalance).toFixed(2)} ADA</span></td></tr>
-                        </tbody>
-                  </table>
-                );
+    //             setDisplay(
+    //                 <table className="stake-info">
+    //                     <tbody>
+    //                         <tr className="stake-info-item"><td>Balance: </td><td><span style={{color: 'green'}}> {(adaBalance/1000000).toFixed(2)} ADA </span></td></tr>
+    //                         <tr className="stake-info-item"><td>Tokens: </td><td><span style={{color: 'purple'}}>{props.data.tokenNumber}</span></td></tr>
+    //                         <tr className="stake-info-item"><td>NFTs:</td><td><span style={{color: 'orange'}}>{props.data.nfts.length}</span></td></tr>
+    //                         <tr className="stake-info-item"><td>Coins:</td><td><span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></td></tr>
+    //                         <tr className="stake-info-item"><td>Token Balance:</td><td><span style={{color: 'red'}}>{(tokenBalance).toFixed(2)} ADA</span></td></tr>
+    //                     </tbody>
+    //               </table>
+    //             );
                 
-            }
-        }   
-        getSummaryInfo();
-    },[props.data])
+    //         }
+    //     }   
+    //     getSummaryInfo();
+    // },[props.data])
 
 
     // returns estimated total value of fungible tokens from coingecko prices in ADA

@@ -69,7 +69,7 @@ export default function PolicyCollection(props){
                             ipfs = token.ipfs;
                         }
                     }
-                    let path = 'token';
+                    let path = 'asset';
 
                     display.push(
                     <div key = {token.asset_name + 'poly'} className = "grid-item" 
@@ -148,7 +148,7 @@ export default function PolicyCollection(props){
                             ipfs = token.ipfs;
                         }
                     }
-                    let path = 'token';
+                    let path = 'asset';
 
                     if(assetName != ''){
                       display.push(

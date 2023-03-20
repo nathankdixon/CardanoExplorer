@@ -134,7 +134,13 @@ export default function Prices (props) {
     async function getCoinGeckoData(){
         let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
         let res = await req.json();
-        return res;
+        if(req.ok){
+            setGecko(res);
+            return res;
+        }
+        else{
+            console.log('error');
+        }
     }
 
 
@@ -276,8 +282,10 @@ export default function Prices (props) {
     }
 
 
-    return(<nav className="price-nav">
-        <nav className="price-nav-inner">
+    return(<div className="price-nav">
+        <div className="price-nav-header">
+            <div className="price-nav-header-title">Cardano Prices</div>
+        </div>
             <div className="out-price">
                 <div className="price-label">ADA/USD ${adaUSD}</div>
                 <div className="price-label" style={{color: usdColor}}>({adaUsdChange}%)</div>
@@ -297,12 +305,6 @@ export default function Prices (props) {
                 <div className="price-label">ADA/BTC ₿{adaBTC}</div>
                 <div className="price-label" style={{color: btcColor}}>({adaBtcChange}%)</div>
             </div>
-        </nav>
-        <div className="price-buttons">
-            <button className="setting-button" onClick={() => increaseGranularity(granularity)}>Interval:<div className="value">{granularity}</div></button>
-            <button className="setting-button" onClick={() => changeCurrency(currency)}>Currency:<div className="currency">{(currency.name).toUpperCase()} {currency.symbol}</div></button>
-            <button className="setting-button" onClick={() => changePrivacy(privacy)}>Privacy Mode</button>
-        </div>
-    </nav>
+    </div>
     )
 }
