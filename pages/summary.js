@@ -173,7 +173,7 @@ export default function Summary(props){
     // total value
 
     return (
-        <div className="summary">
+        <div className="summary"><h1>Wallet Summary</h1>
             <div className="stake-information">{stakeInformation}</div>
         </div>
     )

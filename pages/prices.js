@@ -286,7 +286,7 @@ export default function Prices (props) {
         <div className="crypto-prices">
             <h1 style={{color:"white"}}>Top 5 Cryptocurrencies</h1>
         </div>
-        <div className="cardano-prices" style={{color: "black"}}>
+        <div className="cardano-prices" style={{color: "white"}}>
             <h1>Cardano Prices</h1>
             <div className="out-price">
                 <div className="price-label">ADA/USD ${adaUSD}</div>

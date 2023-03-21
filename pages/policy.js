@@ -9,18 +9,15 @@ export default function Policy(props){
 
     useEffect(() => {
         async function func(){
-          if(props.policy != null && props.prices != null){
+          if(props.policy != null){
             let policyData = await getCnftPolicyData(props.policy);
             if(policyData != null){
 
-              let currency = props.prices.currency;
-              setCurrency(currency);
 
-
-                let floorPrice = ((policyData.floor_price/1000000)*currency.value).toFixed(2);
+                let floorPrice = ((policyData.floor_price/1000000)).toFixed(2);
                 let holders = policyData.asset_holders;
                 let supply = policyData.asset_minted;
-                let volume = ((policyData.total_volume/1000000000000)*currency.value).toFixed(2);
+                let volume = ((policyData.total_volume/1000000000000)).toFixed(2);
                 let thumbnail = getIpfs(policyData.thumbnail);
 
                 let obj = {policy: props.policy, thumbnail : thumbnail, floorPrice: floorPrice, holders: holders, supply: supply, volume: volume}

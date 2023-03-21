@@ -65,11 +65,8 @@ export default function Fts (props){
             <td>Price</td><td>24h</td><td>7d</td><td>30d</td><td>1y</td>
             <td>Value</td></tr>);
 
-            console.log(props.data.fts)
-
-
-          for(let i =0; i < props.data.fts.length; i++){
-            let coin = props.data.fts[i][0];        
+          for(const element of props.data.fts){
+            let coin = element[0];        
 
             if(coin.prices == null){
               if(coin.metadata.ticker == null){
@@ -365,9 +362,11 @@ export default function Fts (props){
   }
 
     //returns a grid view of all NFTs grouped by policy
-    return (
-        <div className="grid-ft">
+    return (<div className="fts"><h1>Fungible Tokens (Coins)</h1>
+              <div className="grid-ft">
           {display}
         </div>
+    </div>
+
     )
 }

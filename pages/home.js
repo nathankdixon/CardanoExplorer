@@ -22,13 +22,21 @@ export default function Home(props){
         setPrices(data);
     }
 
+    function deleteLocalStorage(){
+        localStorage.removeItem(props.data.stake);
+        window.location.reload();
+    }
+
     return (<div>
                 <header className="home-header">
                     <label className="main-label">✥ Explorer</label>
                     <SearchBar/>
                     <WalletButton/>
                 </header>
-                <Prices data={setPriceData}/>
-                <Blocks />
+                <div className="home-body">
+                    <Prices data={setPriceData}/>
+                    <Blocks />
+                    <button onClick={deleteLocalStorage} className="option-button">Refresh Wallet</button>
+                </div>
             </div>)
 }

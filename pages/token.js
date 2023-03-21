@@ -101,6 +101,10 @@ export default class Token {
       this.txs = txsRes || null;
 
       this.ipfs = getIpfsFromMetadata(this.onchain_metadata || {});
+
+      if(this.ipfs == "" || this.ipfs == null){
+        this.ipfs = getIpfsFromMetadata(this.metadata || {});
+      }
     } catch{
     }
   }
@@ -108,7 +112,6 @@ export default class Token {
 
   async getPrice() {
     if (this.quantity === 1) {
-      console.log('Not fungible');
       return;
     }try {
       const request = await fetch('/coin-gecko.json');

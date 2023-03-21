@@ -19,7 +19,12 @@ export default function Nfts (props){
         setInfo("Collections: " + props.data.nfts.length);
         for(const element of props.data.nfts){
           let policy = element;
-          grid.push(<Image className="grid-item" key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
+          if(policy[0].ipfs == "" || policy[0].ipfs == null){
+            grid.push(<div key = {policy[0].asset_name+'noimg'} className="grid-item">no image</div>)
+          }
+          else{
+            grid.push(<Image className="grid-item" key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
+          }
         }
         setDisplay(grid);
       }
@@ -34,7 +39,12 @@ export default function Nfts (props){
 
       for(const element of props.data.nfts){
         let policy = element;
-        grid.push(<Image className="grid-item"  key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
+        if(policy[0].ipfs == "" || policy[0].ipfs == null){
+          grid.push(<div className="grid-item">no image</div>)
+        }
+        else{
+          grid.push(<Image className="grid-item"  key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
+        }
       }
       setDisplay(grid);
 
@@ -46,7 +56,13 @@ export default function Nfts (props){
       setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
       let grid = [];
       for(const element of policy){
-        grid.push(<Image className="grid-item" key = {element.asset_name} src={element.ipfs} alt={element.asset_name} width={200} height={200} onClick={() => router.push('/'+element.policy_id+element.asset_name)}/>);
+        if(element.ipfs == null){
+          grid.push(<div className="grid-item">no image</div>)
+        }
+        else{
+          grid.push(<Image className="grid-item" key = {element.asset_name} src={element.ipfs} alt={element.asset_name} width={200} height={200} onClick={() => router.push('/'+element.policy_id+element.asset_name)}/>);
+
+        }
       }
       setShowing("Back");
       setDisplay(grid);
@@ -71,10 +87,11 @@ export default function Nfts (props){
     //returns a grid view of all NFTs grouped by policy
     return (
       <div className="nfts">
-        <nav>{info}{backButton}</nav>
+        <h1>Non-Fungible Tokens</h1>
+        <nav className="nft-nav">{backButton}{info}</nav>
         <div className="grid-nft">
-        {display}
-      </div>
+          {display}
+        </div>
       </div>
 
 

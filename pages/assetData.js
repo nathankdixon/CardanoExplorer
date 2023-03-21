@@ -22,8 +22,8 @@ function AssetData (props) {
              // fetch asset data from blockfrost
              let assetData = await loadTokenData(assetId);
              if(assetData == null){
-               setDisplay('invalid asset id')
-             }
+
+            }
              else{
                 let token = await createToken(assetData); 
 

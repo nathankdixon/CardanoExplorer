@@ -211,7 +211,6 @@ function WalletData (props) {
       await token.fetchTokenData();
       await token.getPrice();
 
-      console.log(token);
       _tokens.push(token);
     }
 
@@ -317,21 +316,17 @@ function WalletData (props) {
       </div>
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
-          <Home/>
+          <Home data={walletData}/>
           <div>{loadedTokens}</div>
         </section>
         <section className="wallet-data-content-item" id="wallet" >
           <Summary data={walletData} />
         </section>
         <section className="wallet-data-content-item" id="nfts" >
-          <div className="wallet-data-content-item">
-            <Nfts data={walletData} />
-          </div>
+          <Nfts data={walletData} />
         </section>
         <section className="wallet-data-content-item" id="fts">
-        <div className="wallet-data-content-item" >
           <Fts data={walletData} />
-        </div>
         </section>
         <section className="wallet-data-content-item" id="delegation">
           <Delegation data={walletData} />

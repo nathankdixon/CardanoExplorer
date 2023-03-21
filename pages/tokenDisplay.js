@@ -30,9 +30,9 @@ export default function TokenDisplay(props){
 
     return(
         <div className="token-main">
-            <SearchBar/>
-            <WalletButton/>
-            <Policy policy = {props.data.token.policy_id} prices = {prices} stake = {props.stake}/>
+            <div className="token-header"><SearchBar/>
+            <WalletButton/></div>
+            <Policy policy = {props.data.token.policy_id} stake = {props.data.stake}/>
                 <div className="token-box">
                     <div className="token-image">
                         <Image className = "main-img" alt= 'no image' src = {props.data.token.ipfs} width = {500} height = {500}/>
@@ -68,7 +68,7 @@ export default function TokenDisplay(props){
                         </div>
                     </div>
                 </div>
-            <div className="metadata"><code>Metadata: <br/>{JSON.stringify(props.data.token.metadata)}</code></div>
+            <div className="metadata"><code>Metadata: <br/>{JSON.stringify(props.data.token.onchain_metadata)}</code></div>
         </div>
     )
 }
