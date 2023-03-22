@@ -152,12 +152,11 @@ function PolicyData (props) {
     }
 
     return(<div>
-        <Prices data = {setPriceData}/>
         <label>Policy Info</label>
-        <Policy policy = {props.policy} prices={prices} stake ={props.stake}/>
+        <Policy policy = {props.policy}/>
         <label>Your Wallet</label>
-        <PolicyOwned nfts = {tokens} policy = {props.policy}stake={props.stake}/>
-        <PolicyCollection policy = {props.policy} stake={props.stake}/>
+        <PolicyOwned nfts = {tokens} policy = {props.policy}/>
+        <PolicyCollection policy = {props.policy} />
     </div>)
 }
 export default PolicyData;

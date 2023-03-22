@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 export default function Delegation(props){
 
     const [deleagtion, setDelegation] = useState();
+    const [poolInfo, setPoolInfo] = useState({active_epoch_no: '', aactive_stake: '', block_count: '', fixed_cost: '', live_delegators: '', margin: '', meta_json: {name: 'in'}, owners: '', pledge: ''});
+    const [stakeInfo, setStakeInfo] = useState({pool: '', rewards: '', availableRewards: '', balance: ''});
 
     useEffect(() => {
         async function getPoolData(){
@@ -12,9 +14,16 @@ export default function Delegation(props){
             let stakeInfo = await getStakeInfo(props.data.stake);
             
             if(stakeInfo != null){
-            let poolInfo = await getPoolInfo(stakeInfo.pool);
+              setStakeInfo(stakeInfo);
+            let poolInfo = await getPoolInfo(stakeInfo.pool); 
+    
+            
+            if(poolInfo != null){
+              setPoolInfo(poolInfo);
+            }
 
 
+            if(poolInfo != null){
             let activeEpoch = poolInfo.active_epoch_no;
             let activeStake = poolInfo.active_stake;
             let blockCount = poolInfo.block_count;
@@ -28,22 +37,11 @@ export default function Delegation(props){
 
 
             setDelegation(
-                <table className="stake-info">
-                    <tbody>
-                        <tr className="stake-info-item"><td>Pool:</td><td><span style={{color: 'yellow'}}>{(stakeInfo.pool)}</span></td></tr>
-                        <tr className="stake-info-item"><td>Active Epoch:</td><td><span style={{color: 'purple'}}>{activeEpoch}</span></td></tr>
-                        <tr className="stake-info-item"><td>Active Stake:</td><td><span style={{color: 'orange'}}>{activeStake/1000000} ADA</span></td></tr>
-                        <tr className="stake-info-item"><td>Block Count:</td><td><span style={{color: '#ccffcc'}}>{blockCount}</span></td></tr>
-                        <tr className="stake-info-item"><td>Fixed Cost:</td><td><span style={{color: 'red'}}>{fixedCost/1000000} ADA</span></td></tr>
-                        <tr className="stake-info-item"><td>Delegator Count:</td><td><span style={{color: 'blue'}}>{delegatorCount}</span></td></tr>
-                        <tr className="stake-info-item"><td>Margin:</td><td><span style={{color: 'blue'}}>{margin}</span></td></tr>
-                        <tr className="stake-info-item"><td>Metadata:</td><td><span style={{color: 'blue'}}>{metadata.name}</span></td></tr>
-                        <tr className="stake-info-item"><td>Owners:</td><td><span style={{color: 'blue'}}>{owners[0]}</span></td></tr>
-                        <tr className="stake-info-item"><td>Pledge:</td><td><span style={{color: 'blue'}}>{pledge/1000000} ADA</span></td></tr>
-                    </tbody>
-                </table>
 
-            );}}
+
+            );}
+          }
+          }
         }                    
         getPoolData();
     }, [props.data])
@@ -98,7 +96,20 @@ export default function Delegation(props){
 
     return(
         <div>
-           {deleagtion}
+          <table className="stake-info">
+            <tbody>
+                <tr className="stake-info-item"><td>Pool:</td><td><span style={{color: 'yellow'}}>{(stakeInfo.pool)}</span></td></tr>
+                <tr className="stake-info-item"><td>Active Epoch:</td><td><span style={{color: 'purple'}}>{poolInfo.active_epoch_no}</span></td></tr>
+                <tr className="stake-info-item"><td>Active Stake:</td><td><span style={{color: 'orange'}}>{poolInfo.active_stake/1000000} ADA</span></td></tr>
+                <tr className="stake-info-item"><td>Block Count:</td><td><span style={{color: '#ccffcc'}}>{poolInfo.block_count}</span></td></tr>
+                <tr className="stake-info-item"><td>Fixed Cost:</td><td><span style={{color: 'red'}}>{poolInfo.fixed_cost/1000000} ADA</span></td></tr>
+                <tr className="stake-info-item"><td>Delegator Count:</td><td><span style={{color: 'blue'}}>{poolInfo.live_delegators}</span></td></tr>
+                <tr className="stake-info-item"><td>Margin:</td><td><span style={{color: 'blue'}}>{poolInfo.margin}</span></td></tr>
+                <tr className="stake-info-item"><td>Metadata:</td><td><span style={{color: 'blue'}}>{poolInfo.meta_json.name}</span></td></tr>
+                <tr className="stake-info-item"><td>Owners:</td><td><span style={{color: 'blue'}}>{poolInfo.owners[0]}</span></td></tr>
+                <tr className="stake-info-item"><td>Pledge:</td><td><span style={{color: 'blue'}}>{poolInfo.pledge/1000000} ADA</span></td></tr>
+            </tbody>
+        </table>
         </div>
     )
 }

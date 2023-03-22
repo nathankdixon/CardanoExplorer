@@ -35,6 +35,7 @@ function AssetData (props) {
                 let statisticalRank = _assetData.statistical_rank;
                 let statisticalScore = _assetData.statistical_score;
 
+                
                 let assetTxData = await getAssetTxData(assetId);
                 let txHash = assetTxData[0].tx_hash;
 

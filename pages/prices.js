@@ -21,12 +21,16 @@ export default function Prices (props) {
     const [adaBtcChange, setAdaBtcChange] = useState(0);
     const [adaEthChange, setAdaEthChange] = useState(0);
 
+    const [priceColors, setPriceColors] = useState({usd: 'black', gbp: 'black', btc: 'black', eth: 'black', eur: 'black'});
+
     // displayed price change colors
     const [usdColor, setUsdColor] = useState('black');
     const [gbpColor, setGbpColor] = useState('black');
     const [btcColor, setBtcColor] = useState('black');
     const [ethColor, setEthColor] = useState('black');
 
+    const [top5, setTop5] = useState([{name: null, price: null, priceChange:null, color: null}, {name: null, price: null, priceChange:null, color: null},{name: null, price: null,priceChange:null, color: null},{name: null, price: null,priceChange:null, color: null},{name: null, price: null,priceChange:null, color: null}]);
+    const [adaPrice, setAdaPrice] = useState({usd: {price: null, change24hr: null}, gbp: {price: null, change24hr: null}, btc: {price: null, change24hr: null}, eth: {price: null, change24hr: null}, eur: {price: null, change24hr: null}});
     // json request of ADA market data
     const [gecko, setGecko] = useState(null);
 
@@ -42,106 +46,94 @@ export default function Prices (props) {
     useEffect(() => {
         const getCardanoPrices = async () => {
 
-            let res = await getCoinGeckoData();
+            let top5 = await getTop5CryptoPrices("usd");
 
-            //curent ada price in usd, gbp, btc and eth
-            let adaUSD = (res.market_data.current_price.usd);
-            let adaGBP = (res.market_data.current_price.gbp);
-            let adaBTC = (res.market_data.current_price.btc);
-            let adaETH = (res.market_data.current_price.eth);
+            if(top5[0].name != null){
+                let first = top5[0];
+                let second = top5[1];
+                let third = top5[2];
+                let fourth = top5[3];
+                let fifth = top5[4];
 
-            setAdaUSD(adaUSD);
-            setAdaGBP(adaGBP);
-            setAdaBTC(adaBTC);
-            setAdaETH(adaETH);
-
-            // price change last 24 hours of usd, gbp, btc and eth
-            let adaUsd24h = (res.market_data.price_change_percentage_24h_in_currency.usd);
-            let adaGbp24h = (res.market_data.price_change_percentage_24h_in_currency.gbp);
-            let adaBtc24h = (res.market_data.price_change_percentage_24h_in_currency.btc);
-            let adaEth24h = (res.market_data.price_change_percentage_24h_in_currency.eth);
-
-            setAdaUsdChange(adaUsd24h);
-            setAdaGbpChange(adaGbp24h);
-            setAdaBtcChange(adaBtc24h);
-            setAdaEthChange(adaEth24h);
-
-            // price change 24h, 7d, 30d and 1y in USD
-            // passed as props for fts prices / currency
-            let usd24h = (res.market_data.price_change_percentage_24h_in_currency.usd);
-            let usd7d = (res.market_data.price_change_percentage_7d_in_currency.usd);
-            let usd30d = (res.market_data.price_change_percentage_30d_in_currency.usd);
-            let usd1y = (res.market_data.price_change_percentage_1y_in_currency.usd);
-
-            setAdaChange({usd24h: usd24h, usd7d : usd7d, usd30d : usd30d, usd1y: usd1y});
-
-            let usdcolor = '';
-            let gbpcolor = '';
-            let btccolor = '';
-            let ethcolor = '';
-
-            if(adaUsd24h <0 ){
-                usdcolor = 'red';
-            }
-            else if (adaUsd24h == 0){
-                usdcolor = 'grey';
-            }
-            else{
-                usdcolor = '#7FFF00';
+                setTop5([first, second, third, fourth, fifth]);
             }
 
-            if(adaGbp24h < 0){
-                gbpcolor = 'red';
-            }
-            else if(adaGbp24h == 0){
-                gbpcolor ='grey';
-            }
-            else{
-                gbpcolor = '#7FFF00';
+            let cardanoPrices = await getCoinGeckoData();
+
+            if(cardanoPrices != null){
+                props.data(cardanoPrices);
+                setAdaPrice(cardanoPrices);
             }
 
-            if(adaEth24h < 0){
-                ethcolor = 'red';
-            }
-            else if(adaEth24h == 0){
-                gbpcolor ='grey';
-            }
-            else{
-                ethcolor = '#7FFF00';
-            }
-
-            if(adaBtc24h < 0){
-                btccolor = 'red';
-            }
-            else if(adaBtc24h == 0){
-                btccolor ='grey';
-            }
-            else{
-                btccolor = '#7FFF00';
-            }
-
-            setUsdColor(usdcolor);
-            setGbpColor(gbpcolor);
-            setBtcColor(btccolor);
-            setEthColor(ethcolor);
-
-            props.data({adaUSD: adaUSD, adaGBP: adaGBP, adaBTC:adaBTC, adaETH: adaETH,
-                currency: currency, usd24h: usd24h, usd7d: usd7d, usd30d: usd30d, usd1y:usd1y, privacy: privacy});
         }
         getCardanoPrices();
     }, [])
 
-    async function getCoinGeckoData(){
-        let req = await fetch('https://api.coingecko.com/api/v3/coins/cardano?localization=false&tickers=false&developer_data=false');
-        let res = await req.json();
-        if(req.ok){
-            setGecko(res);
-            return res;
+    async function getTop5CryptoPrices(currency) {
+        try {
+          const response = await fetch(
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=5&page=1&sparkline=false`
+          );
+      
+          if (!response.ok) throw new Error('Failed to fetch data');
+      
+          const data = await response.json();
+      
+          const getColor = (priceChange) =>
+            priceChange > 0 ? 'limegreen' : priceChange < 0 ? 'red' : 'black';
+      
+          const prices = data.map((coin) => {
+            const priceChange = coin.price_change_percentage_24h.toFixed(2);
+            return {
+              name: coin.name,
+              price: coin.current_price,
+              priceChange,
+              color: getColor(priceChange),
+            };
+          });
+      
+          return prices;
+        } catch (error) {
+          console.error(error);
+          return null;
         }
-        else{
-            console.log('error');
+      }
+      
+      
+      
+
+      async function getCoinGeckoData() {
+        try {
+          const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd%2Cgbp%2Cbtc%2Ceth%2Ceur&include_24hr_change=true');
+          if (!response.ok) throw new Error('Failed to fetch data');
+      
+          const data = await response.json();
+      
+          const currencies = ['usd', 'gbp', 'btc', 'eth', 'eur'];
+          const priceColors = {};
+          const prices = {};
+      
+          currencies.forEach((currency) => {
+            const price = data.cardano[currency];
+            const change24hr = data.cardano[`${currency}_24h_change`].toFixed(2);
+      
+            prices[currency] = {price, change24hr};
+      
+            priceColors[currency] = change24hr > 0
+              ? 'limegreen'
+              : change24hr < 0
+                ? 'red'
+                : 'black';
+          });
+      
+          setPriceColors(priceColors);
+          return prices;
+        } catch (error) {
+          console.error(error);
+          return null;
         }
-    }
+      }
+      
 
 
     // change currency of all values in app - usd, gbp, ada, eth, btc
@@ -283,31 +275,58 @@ export default function Prices (props) {
 
 
     return(<div className="price-nav">
-        <div className="crypto-prices">
-            <h1 style={{color:"white"}}>Top 5 Cryptocurrencies</h1>
-        </div>
-        <div className="cardano-prices" style={{color: "white"}}>
-            <h1>Cardano Prices</h1>
-            <div className="out-price">
-                <div className="price-label">ADA/USD ${adaUSD}</div>
-                <div className="price-label" style={{color: usdColor}}>({adaUsdChange}%)</div>
-            </div>
+        <table className="crypto-prices">
+            <tr><h1>Top 5 Cryptocurrencies 24h</h1></tr>
+            <tr className="out-price">
+                <td className="price-label">{top5[0].name}/USD ${top5[0].price}</td>
+                <td className="price-label" style={{color: top5[0].color}}>({top5[0].priceChange}%)</td>
+            </tr>
+            <tr className="out-price">
+                <td className="price-label">{top5[1].name}/USD ${top5[1].price}</td>
+                <td className="price-label" style={{color: top5[1].color}}>({top5[1].priceChange}%)</td>
 
-            <div className="out-price">   
-                <div className="price-label">ADA/GBP £{adaGBP}</div>
-                <div className="price-label" style={{color: gbpColor}}>({adaGbpChange}%)</div>
-            </div>
+            </tr>
+            <tr className="out-price">
+                <td className="price-label">{top5[2].name}/USD ${top5[2].price}</td>
+                <td className="price-label" style={{color: top5[2].color}}>({top5[2].priceChange}%)</td>
 
-            <div className="out-price">
-                <div className="price-label">ADA/ETH Ξ{adaETH}</div>
-                <div className="price-label" style={{color: ethColor}}>({adaEthChange}%)</div>
-            </div>
+            </tr>
+            <tr className="out-price">
+                <td className="price-label">{top5[3].name}/USD ${top5[3].price}</td>
+                <td className="price-label" style={{color: top5[3].color}}>({top5[3].priceChange}%)</td>
 
-            <div className="out-price">
-                <div className="price-label">ADA/BTC ₿{adaBTC}</div>
-                <div className="price-label" style={{color: btcColor}}>({adaBtcChange}%)</div>
-            </div>
-        </div>
+            </tr>
+            <tr className="out-price">
+                <td className="price-label">{top5[4].name}/USD ${top5[4].price}</td>
+                <td className="price-label" style={{color: top5[4].color}}>({top5[4].priceChange}%)</td>
+            </tr>
+        </table>
+        <table className="crypto-prices">
+            <tr><h1>Cardano 24hr Prices</h1></tr>
+            <tr className="out-price ">
+                <td className="price-label">ADA/USD ${adaPrice.usd.price}</td>
+                <td className="price-label" style={{color: priceColors.usd}}>({adaPrice.usd.change24hr}%)</td>
+            </tr>
+
+            <tr className="out-price">   
+                <td className="price-label">ADA/GBP ${adaPrice.gbp.price}</td>
+                <td className="price-label" style={{color: priceColors.gbp}}>({adaPrice.gbp.change24hr}%)</td>
+            </tr>
+
+            <tr className="out-price">
+                <td className="price-label">ADA/ETH ${adaPrice.eth.price}</td>
+                <td className="price-label" style={{color: priceColors.eth}}>({adaPrice.eth.change24hr}%)</td>
+            </tr>
+
+            <tr className="out-price">
+                <td className="price-label">ADA/BTC ${adaPrice.btc.price}</td>
+                <td className="price-label" style={{color: priceColors.btc}}>({adaPrice.btc.change24hr}%)</td>
+            </tr>
+            <tr className="out-price">
+                <td className="price-label">ADA/EUR ${adaPrice.eur.price}</td>
+                <td className="price-label" style={{color:priceColors.eur}}>({adaPrice.eur.change24hr}%)</td>
+            </tr>
+        </table>
     </div>
     )
 }

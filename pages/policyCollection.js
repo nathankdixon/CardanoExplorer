@@ -59,16 +59,11 @@ export default function PolicyCollection(props){
                     
 
                     let token = new Token(assetName, policy, element.quantity);
-                    token.metadata = await token.getMetadata();
+                    await token.fetchTokenData();
 
                     let ipfs = '/black.jpeg';
 
-                    if(token.metadata != null){
-                        token.ipfs = token.getIpfsFromMetadata();
-                        if(token.ipfs != null){
-                            ipfs = token.ipfs;
-                        }
-                    }
+
                     let path = 'asset';
 
                     display.push(
@@ -138,21 +133,18 @@ export default function PolicyCollection(props){
 
 
                     let token = new Token(assetName, policy, assets[i].quantity);
-                    token.metadata = await token.getMetadata();
+                    await token.fetchTokenData();
+
 
                     let ipfs = '/black.jpeg';
 
-                    if(token.metadata != null){
-                        token.ipfs = token.getIpfsFromMetadata();
-                        if(token.ipfs != null){
-                            ipfs = token.ipfs;
-                        }
+                    if(token.ipfs != null){
+                      ipfs = token.ipfs;
                     }
-                    let path = 'asset';
 
                     if(assetName != ''){
                       display.push(
-                        <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.stake)}>
+                        <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+token.policy_id+token.asset_name+'?stake='+props.stake)}>
                             <Image className="grid-img" src= {ipfs}
                             alt = 'failed to load image' width={270} height={270}/>
                             <div className="grid-item-info">

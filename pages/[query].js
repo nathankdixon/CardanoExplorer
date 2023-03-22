@@ -17,18 +17,12 @@ function Query(){
 
     useEffect(() => {
       function checkIfPolicyOrAsset() {
-        // Cardano stake address pattern
-        const stakeAddressPattern = /^(stake1[a-zA-Z0-9]{48,98})$/;
-        // Cardano token policy ID pattern
-        const policyIdPattern = /^[a-fA-F0-9]{56}$/;
-        // Cardano token asset ID pattern
-        const assetIdPattern = /^[a-fA-F0-9]{64}$/;
     
         if (query) {
 
           let item = query;
 
-          if(item.startsWith('stake')){
+          if(item.startsWith('stake') || item.startsWith('$')){
             setDisplay(<WalletData stake={query} />);
           }
           else if(item.length == 56){

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 export default function Policy(props){
 
     const [display, setDisplay] = useState({policy: '', thumbnail: '/black.jpeg', floorPrice:'', holders: '', supply :'', volume:''});
-    const [currency, setCurrency] = useState({value: 1, symbol: '$'});
+    const [currency, setCurrency] = useState({value: 1, symbol: '₳'});
 
     useEffect(() => {
         async function func(){
@@ -104,7 +104,7 @@ export default function Policy(props){
     return(<div className="policy-info">
             <div className="policy-section">
               <div className="policy-item-info">Policy: 
-                  <Link className = 'policy-button' href={'/asset/'+display.policy+'?stake='+props.stake}><div className="policy-value">{(display.policy)}</div></Link>
+                  <Link className = 'policy-button' href={'/'+display.policy+'?stake='+props.stake}><div className="policy-value">{(display.policy)}</div></Link>
                   <button
                     className="policy-button"
                     onClick={(e) => copyText(e, display.policy)}

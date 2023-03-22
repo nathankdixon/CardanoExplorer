@@ -9,6 +9,13 @@ import WalletButton from "./walletButton";
 export default function TokenDisplay(props){
 
     const [prices, setPrices] = useState();
+    const [ipfs, setIpfs] = useState('/black.jpeg');
+
+    useEffect(() => {
+        if(props.data.token.ipfs != null){
+            setIpfs(props.data.token.ipfs);
+        }
+    }, [props])
 
     function copyText(event, text) {
         navigator.clipboard.writeText(text).then(() => {
@@ -35,7 +42,7 @@ export default function TokenDisplay(props){
             <Policy policy = {props.data.token.policy_id} stake = {props.data.stake}/>
                 <div className="token-box">
                     <div className="token-image">
-                        <Image className = "main-img" alt= 'no image' src = {props.data.token.ipfs} width = {500} height = {500}/>
+                        <Image className = "main-img" alt= 'no image' src = {ipfs} width = {500} height = {500}/>
                     </div>
                     <div className="token-data">
                         <div className="token-data-item">

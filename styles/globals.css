@@ -1,10 +1,10 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #a4c6ff;
-    --second-color:#5a62fa;
-    --third-color: #ffffff;
+    --main-color: #c19cee;
+    --second-color:#283cc3;
+    --third-color: #f2f2f4;
     --fourth-color: #f3f3f38c;
-    --fifth-color: rgba(255, 255, 255, 0.932);
+    --fifth-color: rgba(255, 255, 255, 0.178);
     --sixth-color: rgba(0, 0, 0, 0.20);
     --main-font: 'Courier New', sans-serif;
     
@@ -14,35 +14,127 @@ body {
     font-family: var(--main-font);
     color: black;
     background-color: var(--second-color);
-    margin: 0;
+
+}
+
+.home{
+    margin-left: 30px;
+}
+h1{
+    font-size: xx-large;
+    font-weight: bold;
+    color: var(--main-color);
+    font-family: var(--main-font);
 }
 
 .home-header{
     display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-top: 10px;
-    justify-content: space-between;
+    margin-top: 5px;
     align-items: center;
-    width: 100vw;
 }
 .home-body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    margin-top:150px;
     margin-left: 100px;
+    font-weight: bold;
+    color:white;
+
+}
+
+.home-body-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+
+    
+}
+
+.home-body-wallets{
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+    align-items: center;
+    height: 10vh;
+    width: 80vw;
+    margin-top: 10px;
+    margin-left: 170px;
+}
+
+.home-wallet-button{
+    border: 4px solid var(--third-color);
+    border-radius: 10%;
+    margin: 10px 10px 10px 10px;
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    background-color: var(--main-color);
+    background-position: center;
+    background-size: cover;
+    font-weight: bold;
+    color: var(--second-color);
+}
+
+.home-wallet-button:hover{
+    background-color: var(--fifth-color);
+    color: var(--second-color);
+    cursor: pointer;
+}
+.refresh-button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid white;
+    color:rgb(0, 0, 0);
+    border-radius: 10px;
+    background-color: rgb(138, 214, 100);
+    font-size: large;
+    font-weight: bold;
+    height: 100%;
+    font-style: var(--main-font);
+    padding: 10px;
+    margin-right: 10px;
+}
+.refresh-button:hover{
+    background-color: var(--third-color);
+    color: var(--second-color);
+    cursor: pointer;
+}
+.title{
+
+}
+
+.summary{
+    display: flex;
+    justify-content: space-evenly;
+    font-weight: bold;
+    font-size: x-large;
+    width: 90vw;
+}
+.preview-img-item{
+    font-size: x-large;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.preview-img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+    
 }
   
 .stake-info-item{
     display: flex;
     align-items: center;
-    justify-content: center;
+    margin-top: 50px;
 
     font-weight: bold;
-    font-size: large;
+    font-size: xx-large;
 }
 
 .wallet-data-header {
@@ -96,6 +188,7 @@ body {
     align-items: center;
     width: 100%;
     min-height: 100vh;
+    justify-content: space-between;
 
 
 }
@@ -288,6 +381,7 @@ color: var(--main-color);/* light green */
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin-top: 10px;
 }
 .grid-item{
     padding: 10px
@@ -394,6 +488,8 @@ td{
     background-color:var(--third-color);
 }
 
+
+
 .connect-wallet{
 
 }
@@ -407,7 +503,6 @@ td{
     border-color: var(--third-color);
     text-align: center;
     cursor: pointer;
-    font-size: 16px;
     background-color:var(--main-color);
     color:var(--second-color);
     padding: 10px 10px 10px 10px;
@@ -510,16 +605,28 @@ td{
     background-color: var(--third-color);
 
 }
+.blocks{
+    background-color: var(--fifth-color);
+    border: 2px solid white;
+    text-align: center;
+    color:black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 5px;
+    height: 20vh;
+    width: 86vw;
+}
+
+.blocks-body{
+    color:white;
+}
 
 .price-nav{
-    background-color: var(--sixth-color);
-    color: var(--second-color);
+    padding: 10px;
+    margin-top: 5px;
+    color:black;
     display: flex; 
-    width: 80vw;
     align-items: center;
-    border: 2px white solid;
-    border-radius: 10px;
-    border-collapse: collapse;
 }
 .cardano-prices{
     display: flex;
@@ -533,19 +640,29 @@ td{
 }
 
 .crypto-prices{
+    background-color: var(--fifth-color);
+    padding: 10px;
+    margin: 10px;
+    
+    width: 43vw;
+    height: 30vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     float: left;
-    width: 50%;
+    border: 2px solid white;
+    border-radius: 10px;
 }
 .out-price{
     display: flex;
     justify-content: space-evenly;
 }
 
+.header-row{
+
+}
 .price-nav-header{
 
 }
@@ -573,7 +690,7 @@ td{
 .price-label {
     display: inline-block;
     font-weight: bolder;
-    font-size: 15px;
+    font-size: x-large;
     color: var(--third-color);
     padding: 10px;
 }
@@ -602,16 +719,16 @@ td{
 .summary{
     display: flex;
     justify-content: space-between;
-    background-color: var(--sixth-color);
-    color: var(--main-color);
+    flex-direction: column;
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
-    border-color: var(--third-color);
     border-width: 2px;
-    border-style: solid;
+    border-style: solid white 2px;
     border-radius: 5px;
     font-weight: bold;
     font-size: larger;
+    width: 90vw;
+    margin-left: 200px;
 }
 
 .summary-item{

@@ -1,8 +1,12 @@
 export default function Blocks(){
     return (
-        <div>
+        <div className="blocks">
             <h1>Blocks</h1>
-            <div>some block data visualisation</div>
+            <div className="blocks-body">
+                some block data visualisation
+
+                [] ~~~ [] ~~~ [] ~~~ []
+                </div>
         </div>
     )
 }

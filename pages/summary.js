@@ -14,7 +14,11 @@ export default function Summary(props){
     // total wallet value = ada value + tokens value
     const [totalValue, setTotalValue] = useState();
 
-    const [stakeInformation, setStakeInformation] = useState('Summary');
+    const [topToken, setTopToken] = useState({asset_name: '', ipfs: '/black.jpeg', onchain_metadata:{name:''}});
+    const [topCoin, setTopCoin] = useState({asset_name: '', ipfs: '/black.jpeg', metadata:{name:''}});
+    const [tokenBalance, setTokenBalance] = useState();
+
+    const [stakeInfo, setStakeInfo] = useState('Summary');
     const [poolInformation, setPoolInformation] = useState('Summary');
 
     // useEffect(() => {
@@ -98,20 +102,15 @@ export default function Summary(props){
                 let stakeInfo = await getStakeInfo(props.data.stake);
                 let tokenBalance = getTokenBalance(props.data.fts);
 
-                setStakeInformation(
-                    <table className="stake-info">
-                        <tbody>
-                            <tr className="stake-info-item"><td>Balance: </td><td><span style={{color: 'green'}}> {(stakeInfo.balance/1000000).toFixed(2)} ADA </span></td></tr>
-                            <tr className="stake-info-item"><td>Tokens: </td><td><span style={{color: 'purple'}}>{props.data.tokenNumber}</span></td></tr>
-                            <tr className="stake-info-item"><td>NFTs:</td><td><span style={{color: 'orange'}}>{props.data.nfts.length}</span></td></tr>
-                            <tr className="stake-info-item"><td>Coins:</td><td><span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></td></tr>
-                            <tr className="stake-info-item"><td>Token Balance:</td><td><span style={{color: 'red'}}>{(tokenBalance).toFixed(2)} ADA</span></td></tr>
-                            <tr className="stake-info-item"><td>Total Rewards:</td><td><span style={{color: 'blue'}}>{(stakeInfo.rewards)/1000000} ADA</span></td></tr>
-                            <tr className="stake-info-item"><td>Available Rewards:</td><td><span style={{color: 'blue'}}>{(stakeInfo.availableRewards)/1000000} ADA</span></td></tr>
-                            <tr className="stake-info-item"><td>top coin, top collection, last 5 nft txs, </td><td><span style={{color: 'blue'}}></span></td></tr>
-                        </tbody>
-                  </table>
-                );
+                let topToken = props.data.nfts[0][0];
+                let topCoin = props.data.fts[0][0];
+
+                setTokenBalance(tokenBalance);
+                setStakeInfo(stakeInfo);
+                setTopToken(topToken);
+                setTopCoin(topCoin);
+
+                console.log(topToken);
                 
             }
         }   
@@ -173,8 +172,22 @@ export default function Summary(props){
     // total value
 
     return (
-        <div className="summary"><h1>Wallet Summary</h1>
-            <div className="stake-information">{stakeInformation}</div>
+        <div className="summary">
+            <h1>Wallet Summary</h1>
+            <table className="stake-info">
+                        <tbody>
+                            <tr className="stake-info-item"><td>Balance: </td><td><span style={{color: 'green'}}> {(stakeInfo.balance/1000000).toFixed(2)} ADA </span></td></tr>
+                            <tr className="stake-info-item"><td>Tokens: </td><td><span style={{color: 'purple'}}>{props.data.tokenNumber}</span></td></tr>
+                            <tr className="stake-info-item"><td>NFTs:</td><td><span style={{color: 'orange'}}>{props.data.nfts.length}</span></td></tr>
+                            <tr className="stake-info-item"><td>Coins:</td><td><span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></td></tr>
+                            <tr className="stake-info-item"><td>Token Balance:</td><td><span style={{color: 'red'}}>{(tokenBalance)} ADA</span></td></tr>
+                            <tr className="stake-info-item"><td>Total Rewards:</td><td><span style={{color: 'blue'}}>{(stakeInfo.rewards)/1000000} ADA</span></td></tr>
+                            <tr className="stake-info-item"><td>Available Rewards:</td><td><span style={{color: 'blue'}}>{(stakeInfo.availableRewards)/1000000} ADA</span></td></tr>
+                        </tbody>
+            </table>
+            <div className="preview-img-item" >Largest NFT Collection<Image className='preview-img' src={topToken.ipfs} width={200} height={200} alt={topToken.asset_name}/>{topToken.onchain_metadata.name}</div>
+            <div className="preview-img-item">Most Valuable Coin <Image className='preview-img' src={topCoin.ipfs} width={200} height={200} alt={topCoin.asset_name}/>{topCoin.metadata.name}</div>
+
         </div>
     )
 }

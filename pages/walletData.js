@@ -62,6 +62,11 @@ function WalletData (props) {
     getWalletData();
   }, [stakeAddress]);
 
+  useEffect(() => {
+    scrollToSection('wallet');
+
+  },[walletData]);
+
 
   // creates savable wallet data object
   // which gets stored in local storage
@@ -278,8 +283,11 @@ function WalletData (props) {
   }
 
   const scrollToSection = (id) => {
+    
     const element = document.getElementById(id);
+    if(element != null){
     element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const scrollToTop = () => {
@@ -317,23 +325,26 @@ function WalletData (props) {
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
           <Home data={walletData}/>
-          <div>{loadedTokens}</div>
+          <div style={{fontSize: 'xx-large', color:"white"}}>{loadedTokens}</div>
         </section>
-        <section className="wallet-data-content-item" id="wallet" >
-          <Summary data={walletData} />
-        </section>
-        <section className="wallet-data-content-item" id="nfts" >
-          <Nfts data={walletData} />
-        </section>
-        <section className="wallet-data-content-item" id="fts">
-          <Fts data={walletData} />
-        </section>
-        <section className="wallet-data-content-item" id="delegation">
-          <Delegation data={walletData} />
-        </section>
-        <section className="wallet-data-content-item" id="txs">
-          <Transaction data={walletData}/>
-        </section>
+        {walletData.stake && (
+          <div>
+            <section className="wallet-data-content-item" id="wallet" >
+              <Summary data={walletData} />
+            </section>
+            <section className="wallet-data-content-item" id="nfts" >
+              <Nfts data={walletData} />
+            </section>
+            <section className="wallet-data-content-item" id="fts">
+              <Fts data={walletData} />
+            </section>
+            <section className="wallet-data-content-item" id="delegation">
+              <Delegation data={walletData} />
+            </section>
+            <section className="wallet-data-content-item" id="txs">
+              <Transaction data={walletData}/>
+            </section>
+          </div>)}
       </div>
     </div>
 

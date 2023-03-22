@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // exports a table of fungible tokens with prices, price changes and values
@@ -6,6 +7,7 @@ export default function Fts (props){
 
     const [display, setDisplay] = useState("Coins");
 
+    const router = useRouter();
     // useEffect( () => {
     // const getData = async () =>{
     //   if(props.data == null){
