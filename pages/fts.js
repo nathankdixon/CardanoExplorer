@@ -6,54 +6,11 @@ import { useEffect, useState } from "react";
 export default function Fts (props){
 
     const [display, setDisplay] = useState("Coins");
+    const [displayWithPrices, setDisplayWithPrices] = useState([]);
+    const [displayWithoutPrices, setDisplayWithoutPrices] = useState([]);
+    const [totalValue, setTotalValue] = useState(0);
 
     const router = useRouter();
-    // useEffect( () => {
-    // const getData = async () =>{
-    //   if(props.data == null){
-    //     //base
-    //   }
-    //   else{
-    //     let _display = [];
-
-    //     // add column names
-    //     _display.push(<tr key = 'keyregular' className = "grid-item-ft" style={{color: "black"}}>
-    //       <td>Coin</td><td>Ticker</td><td>Quantity</td>
-    //       <td>Price</td><td>24h</td><td>7d</td><td>30d</td><td>1y</td>
-    //       <td>Value</td></tr>)
-
-
-    //     // get stake info from koios
-    //     let adaBalance = await getAccountBalance(props.data.stake);
-
-    //     if(adaBalance != null){
-    //       // ada balance at stake address
-
-    //       // selected currency
-    //       let currency = props.prices.currency;
-
-    //       // price data
-    //       let prices = props.prices;
-
-    //       // add ada price info and values to table
-    //       let adaInfoToAdd = addAdaInfoToDisplay(adaBalance, currency, prices);
-
-    //       // add each token to the table with price data if available
-    //       let tokenInfoToAdd = addTokenInfoToDisplay(currency, prices);
-
-    //       _display.push(adaInfoToAdd);
-    //       _display.push(tokenInfoToAdd);
-
-    //     }
-
-    //     // output to page
-    //     let table = <table className="ft-table"><tbody>{_display}</tbody></table>
-    //     setDisplay(table);
-    //   }
-    // }
-    // getData();
-    // }, [props.data]);
-
 
     useEffect( () => {
       const getData = async () =>{
@@ -61,13 +18,41 @@ export default function Fts (props){
           //base
         }
         else{
-          let display = [];
-          display.push(<tr key = 'keyregular' className = "grid-item-ft" style={{color: "darkgreen"}}>
-            <td>Coin</td><td>Ticker</td><td>Quantity</td>
-            <td>Price</td><td>24h</td><td>7d</td><td>30d</td><td>1y</td>
-            <td>Value</td></tr>);
 
-          for(const element of props.data.fts){
+        // Sort the fts array by the value
+          const sortedFts = [...props.data.fts].sort((a, b) => {
+            const aValue = a[0].prices?.current * a[0].quantity || 0;
+            const bValue = b[0].prices?.current * b[0].quantity || 0;
+            return bValue - aValue;
+          });
+
+          let displayWithPrices = [];
+          let displayWithoutPrices = [];
+          let totalPrice = 0;
+
+          displayWithPrices.push(
+            <tr key="keyregular" className="grid-item-ft" style={{ color: "darkgreen" }}>
+              <td>Coin</td>
+              <td>Ticker</td>
+              <td>Quantity</td>
+              <td>Price</td>
+              <td>24h</td>
+              <td>7d</td>
+              <td>30d</td>
+              <td>1y</td>
+              <td>Value</td>
+            </tr>
+          );
+
+          displayWithoutPrices.push(
+            <tr key="keyregular" className="grid-item-ft" style={{ color: "darkgreen" }}>
+              <td>Coin</td>
+              <td>Ticker</td>
+              <td>Quantity</td>
+            </tr>
+          );
+
+          for(const element of sortedFts){
             let coin = element[0];        
 
             if(coin.prices == null){
@@ -83,264 +68,44 @@ export default function Fts (props){
                 }
               }
               
-              display.push(<tr className="grid-item-ft" key={coin.asset_name}>
+              displayWithoutPrices.push(<tr className="grid-item-ft" key={coin.asset_name}>
               <td><Image src={coin.ipfs} height={50} width={50} alt={coin.asset_name}/></td><td>{coin.metadata.ticker}</td>
-              <td>{coin.quantity}</td><td>-</td>
-              <td>-%</td><td>-%</td><td>-%</td>
-              <td>-%</td>
+              <td>{coin.quantity}</td>
               </tr>);
 
             }
             else{
               let value = coin.prices.current * coin.quantity;
+              totalPrice += value;
 
-              display.push(<tr className="grid-item-ft" key={coin.asset_name}>
+              displayWithPrices.push(<tr className="grid-item-ft" key={coin.asset_name}>
               <td><Image src={coin.ipfs} height={50} width={50} alt={coin.asset_name}/></td><td>{coin.metadata.ticker}</td>
-              <td>{coin.quantity}</td><td>{coin.prices.current}</td>
-              <td>{coin.prices.change24h}%</td><td>{coin.prices.change7d}%</td><td>{coin.prices.change30d}%</td>
-              <td>{coin.prices.change1y}%</td><td>{(value).toFixed(2)}</td>
+              <td>{coin.quantity}</td><td>{((coin.prices.current)* props.currency.value.price).toFixed(2)}{props.currency.symbol}</td>
+              <td style={{ color: getColor(coin.prices.change24h) }}>
+            {coin.prices.change24h}%
+          </td>
+            <td style={{ color: getColor(coin.prices.change7d) }}>
+              {coin.prices.change7d}%
+            </td>
+            <td style={{ color: getColor(coin.prices.change30d) }}>
+              {coin.prices.change30d}%
+            </td>
+            <td style={{ color: getColor(coin.prices.change1y) }}>
+              {coin.prices.change1y}%
+            </td>
+          <td>{((value)* props.currency.value.price).toFixed(2)} {props.currency.symbol}</td>
               </tr>);
             }
 
           }
-          let table = <table className="grid-ft"><tbody>{display}</tbody></table>;
-          setDisplay(table);
+          setDisplayWithPrices(displayWithPrices);
+          setDisplayWithoutPrices(displayWithoutPrices);
+          setTotalValue(totalPrice.toFixed(2));
         }
       }
       getData();
-    }, [props.data]);
+    }, [props.data, props.currency]);
 
-
-
-    // adds all fungible tokens with price, price changes and values to the table
-    function addTokenInfoToDisplay(currency, prices){
-
-      // since tokens are fungible - one coin per policy
-      let policies = Object.keys(props.data.fts);
-      let display = [];
-
-      for(const policy of policies){
-
-        // list length 1 - as tokens are fungible
-        let token = props.data.fts[policy][0];
-
-        // 4 letter symbol 
-        let name = token.metadata.ticker;
-        if(token.metadata.ticker == null){
-
-          // otherwise get name from metadata
-          if(token.metadata.name != null){
-            name = (token.metadata.name).toUpperCase();
-          }
-          else{
-            name = 'unknown';
-          }
-        }
-
-        let price = '-';
-        let value = '-';
-
-        let _change24h = '-';
-        let _change7d = '-';
-        let _change30d = '-';
-        let _change1y = '-';
-
-        let token24hcolor = 'black';
-        let token7dcolor = 'black';
-        let token30dcolor = 'black';
-        let token1ycolor = 'black';
-
-        let quantity = 0;
-
-        if(token.prices != null && token.prices.current != null){
-
-          // price of token in ADA
-          let tokenPriceAda = token.prices.current* 1/(props.prices.adaUSD);
-
-          // quantity decimal points differ across tokens. LQ quantity applied manually based on DEXs
-
-          // ------ quantity lacks metadata standard ----------
-          if(token.metadata.ticker == 'LQ'){
-            quantity = token.quantity/1000000;
-          }
-          else{
-            quantity = token.quantity;
-          }
-
-          // price of token converted to current selected currency
-          price = ((tokenPriceAda) * currency.value).toFixed(2);
-
-          // value = price * quantity
-          value = (price*quantity).toFixed(2);
-
-
-          // price change values
-          let usd24hChange = token.prices.change24h/100;
-          _change24h = ((usd24hChange * currency.value)*100).toFixed(2);
-
-          let usd7dChange = token.prices.change7d/100;
-          _change7d = ((usd7dChange * currency.value)*100).toFixed(2);
-
-          let usd30dChange = token.prices.change30d/100;
-          _change30d = ((usd30dChange * currency.value)*100).toFixed(2);
-
-          let usd1yChange = token.prices.change1y/100;
-          _change1y = ((usd1yChange * currency.value)*100).toFixed(2);
-
-          // colors of price change values
-          if(usd24hChange > 0){
-            token24hcolor = '#49f500';
-          }
-          else if(usd24hChange == 0){
-            token24hcolor = 'grey';
-          }
-          else{
-            token24hcolor = 'red';
-          }
-
-          if(usd7dChange > 0){
-            token7dcolor = '#49f500';
-          }
-          else if(usd7dChange == 0){
-            token7dcolor = 'grey';
-          }
-          else{
-            token7dcolor = 'red';
-          }
-
-          if(usd30dChange > 0){
-            token30dcolor = '#49f500';
-          }
-          else if(usd30dChange == 0){
-            token30dcolor = 'grey';
-          }
-          else{
-            token30dcolor = 'red';
-          }
-
-          if(usd1yChange > 0){
-            token1ycolor = '#49f500';
-          }
-          else if(usd1yChange == 0){
-            token1ycolor = 'grey';
-          }
-          else{
-            token1ycolor = 'red';
-          }
-
-        }
-
-        // privacy option
-        if(prices.privacy == true){
-          let valueNum = (value).toString();
-          let valueAsterisks = "*".repeat(valueNum.length);
-          value = valueAsterisks;
-        }
-
-        // add to display to be returned
-        display.push(<tr key = {token.asset_name + 'ftunpriced'} className = "grid-item-ft">
-          <td><img className='ft-img' src={token.ipfs}></img></td>
-          <td>{name}</td><td>{quantity}</td>
-          <td><div className="value"><div className="currency">{currency.symbol}</div>{price}</div></td>
-          <td><div style={{color: token24hcolor}}>{_change24h}%</div></td>
-          <td><div style={{color: token7dcolor}}>{_change7d}%</div></td>
-          <td><div style={{color: token30dcolor}}>{_change30d}%</div></td>
-          <td><div style={{color: token1ycolor}}>{_change1y}%</div></td>
-          <td><div className="value"><div className="currency">{currency.symbol}</div>{value}</div></td></tr>);
-      }
-
-      return display;
-    }
-
-    // adds ADA price, price changes and values to the table
-    function addAdaInfoToDisplay(lovelaces, currency, prices){
-
-      let _balance = (lovelaces/1000000).toFixed(2);
-      let value = (currency.value*_balance).toFixed(2);
-
-      // if privacy option is selected
-      // asterisk out any sensitive data
-      if(prices.privacy){
-        let valueNum = (value).toString();
-        let valueAsterisks = "*".repeat(valueNum.length);
-        value = valueAsterisks;
-      }
-
-      // price change colors
-      let ada24hcolor = 'black';
-      let ada7dcolor = 'black';
-      let ada30dcolor = 'black';
-      let ada1ycolor = 'black';
-
-
-      // calculate price changes in select currency
-      let ada24hChange = prices.usd24h/100;
-      let _adachange24h = ((ada24hChange * currency.value)*100).toFixed(2);
-
-      let ada7dChange = prices.usd7d/100;
-      let _adachange7d = ((ada7dChange * currency.value)*100).toFixed(2);
-
-      let ada30dChange = prices.usd30d/100;
-      let _adachange30d = ((ada30dChange * currency.value)*100).toFixed(2);
-
-      let ada1yChange = prices.usd1y/100;
-      let _adachange1y = ((ada1yChange * currency.value)*100).toFixed(2);
-
-
-      // apply price change colors
-      if(ada24hChange < 0){
-        ada24hcolor = 'red';
-      }
-      else if(ada24hChange == 0){
-        ada24hcolor = 'grey';
-      }
-      else{
-        ada24hcolor = '#49f500';
-      }
-
-      if(ada7dChange < 0){
-        ada7dcolor = 'red';
-      }
-      else if(ada7dChange == 0){
-        ada7dcolor = 'grey';
-      }
-      else{
-        ada7dcolor = '#49f500';
-      }
-
-      if(ada30dChange < 0){
-        ada30dcolor = 'red';
-      }
-      else if(ada30dChange == 0){
-        ada30dcolor = 'grey';
-      }
-      else{
-        ada30dcolor = '#49f500';
-      }
-
-      if(ada1yChange < 0){
-        ada1ycolor = 'red';
-      }
-      else if(ada1yChange == 0){
-        ada1ycolor = 'grey';
-      }
-      else{
-        ada1ycolor = '#49f500';
-      }
-
-      // add to table to be retuned
-      let adaInfo = (<tr key = 'ada-ft' className="grid-item-ft"><td><img src="/cardano.png" className="ft-img"></img></td>
-      <td>ADA</td><td>{_balance} </td>
-      <td><div className="value"><div className="currency">{currency.symbol}</div>{currency.value}</div></td>
-      <td><div style = {{color: ada24hcolor}}>{_adachange24h}%</div>
-      </td><td><div style={{color: ada7dcolor}}>{_adachange7d}%</div></td>
-      <td><div style={{color: ada30dcolor}}>{_adachange30d}%</div></td>
-      <td><div style={{color: ada1ycolor}}>{_adachange1y}%</div></td>
-      <td><div className="value"><div className="currency">{currency.symbol}</div>{value}</div></td>
-      </tr>);
-
-      return adaInfo;
-    }
     // requests account info from stake address from koios api -- ada balance used
     async function getAccountBalance(stakeAddress){
       try{
@@ -363,12 +128,24 @@ export default function Fts (props){
       }
   }
 
-    //returns a grid view of all NFTs grouped by policy
-    return (<div className="fts"><h1>Fungible Tokens (Coins)</h1>
-              <div className="grid-ft">
-          {display}
-        </div>
-    </div>
+      // Function to get the color based on the value
+    const getColor = (value) => {
+      if (value > 0) {
+        return "green";
+      } else if (value < 0) {
+        return "red";
+      }
+      return "black";
+    };
 
-    )
+  return (
+    <div className="fts">
+      <h1>Fungible Tokens (Coins)</h1>
+      <h2>Tokens with Prices</h2>
+      <div className="grid-ft">{displayWithPrices}</div>
+      <h3>Total Value: {totalValue} {props.currency.symbol}</h3>
+      <h2>Tokens without Prices</h2>
+      <div className="grid-ft-noprice">{displayWithoutPrices}</div>
+    </div>
+  );
 }

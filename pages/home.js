@@ -10,7 +10,6 @@ import WalletButton from "./walletButton";
 export default function Home(props){
 
     const [isLoading, setisLoading] = useState(null);
-    const [prices, setPrices] = useState(null);
 
     const router = useRouter();
 
@@ -24,14 +23,10 @@ export default function Home(props){
     },[props.data])
 
     function setPriceData (data){
-        setPrices(data);
+        props.prices(data);
     }
 
-    function deleteLocalStorage(){
-        localStorage.removeItem(props.data.stake);
-        window.location.reload();
-        router.reload();
-    }
+
   
     // gets stake address from wallet using cip-30 and lucid
     // @params - the name of the wallet to connect to e.g. 'Nami' or 'Typhon Wallet'
@@ -92,7 +87,7 @@ export default function Home(props){
                 scrollToSection('wallet');
             }
             else{
-                router.push(`/${stake}#wallet`);
+                router.push(`/${stake}`);
             }
         }
         else{
@@ -100,20 +95,12 @@ export default function Home(props){
     }
 
     return (<div className="home">
-                <header className="home-header">
-                    <label className="main-label">✥ Explorer</label>
-                    <SearchBar/>
-                    <WalletButton/>
-                </header>
-                <div className="home-body">
+                <div className="home-body"> 
                     <div className="home-body-header">
-                        <h1 className="title">Home</h1>
-                        <button onClick={deleteLocalStorage} className="refresh-button">Refresh Wallet<Image src={'/refresh.png'} width = {30} height={30} alt='refresh wallet'/></button>
                     </div>
                     <Prices data={setPriceData}/>
-                    <Blocks />
-                    <h1>Connect your Wallet</h1>
                     <div className="home-body-wallets">
+                        <div className="arrow"><h1>Connect your Wallet</h1><Image src={'/arrow.png'} width={50} height={50} alt={'arrow'}/></div>
                         <button className="home-wallet-button" onClick={() => handleSelect('Typhon Wallet')}><img className="wallet-img" src='/typhon.svg'></img></button>
                         <button className="home-wallet-button" onClick={() => handleSelect('eternl')}><img className="wallet-img" src='/eternl.png'></img></button>
                         <button className="home-wallet-button" onClick={() => handleSelect('Nami')}><img className="wallet-img" src='/nami.svg'></img></button>

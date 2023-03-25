@@ -9,7 +9,7 @@ import ColorPicker from "./colorPicker";
 // loads any local storage data linked to stake address
 export default function WalletButton(props){
 
-    const [buttonText, setButtonText] = useState('Connect') ;
+    const [buttonText, setButtonText] = useState('Wallet') ;
     const [colors, setColors] = useState();
     const [isVisable, setIsVisable] = useState(false);
     const [stake, setStake] = useState();
@@ -227,10 +227,6 @@ export default function WalletButton(props){
         }
     }
 
-    // used to set colors for color picker
-    function setColorData(data){
-        setColors(data);
-    }
 
     // used to show dropdown options list
     function showMenu(){
@@ -244,7 +240,7 @@ export default function WalletButton(props){
     // need options to still be present but hidden so color picker will work
     return(<div className="connect-wallet">
         <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu} 
-        onClick={() => router.push('/wallet/'+props.stake)}><Image src={'/wallet.svg'} width={30} height={30} alt='no-img'/>{buttonText}</button>
+        onClick={() => router.push('/wallet/'+props.stake)}>{buttonText}  <Image src={'/wallet.svg'} width={30} height={30} alt='no-img' className='wallet-img'/></button>
         <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} onMouseEnter={showMenu} onMouseLeave={hideMenu}>
             <div className="options">
                 <div className="option">

@@ -6,20 +6,28 @@ import Delegation from "./delagation";
 import Fts from "./fts";
 import Home from "./home";
 import Nfts from "./nfts";
+import SearchBar from "./searchbar";
 import Summary from "./summary";
 import Token from "./token";
 import Transaction from "./transactions";
+import WalletButton from "./walletButton";
 
 
 function WalletData (props) {
-  const [isLoading, setisLoading] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [loadingInfo, setLoadingInfo] = useState();
+
   const [walletData, setWalletData] = useState({stake: null, tokenNumber: 0, projectNumber: 0, nfts: [], fts: []});
   const [stakeAddress, setStakeAddress] = useState(null);
   const [loadedTokens, setLoadedTokens] = useState('-');
+  const [currency, setCurrency] = useState({name: 'USD', value: {price : 1, change24hr: 0}, symbol: '$'});
+  const [prices, setPrices] = useState({usd: 1, gbp: 1, btc: 1, eth:1, eur: 1});
+
+
 
   const router = useRouter();
+
+  useEffect(() => {
+    setCurrency({name: 'USD', value: prices.usd, symbol: '$'});
+  },[prices]);
 
   useEffect(() => {
     const getTokens = async () =>{
@@ -110,6 +118,7 @@ function WalletData (props) {
 
       }catch(error){
         console.log(error);
+        deleteLocalStorage(stake);
         return null;
       }
     }
@@ -274,14 +283,6 @@ function WalletData (props) {
     return {nfts : _nfts, fts : _fts};
   }
 
-  // displays while token data is being fetched
-  if(isLoading == 'fetching'){
-    return <div>
-      <div className="loading-symbol" style={{ visibility: isVisible ? 'visible' : 'hidden' }}></div>
-      <label className="loading-info">{loadingInfo}</label>
-    </div>
-  }
-
   const scrollToSection = (id) => {
     
     const element = document.getElementById(id);
@@ -294,8 +295,49 @@ function WalletData (props) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  function deleteLocalStorage(){
+    localStorage.removeItem(props.stake);
+    window.location.reload();
+    router.reload();
+  }
+
+  function setPriceData (data){
+    console.log(data);
+    setPrices(data);
+  }
+
+  function changeCurrency(){
+    if(prices == null){
+      return;
+    }
+    else{
+      if(currency.name == 'ADA'){
+        setCurrency({name:'USD', value: prices.usd, symbol: '$'});
+      }
+      else if (currency.name == 'USD'){
+        setCurrency({name:'EUR', value:  prices.eur, symbol: '€'});
+      }
+      else if(currency.name == 'EUR'){
+        setCurrency({name:'BTC', value:  prices.btc, symbol: '฿'});
+      }
+      else if(currency.name == 'BTC'){
+        setCurrency({name:'ETH', value: prices.eth, symbol: 'Ξ'});
+      }
+      else{
+        setCurrency({name:'ADA', value: {price: 1, change24hr: 0}, symbol: '₳'});
+    }
+  }
+  }
+
   return(
     <div className="wallet-data">
+        <header className="home-header">
+          <h1>Cardano Explorer</h1>
+          <SearchBar/>
+          <button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
+          <button className="currency-button" onClick={() => changeCurrency()}>Currency: {currency.name}</button>
+          <WalletButton/>
+      </header>
       <div className="wallet-data-header">
         <span className="wallet-button" id='h' onClick={() => scrollToTop()}>
           <span><Image src={'/home.png'} height={50} width={50} alt='home'/></span>
@@ -313,36 +355,22 @@ function WalletData (props) {
           <span><Image src={'/cardanocoin.png'} height={50} width={50} alt='coin'/></span>
           <span className="tooltip">Coins</span>
         </span>
-        <span className="wallet-button" id='del' onClick={() => scrollToSection('delegation')}>
-          <span>Pool</span>
-          <span className="tooltip">Delegation</span>
-        </span>
-        <span className="wallet-button" id='t' onClick={() => scrollToSection('txs')}>
-          <span><Image src={'/txs.png'} height={50} width={50} alt='txs'/></span>
-          <span className="tooltip">Transactions</span>
-        </span>
       </div>
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
-          <Home data={walletData}/>
+          <Home data={walletData} prices = {setPriceData} currency = {currency}/>
           <div style={{fontSize: 'xx-large', color:"white"}}>{loadedTokens}</div>
         </section>
         {walletData.stake && (
           <div>
             <section className="wallet-data-content-item" id="wallet" >
-              <Summary data={walletData} />
+              <Summary data={walletData} currency = {currency}/>
             </section>
             <section className="wallet-data-content-item" id="nfts" >
               <Nfts data={walletData} />
             </section>
             <section className="wallet-data-content-item" id="fts">
-              <Fts data={walletData} />
-            </section>
-            <section className="wallet-data-content-item" id="delegation">
-              <Delegation data={walletData} />
-            </section>
-            <section className="wallet-data-content-item" id="txs">
-              <Transaction data={walletData}/>
+              <Fts data={walletData} currency = {currency}/>
             </section>
           </div>)}
       </div>

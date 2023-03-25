@@ -1,12 +1,13 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #c19cee;
-    --second-color:#283cc3;
-    --third-color: #f2f2f4;
+    --main-color: #bcbcbc;
+    --second-color:#454444;
+    --third-color: #e4ff77;
     --fourth-color: #f3f3f38c;
     --fifth-color: rgba(255, 255, 255, 0.178);
     --sixth-color: rgba(0, 0, 0, 0.20);
     --main-font: 'Courier New', sans-serif;
+    width: 100vw;
     
 }
 
@@ -14,8 +15,14 @@ body {
     font-family: var(--main-font);
     color: black;
     background-color: var(--second-color);
-
+    margin: 0;
+    padding: 0;
 }
+
+::-webkit-scrollbar {
+    display: none;
+  }
+  
 
 .home{
     margin-left: 30px;
@@ -29,15 +36,26 @@ h1{
 
 .home-header{
     display: flex;
-    margin-top: 5px;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 10px;
+    height: 7vh;
+    padding-right: 10px;
+    position: fixed;
+    background-color: var(--fifth-color);
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.627);
+    z-index: 999;
 }
 .home-body{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin-left: 100px;
     font-weight: bold;
+    margin-top: 9rem;
     color:white;
 
 }
@@ -45,11 +63,19 @@ h1{
 .home-body-header{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
+
+    font-style: var(--main-font);
     align-items: center;
     width:100%;
 
     
+}
+
+.arrow{
+    padding: 10px;
+
+
 }
 
 .home-body-wallets{
@@ -59,7 +85,7 @@ h1{
     align-items: center;
     height: 10vh;
     width: 80vw;
-    margin-top: 10px;
+    margin-top: 70px;
     margin-left: 170px;
 }
 
@@ -86,16 +112,37 @@ h1{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 2px solid white;
-    color:rgb(0, 0, 0);
-    border-radius: 10px;
-    background-color: rgb(138, 214, 100);
-    font-size: large;
+    background-color: var(--main-color);
+    color: var(--second-color);
+    font-family: var(--main-font);
     font-weight: bold;
-    height: 100%;
-    font-style: var(--main-font);
+    font-size:25px;
+    border: 2px solid white;
+    padding: 2px;
+    border-radius: 50%;
+    height: 60%;
+    margin: 19px 0;
+
+}
+
+.currency-button{
+    height: 50%;
+    text-align: center;
+    font-size: 20px;
+    font-family: var(--main-font);
+    margin-top:20px;
+    background-color: var(--main-color);
+    color: var(--third-color);
+    border: 2px solid white;
     padding: 10px;
-    margin-right: 10px;
+    font-weight: bold;
+    border-radius: 20px;
+    color: var(--second-color);
+}
+.currency-button:hover{
+    background-color: var(--third-color);
+    color: var(--second-color);
+    cursor: pointer;
 }
 .refresh-button:hover{
     background-color: var(--third-color);
@@ -103,7 +150,7 @@ h1{
     cursor: pointer;
 }
 .title{
-
+    margin-top:90px;
 }
 
 .summary{
@@ -171,8 +218,8 @@ h1{
 .wallet-button:hover {
     background-color: var(--third-color);
 }
-
-.wallet-data{
+.wallet-img{
+    padding-left: 2px;
 }
  .wallet-data-content{
     display: flex;
@@ -180,15 +227,19 @@ h1{
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    width: 100%;
+
+
 
 }
 .wallet-data-content-item{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     min-height: 100vh;
     justify-content: space-between;
+    width: 100%;
+
 
 
 }
@@ -248,14 +299,10 @@ p{
     background-color: #ccffccf5; /* light green */
   }
   
-  #t{
-    background-color: #ccccffc4; /* light blue */
-  }
-  
 
 #h{
-background-color: var(--second-color);
-color: var(--main-color);/* light green */
+    background-color: var(--second-color);
+    color: var(--main-color);/* light green */
 }
 #h:hover{
 background-color: var(--fifth-color);
@@ -336,19 +383,11 @@ color: var(--main-color);/* light green */
   }
 
 
-.grid-nft{
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    
-    align-items: center;
-    margin-left: 98px;
-    margin-right: 30px;
-    
-    padding: 10px;
-    
-
-}
+  .grid-nft {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    padding: 1rem;
+  }
 
 .back-button{
     display: flex;
@@ -384,26 +423,100 @@ color: var(--main-color);/* light green */
     margin-top: 10px;
 }
 .grid-item{
-    padding: 10px
+    padding: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    margin: 10px;
+    background-color: var(--main-color);
+}
+
+.grid-item-collection{
+    padding: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    margin: 10px;
+    background-color: var(--second-color);
+
+
+}
+
+
+.grid-item:hover{
+    background-color:var(--fourth-color);
+    cursor: pointer;
+    transition: transform 0.3s;
+    transform: scale(1.07);
+    
+}
+    
+.grid-item-collection:hover{
+    background-color:var(--fourth-color);
+    cursor: pointer;
+    transition: transform 0.3s;
+    transform: scale(1.05);
 }
 
 
 .grid-ft {
-    align-items: center;
-    border-collapse: collapse;
-    width: 85vw;
-    margin-left: 40px;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    background-color: var(--main-color);
+    border: 5px solid var(--second-color);
+    border-radius: 10px;
+    width: 100%;
 
-}
+
+  }
+  
+  .grid-ft tr {
+    display: contents;
+  }
+  
+  .grid-ft td {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    border: 2px solid white;
+    border-collapse: collapse;
+    padding: 1rem;
+  }
+
+
+  .grid-ft-noprice{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: var(--main-color);
+    border: 5px solid var(--second-color);
+    border-radius: 10px;
+    width: 50%;
+
+
+  }
+
+  .grid-ft-noprice tr {
+    display: contents;
+  }
+  
+  .grid-ft-noprice td {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    border: 2px solid white;
+    border-collapse: collapse;
+    padding: 1rem;
+
+  }
 .grid-item-ft{
     font-weight: bold;
     font-size: x-large;
     text-align: center ;
 
-}
-td{
-    padding: 10px;
-    text-align: center;
 }
 
 .grid-tx {
@@ -417,12 +530,6 @@ td{
 
 }
 
-.nfts{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
 .nft-nav{
     display: flex;
@@ -432,7 +539,9 @@ td{
 
 }
 
-
+.nfts{
+    width: 75%;
+}
 
 
 .main-label{
@@ -444,23 +553,38 @@ td{
 }
 
 .searchForm{
-
     display: flex;
-    width: 100%;
     align-items: center;
     justify-content: center;
-    
+    width: 40%;
+
 }
 
 .search-input{
     font-family: var(--main-font);
+    width: 100%;
 
     background-color: var(--main-color);
     color:var(--second-color);
-    width: 50%;
-    height: 55%;
 
-    width: 80%;
+
+
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid var(--third-color);
+    border-radius: 4px;
+}
+
+.search-nft{
+    font-family: var(--main-font);
+    width: 30%;
+
+    background-color: var(--main-color);
+    color:var(--second-color);
+
+
+
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
@@ -491,30 +615,24 @@ td{
 
 
 .connect-wallet{
-
 }
 
 
 .connect-wallet-button{
-    font-family: var(--main-font);
-    border-style: solid;    
-    border-radius: 20px;
-    border-style: solid;
-    border-color: var(--third-color);
-    text-align: center;
-    cursor: pointer;
-    background-color:var(--main-color);
-    color:var(--second-color);
-    padding: 10px 10px 10px 10px;
-    margin: 0px 10px 10px 10px;
-    font-size: larger;
-    font-weight: bold;
-    width: 170px;
-    height: 60px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--main-color);
+    color: var(--second-color);
+    font-family: var(--main-font);
+    font-weight: bold;
+    font-size:25px;
+    border: 2px solid white;
+    padding: 10x;
+    border-radius: 20px;
+    height: 60%;
+    margin: 19px 0;
+    margin-right: 20px;
 }
 
 .color-picker{
@@ -621,79 +739,92 @@ td{
     color:white;
 }
 
-.price-nav{
-    padding: 10px;
-    margin-top: 5px;
-    color:black;
-    display: flex; 
-    align-items: center;
-}
-.cardano-prices{
+.price-nav {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    width: 70vw;
+  }
+  
+  .crypto-prices {
+    border-collapse: collapse;
+    margin-right: 2rem;
     width: 50%;
-    float: right;
+    height: 100%;
 
-}
+  }
 
-.crypto-prices{
+
+  .crypto-prices th {
     background-color: var(--fifth-color);
-    padding: 10px;
-    margin: 10px;
-    
-    width: 43vw;
-    height: 30vh;
+    color: var(--main-color);
+  }
+  
+  .crypto-prices tbody tr:nth-child(even) {
+    background-color: var(--second-color);
+  }
+  
+  .crypto-prices tbody tr:hover {
+    background-color: var(--fifth-color);
+  }
+  
+  .crypto-prices,
+  .crypto-prices td {
+    padding: 1rem;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .crypto-prices th{
+    padding: 1rem;
+    text-align: center;
+    font-size: 25px;
+  }
+
+  
+  .titles-price{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+  }
+  .ada{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    float: left;
-    border: 2px solid white;
-    border-radius: 10px;
-}
-.out-price{
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.header-row{
-
-}
-.price-nav-header{
-
-}
-.price-nav-header-title{
-    font-size: 20px;
+  }
+  .price-label {
+    font-size: 1.5rem;
     font-weight: bold;
-    margin: 10px 10px 10px 10px;
-    color:var(--third-color);
+    white-space: nowrap;
+  }
+  
+  .currency {
+    font-size: 1.7rem;
+    color: #999;
+    margin-bottom: 0.5rem;
+  }
+  
+  .out-price {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .out-price:last-child {
+    border-bottom: none;
+  }
+  
+
+.value{
+    display: flex;
+    flex-direction: row;
+}
+
+.currency{
+    color:gold;
 }
 
 
-.price-nav-inner{
-    display: flex; 
-    justify-content:center;
-    align-items: center;
-}
 
-.price-buttons{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-left: auto;
-}
-
-.price-label {
-    display: inline-block;
-    font-weight: bolder;
-    font-size: x-large;
-    color: var(--third-color);
-    padding: 10px;
-}
 
 
 .setting-button {
@@ -776,54 +907,7 @@ td{
 }
   
 
-.value{
-    display: flex;
-    padding: 0px 10px 0px 10px;
-    color:var(--third-color);
-    justify-content: center;
-    align-items: center;
-}
 
-.currency{
-    padding: 0px 10px 0px 10px;
-    color:gold;
-}
-
-
-
-.grid-item-collection{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px 10px 10px 10px;
-    margin: 10px 10px 10px 10px;
-    text-align: center;
-    align-items: center;
-    color: var(--third-color);
-    border-style: solid;
-    border-width: 2px;
-    border-color:  var(--main-color);
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px 2px var(--main-color);
-    width: 300px;
-    height: 370px;
-    background-color: var(--sixth-color);
-}
-
-
-.grid-item:hover{
-    background-color:var(--fourth-color);
-    cursor: pointer;
-    transition: transform 0.3s;
-    transform: scale(1.05);
-}
-    
-.grid-item-collection:hover{
-    background-color:var(--fourth-color);
-    cursor: pointer;
-    transition: transform 0.3s;
-    transform: scale(1.05);
-}
 
 .policy-button{
     background-color:inherit;

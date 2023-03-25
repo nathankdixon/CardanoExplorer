@@ -1,6 +1,8 @@
 import { useEffect, useState} from "react";
+import SearchBar from "./searchbar";
 import Token from "./token";
 import TokenDisplay from "./tokenDisplay";
+import WalletButton from "./walletButton";
 
 // this function fetches token data from blockfrost and market data from opencnft
 // data is then passed to TokenDisplay to be displayed
@@ -150,6 +152,13 @@ function AssetData (props) {
     }
 
     return(
-        <TokenDisplay data = {data} stake={props.stake}/>)
+      <div>
+        <header className="home-header">
+          <h1>Cardano Explorer</h1>
+          <SearchBar/>
+          <button className="currency-button">Currency: USD</button>
+          <WalletButton/>
+        </header>
+      </div>);
 }
 export default AssetData;

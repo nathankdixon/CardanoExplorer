@@ -86,6 +86,7 @@ export default class Token {
     this.ipfs = null;
     this.prices = null;
     this.image = null;
+    this.decoded_name =  Buffer.from(asset_name, 'hex').toString();
   }
 
   async fetchTokenData() {
