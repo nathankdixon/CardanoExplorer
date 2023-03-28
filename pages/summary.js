@@ -147,7 +147,7 @@ export default function Summary(props){
             </table>
             <div className="preview-img-item" >Largest NFT Collection<Image className='preview-img' src={topToken.ipfs} width={200} height={200} alt={topToken.asset_name}/>{topToken.onchain_metadata.name}</div>
             <div className="preview-img-item">Value: {topValue} {currency.symbol}</div>
-            <div className="preview-img-item">Most Valuable Coin <Image className='preview-img' src={topCoin.ipfs} width={200} height={200} alt={topCoin.asset_name}/>{topCoin.metadata.name} </div>
+            <div className="preview-img-item">Most Valuable Coin <Image className='preview-img' src={topCoin.ipfs} width={200} height={200} alt={topCoin.asset_name}/> </div>
         </div>
     )
 }

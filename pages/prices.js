@@ -51,26 +51,28 @@ export default function Prices (props) {
               );
           
               if (!response.ok) throw new Error('Failed to fetch data');
+                else{
+                  const data = await response.json();
           
-              const data = await response.json();
-          
-              const getColor = (priceChange) =>
-                priceChange > 0 ? 'limegreen' : priceChange < 0 ? 'red' : 'white';
-          
-              const prices = data.map((coin) => {
-                const priceChange = coin.price_change_percentage_24h.toFixed(2);
-                const formattedPriceChange =
-                  priceChange > 0 ? `+${priceChange}` : `${priceChange}`;
-          
-                return {
-                  name: coin.name,
-                  price: coin.current_price,
-                  priceChange: formattedPriceChange,
-                  color: getColor(priceChange),
-                };
-              });
-          
-              return prices;
+                  const getColor = (priceChange) =>
+                    priceChange > 0 ? 'limegreen' : priceChange < 0 ? 'red' : 'white';
+              
+                  const prices = data.map((coin) => {
+                    const priceChange = coin.price_change_percentage_24h.toFixed(2);
+                    const formattedPriceChange =
+                      priceChange > 0 ? `+${priceChange}` : `${priceChange}`;
+              
+                    return {
+                      name: coin.name,
+                      price: coin.current_price,
+                      priceChange: formattedPriceChange,
+                      color: getColor(priceChange),
+                    };
+                  });
+              
+                  return prices;
+                }
+
             } catch (error) {
               console.error(error);
               return null;
@@ -81,29 +83,31 @@ export default function Prices (props) {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd%2Cgbp%2Cbtc%2Ceth%2Ceur&include_24hr_change=true');
         if (!response.ok) throw new Error('Failed to fetch data');
+        else{
+          const data = await response.json();
     
-        const data = await response.json();
-    
-        const currencies = ['usd', 'gbp', 'btc', 'eth', 'eur'];
-        const priceColors = {};
-        const prices = {};
-    
-        currencies.forEach((currency) => {
-        const price = data.cardano[currency];
-        const change24hrRaw = data.cardano[`${currency}_24h_change`].toFixed(2);
-        const change24hr = change24hrRaw > 0 ? `+${change24hrRaw}` : `${change24hrRaw}`;
-    
-        prices[currency] = {price, change24hr};
-    
-        priceColors[currency] = change24hrRaw > 0
-            ? 'limegreen'
-            : change24hrRaw < 0
-            ? 'red'
-            : 'white';
-        });
-    
-        setPriceColors(priceColors);
-        return prices;
+          const currencies = ['usd', 'gbp', 'btc', 'eth', 'eur'];
+          const priceColors = {};
+          const prices = {};
+      
+          currencies.forEach((currency) => {
+          const price = data.cardano[currency];
+          const change24hrRaw = data.cardano[`${currency}_24h_change`].toFixed(2);
+          const change24hr = change24hrRaw > 0 ? `+${change24hrRaw}` : `${change24hrRaw}`;
+      
+          prices[currency] = {price, change24hr};
+      
+          priceColors[currency] = change24hrRaw > 0
+              ? 'limegreen'
+              : change24hrRaw < 0
+              ? 'red'
+              : 'white';
+          });
+      
+          setPriceColors(priceColors);
+          return prices;
+        }
+
     } catch (error) {
         console.error(error);
         return null;

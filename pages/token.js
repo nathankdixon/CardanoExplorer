@@ -1,20 +1,4 @@
-const blockfrostFetch = async (endpoint) => {
-  const baseURL = 'https://cardano-mainnet.blockfrost.io/api/v0/';
-  const projectId = 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh';
-  const response = await fetch(baseURL + endpoint, {
-    headers: {
-      project_id: projectId,
-      'cache-control': 'max-age=31536000',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch data from Blockfrost API: ${response.statusText}`);
-  }
-  return await response.json();
-};
-
-    // if metadata has been fetched
+// if metadata has been fetched
     // find the ipfs link under 'image' metadata tag and store it
 const getIpfsFromMetadata = (metadata) =>{
       const keys = Object.keys(metadata);
@@ -28,7 +12,7 @@ const getIpfsFromMetadata = (metadata) =>{
         }
         
         // fungible tokens will have a 'logo' instead of 'image' tag
-        if(keys[i] == "logo"){
+        else if(keys[i] == "logo"){
           ipfs = "data:image/png;base64,"+values[i]
         }
       }
@@ -67,7 +51,7 @@ const getIpfsFromMetadata = (metadata) =>{
         }
 
       }catch{
-        return null;
+        return '/black.jpeg';
       }
       return ipfs;
     
@@ -83,33 +67,50 @@ export default class Token {
     this.onchain_metadata = null;
     this.metadata = null;
     this.txs = null;
-    this.ipfs = null;
+    this.ipfs = '/black.jpeg';
     this.prices = null;
     this.image = null;
     this.decoded_name =  Buffer.from(asset_name, 'hex').toString();
   }
 
-  async fetchTokenData() {
+  async fetchTokenMetadata() {
     try {
-      const assetId = this.policy_id + this.asset_name;
-      const [metadataRes, txsRes] = await Promise.all([
-        blockfrostFetch(`assets/${assetId}`),
-        blockfrostFetch(`assets/${assetId}/transactions`),
-      ]);
-
-      this.onchain_metadata = metadataRes.onchain_metadata || null;
-      this.metadata = metadataRes.metadata || null;
-      this.txs = txsRes || null;
-
-      this.ipfs = getIpfsFromMetadata(this.onchain_metadata || {});
-
-      if(this.ipfs == "" || this.ipfs == null){
-        this.ipfs = getIpfsFromMetadata(this.metadata || {});
+      let req = await fetch('https://api.koios.rest/api/v0/asset_info?_asset_policy=' + this.policy_id + '&_asset_name=' + this.asset_name);
+      let res = await req.json();
+      let decod = Buffer.from(this.asset_name, 'hex').toString();
+      try {
+        if (res[0].minting_tx_metadata && res[0].minting_tx_metadata[721]) {
+          if (res[0].minting_tx_metadata[721][this.policy_id][decod]) {
+            this.onchain_metadata = res[0].minting_tx_metadata[721][this.policy_id][decod];
+            this.ipfs = getIpfsFromMetadata(res[0].minting_tx_metadata[721][this.policy_id][decod]);
+  
+            if (this.ipfs == '/black.jpeg') {
+              this.ipfs = getIpfsFromMetadata(res[0].token_registry_metadata);
+            }
+          } else {
+            this.onchain_metadata = res[0].minting_tx_metadata;
+          }
+        }
+        if (res[0].token_registry_metadata) {
+          this.metadata = res[0].token_registry_metadata;
+          let ipfs = getIpfsFromMetadata(res[0].token_registry_metadata);
+          if(ipfs != ''){
+            this.ipfs = ipfs;
+          }
+          else{
+          }
+        } else if (!res[0].minting_tx_metadata && !res[0].minting_tx_metadata) {
+          console.log("no metadata found");
+        }
+      } catch (error) {
+        console.error(error, res);
       }
-    } catch{
+    } catch (error) {
+      console.error("Error in fetchTokenMetadata:", error);
     }
   }
   
+
 
   async getPrice() {
     if (this.quantity === 1) {
@@ -127,6 +128,8 @@ export default class Token {
       if (!foundGeckoCoin) {
         return;
       }
+
+      console.log(foundGeckoCoin.id);
     
       const req = await fetch(`https://api.coingecko.com/api/v3/coins/${foundGeckoCoin.id}`);
       const res = await req.json();

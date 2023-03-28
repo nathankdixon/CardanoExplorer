@@ -1,8 +1,8 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #bcbcbc;
-    --second-color:#454444;
-    --third-color: #e4ff77;
+    --main-color: #ea52fb;
+    --second-color:#02179c;
+    --third-color: #61e584;
     --fourth-color: #f3f3f38c;
     --fifth-color: rgba(255, 255, 255, 0.178);
     --sixth-color: rgba(0, 0, 0, 0.20);
@@ -13,7 +13,7 @@
 
 body {
     font-family: var(--main-font);
-    color: black;
+    color: rgb(255, 255, 255);
     background-color: var(--second-color);
     margin: 0;
     padding: 0;
@@ -32,6 +32,18 @@ h1{
     font-weight: bold;
     color: var(--main-color);
     font-family: var(--main-font);
+}
+h2{
+    color: white;
+    margin: 0;
+    padding: 2px;
+}
+
+h3{
+    color: white;
+    margin: 0;
+    padding: 2px;
+
 }
 
 .home-header{
@@ -267,7 +279,7 @@ h1{
     transform: scale(1.2);
 }
 p{
-    color: var(--second-color);
+    color: white;
 
 }
 
@@ -385,7 +397,7 @@ color: var(--main-color);/* light green */
 
   .grid-nft {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     padding: 1rem;
   }
 
@@ -462,74 +474,36 @@ color: var(--main-color);/* light green */
     transform: scale(1.05);
 }
 
+.fts{
+    font-size: 20px;
+    width: 70vw;
+ 
+}
 
-.grid-ft {
+.grid-ft{
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    background-color: var(--main-color);
-    border: 5px solid var(--second-color);
-    border-radius: 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* three columns each taking up equal space */
+    grid-gap: 10px;
+    color: black;
     width: 100%;
 
-
-  }
-  
-  .grid-ft tr {
-    display: contents;
-  }
-  
-  .grid-ft td {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    border: 2px solid white;
-    border-collapse: collapse;
-    padding: 1rem;
-  }
-
-
-  .grid-ft-noprice{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    background-color: var(--main-color);
-    border: 5px solid var(--second-color);
-    border-radius: 10px;
-    width: 50%;
-
-
-  }
-
-  .grid-ft-noprice tr {
-    display: contents;
-  }
-  
-  .grid-ft-noprice td {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    border: 2px solid white;
-    border-collapse: collapse;
-    padding: 1rem;
-
-  }
-.grid-item-ft{
-    font-weight: bold;
-    font-size: x-large;
-    text-align: center ;
-
 }
 
-.grid-tx {
+.grid-ft-noprice{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* three columns each taking up equal space */
+    grid-gap: 10px;
+    color: black;
+    width: 100%;
+
+    
+}
+  
+
+.grid-ft-item{
+    padding: 5px;
     text-align: center;
-    border-collapse: collapse;
-
 }
-.grid-item-tx{
-    font-size: large;
-    text-align: center ;
-
-}
-
 
 .nft-nav{
     display: flex;
@@ -541,6 +515,7 @@ color: var(--main-color);/* light green */
 
 .nfts{
     width: 75%;
+    margin-top: 70px;
 }
 
 
@@ -823,20 +798,17 @@ color: var(--main-color);/* light green */
     color:gold;
 }
 
-
-
-
-
 .setting-button {
     font-family: var(--main-font);
     border: var(--third-color) 1px solid;
     display: inline-block;
     cursor: pointer;
-    font-weight: bolder;
-    font-size: 15px;
+    font-weight: bold;
+    font-size: 17px;
     color:var(--second-color);
     background-color:var(--main-color);
     height: 50px;
+    border-radius: 10px;
 
 }
 
@@ -931,9 +903,54 @@ color: var(--main-color);/* light green */
 .policy-search{
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.policy-data{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    flex-direction: column;
+    background-color: var(--sixth-color);
+    padding: 10px;
+    margin: 100px 100px 10px 100px;
+    border: 5px solid white;
+    border-radius: 10px;
+}
+.policy-item-data{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
 }
 
+.policy-item{
+    padding: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: var(--fifth-color);
+    border: 2px solid white;
+    border-radius: 10px;
+    margin: 5px
+}
 
+.grid-item-policy{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid var(--main-color);
+    border-radius: 10px;
+    background-color: var(--fifth-color);
+}
+
+.grid-nft-policy{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+}
 
 
 .grid-item-info{
@@ -961,7 +978,7 @@ color: var(--main-color);/* light green */
 }
 
 tr:hover {
-    background-color: var(--fourth-color);
+    background-color: var(--sixth-color);
     cursor:pointer;
 }
 
@@ -1080,7 +1097,7 @@ tr:hover {
     color:var(--main-color);
     border: var(--third-color) 2px solid;
     border-radius: 20px;
-    margin: 10px 10px 10px 10px;
+    margin: 100px 10px 10px 10px;
     padding: 10px 10px 10px 10px;
 }
 
@@ -1090,7 +1107,7 @@ tr:hover {
 
 .policy-section-item{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 
 }
@@ -1198,14 +1215,72 @@ label{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 80px;
 
 }
 
+.asset-display{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px 10px 10px;
+    margin-top: 60px;
+}
 
+.asset-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
+}
+.asset-img{
+    width: 35vw;
+    height: 100%;
+    object-fit: cover;
+    border: var(--fifth-color) 5px solid;
+    box-shadow: 10px 10px 5px var(--sixth-color);
 
+}
 
+.asset-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px 10px 10px;
+    font-size: x-large;
+}
 
+.asset-item-data{
+    background-color: var(--sixth-color);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
+    border: var(--fifth-color) 2px solid;
+    box-shadow: 10px 10px 5px var(--fifth-color);
 
+    text-align: center;
 
-  
+}
+a,
+a:visited,
+a:active,
+a:hover {
+  color: rgb(113, 210, 255);
+  text-decoration: underline;
+
+}
+
+td{
+    padding: 5px;
+}
+.key{
+    color:var(--main-color);
+    font-weight: bold;
+}

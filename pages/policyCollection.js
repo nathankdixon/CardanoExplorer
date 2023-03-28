@@ -14,9 +14,27 @@ export default function PolicyCollection(props){
     const [total, setTotal] = useState(0);
     const [minIndex, setMinIndex] = useState(0)
     const [maxIndex, setMaxIndex] = useState(20);
-
+    const [itemPage, setItemPage] = useState(10);
     const router = useRouter();
 
+    useEffect(() => {
+      async function getAssetPageFromBlockfrost(){
+          if(props == null || props.policy == null){
+              // do nothing
+          }
+          else{
+              let policy = props.policy;
+
+              //setTokens(assets);
+
+              let allAssets = await loadAllTokenData(policy);
+              console.log(allAssets);
+              setAssets(allAssets);
+              setTotal(allAssets.length);
+          }
+      }
+      getAssetPageFromBlockfrost()
+  }, [props])
 
     useEffect(() => {
         async function func(){
@@ -39,15 +57,11 @@ export default function PolicyCollection(props){
                     if((assetId).includes(searchQuery) || decodedAssetL.includes(searchQuery) || assetNameL.includes(searchQuery)){
                         matches.push((element));
                     }
-    
                 }
                 // display matches
-                if(matches.length != 0 && matches.length >20){
+                if(matches.length != 0){
                     setTotal(matches.length);
                     setDisplayedAssets(<div className="value">{matches.length} matches</div>)
-
-                }
-                else if(matches.length <20){
                     let display = []
                     setTotal(matches.length);
                     for(const element of matches){
@@ -80,7 +94,6 @@ export default function PolicyCollection(props){
      
                   </div>);
                     }
-
                     setDisplayedAssets(display);
 
                 }
@@ -98,80 +111,6 @@ export default function PolicyCollection(props){
         }
         func();
     }, [searchQuery])
-
-
-    useEffect(() => {
-        async function getAssetPageFromBlockfrost(){
-            if(props == null || props.policy == null){
-                // do nothing
-            }
-            else{
-                let policy = props.policy;
-
-                //setTokens(assets);
-
-                let allAssets = await loadAllTokenData(policy);
-
-                setAssets(allAssets);
-                setTotal(allAssets.length);
-            }
-        }
-        getAssetPageFromBlockfrost()
-    }, [props])
-
-
-    useEffect(() => {
-        async function setDisplay(){
-            if(assets != null){
-
-                let display = [];
-                for(let i = minIndex; i <maxIndex; i++){
-
-                    let assetName = (assets[i].asset).substring(56);
-                    let policy = (assets[i].asset).substring(0,56);
-                    let decodedAsset = Buffer.from(assetName, 'hex').toString();
-
-
-                    let token = new Token(assetName, policy, assets[i].quantity);
-                    await token.fetchTokenData();
-
-
-                    let ipfs = '/black.jpeg';
-
-                    if(token.ipfs != null){
-                      ipfs = token.ipfs;
-                    }
-
-                    if(assetName != ''){
-                      display.push(
-                        <div key = {token.asset_name + 'poly'} className = "grid-item" onClick={() => router.push('/'+token.policy_id+token.asset_name+'?stake='+props.stake)}>
-                            <Image className="grid-img" src= {ipfs}
-                            alt = 'failed to load image' width={270} height={270}/>
-                            <div className="grid-item-info">
-                            <div className="grid-item-text" style={{fontWeight: "bolder"}}>
-                                {decodedAsset}
-                             </div>
-                            <div className="grid-item-text">
-                              <button
-                                className="policy-button"
-                                onClick={(e) => copyText(e, token.asset_name)}
-                              >
-                                Copy
-                              </button>
-                              <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+assets[i].asset}>JPG.store</Link>
-            
-                            </div>
-                        </div>
-                      </div>);
-                    }
-
-
-                }
-                setDisplayedAssets(display);
-            }
-        }
-        setDisplay();
-    }, [assets, minIndex, maxIndex])
 
     async function loadAllTokenData(policy) {
         let page = 1;
@@ -197,8 +136,6 @@ export default function PolicyCollection(props){
         return allData;
       }
       
-
-      
     // fetch token metadata from blockfrost
     async function loadTokenData(policy, page){
         try{
@@ -214,22 +151,10 @@ export default function PolicyCollection(props){
         }
     }
 
-    function nextPage(){
-        let mindex = minIndex +20;
-        let maxdex = maxIndex +20;
-
-        setMinIndex(mindex);
-        setMaxIndex(maxdex);
-    }
-      
-
       return (
         <div>
-          <label>Collection</label><label>Showing results: {maxIndex} of {total}</label>
-          <div className="policy-search">
-            <button className="setting-button" onClick={() => nextPage()}>
-              Next
-            </button>
+          <h2>Collection</h2>
+          <nav className="policy-search">
             <form className="searchForm">
               <input
                 type="text"
@@ -239,8 +164,7 @@ export default function PolicyCollection(props){
                 onChange={(event) => setSearchQuery((event.target.value).toLowerCase())}
               />
             </form>
-          </div>
-      
+          </nav>
           <div className="grid-nft">{displayedAssets}</div>
         </div>
       );

@@ -149,7 +149,12 @@ export default function Nfts (props){
       for(const element of props.data.nfts){
         let policy = element;
         if(policy[0].ipfs == "" || policy[0].ipfs == null){
-          singleGrid.push(<div className="grid-item">no image</div>)
+          singleGrid.push(          <Image
+            key={element.policy_id + "-noimg-"}
+            width={200}
+            height={200}
+            className="grid-item"
+            src={"/black.jpeg"}/>)
         }
         else{
           if(policy.length > 1){
@@ -171,10 +176,11 @@ export default function Nfts (props){
       setInfo("Showing Policy: " +policy[0].policy_id +" with " +policy.length +" NFTs");
       setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
 
-      let grid = [];
+      let collectionGrid = [];
+      let singleGrid = [];
       for (const [index, element] of policy.entries()) {
         if (element.ipfs == null) {
-          grid.push(
+          singleGrid.push(
           <Image
             key={element.policy_id + "-noimg-" + index}
             width={200}
@@ -183,7 +189,7 @@ export default function Nfts (props){
             src={"/black.jpeg"}/>
           );
         } else {
-            grid.push(
+            singleGrid.push(
               <Image
               className="grid-item"
               key={element.asset_name}
@@ -197,7 +203,7 @@ export default function Nfts (props){
           }
       }
       setShowing("Back");
-      setDisplay(grid);
+      setDisplay({ collections: collectionGrid, singles: singleGrid });
       }
 
     function copyText(event, text) {

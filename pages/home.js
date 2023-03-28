@@ -2,7 +2,6 @@ import { Lucid } from "lucid-cardano";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react";
-import Blocks from "./blocks";
 import Prices from "./prices";
 import SearchBar from "./searchbar";
 import WalletButton from "./walletButton";

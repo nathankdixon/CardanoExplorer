@@ -2,14 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Delegation from "./delagation";
 import Fts from "./fts";
 import Home from "./home";
 import Nfts from "./nfts";
 import SearchBar from "./searchbar";
 import Summary from "./summary";
 import Token from "./token";
-import Transaction from "./transactions";
 import WalletButton from "./walletButton";
 
 
@@ -30,44 +28,34 @@ function WalletData (props) {
   },[prices]);
 
   useEffect(() => {
-    const getTokens = async () =>{
-
-      if(props.stake != null){
-  
-          // props passed from [stake].js
-          let stakeAddress = props.stake;
-
-          if(stakeAddress[0] == ('$')){
-            let stake = await getAddressFromHandle(stakeAddress.slice(1));
-            stakeAddress = stake;
-          }
-          setStakeAddress(stakeAddress);
-
-      }
+    if(props.stake != null){
+      setStakeAddress(props.stake);
     }
-    getTokens();
   }, [props.stake]);
 
   useEffect(() => {
-    const getWalletData = async () => {
-      if(stakeAddress != null){
+    async function getWalletData(){
+      if(stakeAddress){
         let walletData = '';
-
-        if(localStorage.getItem(stakeAddress) != null){
-          walletData = JSON.parse(localStorage.getItem(stakeAddress));
+        try{
+          if(localStorage.getItem(stakeAddress) != null){
+            walletData = JSON.parse(localStorage.getItem(stakeAddress));
+          }
+          else{
+            walletData = await createWalletDataFromStake(props.stake);
+            localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+          }
         }
-        else{
-          walletData = await createWalletDataFromStake(stakeAddress);
-           localStorage.setItem(stakeAddress, JSON.stringify(walletData));
-
+        catch(err){
+          console.log(err);
         }
+        console.log(walletData);
         setWalletData(walletData);
         setLoadedTokens('scroll to view wallet')
-
-
       }
     }
     getWalletData();
+
   }, [stakeAddress]);
 
   useEffect(() => {
@@ -75,16 +63,6 @@ function WalletData (props) {
 
   },[walletData]);
 
-
-  // creates savable wallet data object
-  // which gets stored in local storage
-
-  // stake address
-  // number of tokens
-  // number of projects
-  // list of nfts
-  // list of fts
-  // 
   async function createWalletDataFromStake(stake){
 
     let walletData = '';
@@ -118,64 +96,12 @@ function WalletData (props) {
 
       }catch(error){
         console.log(error);
-        deleteLocalStorage(stake);
+        deleteLocalStorage();
         return null;
       }
     }
     return walletData;
 
-  }
-
-  // returns base address from handle
-  const getAddressFromHandle = async (handle) => {
-    try{
-      let policyID = 'f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a';
-    
-      // A blank Handle name should always be ignored.
-      if (handle.length === 0) {
-        // Handle error.
-      }
-    
-      // Convert handleName to hex encoding.
-      let assetName = Buffer.from(handle).toString('hex');
-    
-      const data = await fetch(
-        `https://cardano-mainnet.blockfrost.io/api/v0/assets/${policyID}${assetName}/addresses`,
-        {
-          headers: {
-            // Your Blockfrost API key
-            project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh',
-            'Content-Type': 'application/json'
-          }
-        }
-      ).then(res => res.json());
-
-      if(data[0].address != null){
-        let stake = await getStakeFromAddress(data[0].address);
-
-        if(stake != null){
-          return stake;
-        }
-        else{
-          return null;
-        }
-      }
-      else{
-        return null;
-      }
-    }catch(error){
-      return null;
-    }
-
-  }
-
-  async function getStakeFromAddress(addresss){
-    let req = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+addresss,
-    {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-
-    let res = await req.json();
-
-    return res.stake_address;
   }
 
   // no asset limit on how many assets gets returned on one request
@@ -222,7 +148,7 @@ function WalletData (props) {
 
       let token = new Token(assets[i].asset_name, assets[i].policy_id, quantity);
 
-      await token.fetchTokenData();
+      await token.fetchTokenMetadata();
       await token.getPrice();
 
       _tokens.push(token);
