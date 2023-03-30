@@ -15,7 +15,7 @@ function AssetData(props) {
     ipfs: "/black.jpeg",
     decoded_name: "",
   });
-
+  const [asset, setAsset] = useState(null);
   const [ipfs, setIpfs] = useState("/black.jpeg");
   const [prices, setPrices] = useState({});
   const [name, setName] = useState("");
@@ -27,6 +27,12 @@ function AssetData(props) {
   const [rank, setRank] = useState(0);
   const [policy, setPolicy] = useState("");
   const [floorPrice, setFloorPrice] = useState(0);
+
+  useEffect(() => {
+    if(props.assetId != null){
+      setAsset(props.assetId);
+    }
+  })
 
   useEffect(() => {
     const getTokenData = async () => {
@@ -46,10 +52,12 @@ function AssetData(props) {
         if (token.ipfs != null && token.ipfs != "") {
           setIpfs(token.ipfs);
         }
-        //setOwner(token.txs[0].address);
         let assetData = await fetchAssetData(assetId);
         let ownerData = await fetchOwner(assetId);
+        console.log(ownerData[0].payment_address);
         setOwner(ownerData[0].payment_address);
+
+
         let policyData = await fetchPolicyData(policy);
         setFloorPrice(policyData.floor_price/1000000);
         console.log(policyData);
@@ -59,7 +67,8 @@ function AssetData(props) {
       }
     };
     getTokenData();
-  }, [props]);
+  }, [asset]);
+
 
   async function fetchAssetData(asset) {
     let req = await fetch("https://api.opencnft.io/1/asset/" + asset);
@@ -74,16 +83,17 @@ function AssetData(props) {
   }
 
   async function fetchOwner(asset) {
-    let policy = asset.substring(0, 56);
-    let name = asset.substring(56);
-    let req = await fetch("https://api.koios.rest/api/v0/asset_nft_address?_asset_policy=" + policy + "&_asset_name=" + name);
-    let data = await req.json();
-    console.log(data);
-    if(data.length == 0) {
-      return [{payment_address: "Unknown"}];
+    try{
+      let policy = asset.substring(0, 56);
+      let name = asset.substring(56);
+      let req = await fetch("https://api.koios.rest/api/v0/asset_nft_address?_asset_policy=" + policy + "&_asset_name=" + name);
+      let data = await req.json();
+      return data;
+    }
+    catch(e) {
+      return null;
     }
 
-    return data;
   }
 
   const isUrl = (value) => {
@@ -182,12 +192,18 @@ function AssetData(props) {
     setPrices(data);
   }
   
+  function clearLocalStorage(){
+    localStorage.clear();
+    window.location.reload();
+    router.reload();
+  }
   
   return (
     <div>
       <header className="home-header">
         <h1>Cardano Explorer</h1>
         <SearchBar />
+        <button onClick={clearLocalStorage} className="refresh-button">Clear</button>
         <button className="currency-button">Currency: USD</button>
         <WalletButton />
       </header>
@@ -212,7 +228,7 @@ function AssetData(props) {
         </div>
         <div className="asset-text">
             <h3>
-              Current Owner: <Link href={"/" + owner}>{owner.substring(0,15)+'...'}</Link>
+              Current Owner: <Link href={"/" + owner}>{owner.substring(0,20)+'...'}</Link>
             </h3>
             <h3>
               Floor Price: {floorPrice} ADA

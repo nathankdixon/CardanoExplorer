@@ -33,43 +33,43 @@ export default function Nfts (props){
           let policy = nft;
           if (!policy) continue;
           if (policy.ipfs == "") {
-            singleGrid.push(
-              <Image
+            singleGrid.push(<div key={policy.policy_id + "-noimg"} className="grid-item">
+                <Image
                 key={policy.policy_id + "-noimg"}
                 width={200}
                 height={200}
-                className="grid-item"
+                className="grid-img"
                 src={"/black.jpeg"}
               />
+            </div>
+
             );
           } else {
             if (policy.length > 1) {
               collectionGrid.push(
-                <Image
-                  className="grid-item-collection"
+                <div key={policy[0].asset_name} className="grid-item-collection" onClick={() => showCollection(policy)}>
+                  <Image
+                  className="grid-img"
                   key={policy.asset_name}
                   src={policy.ipfs}
                   height={200}
                   width={200}
                   alt={policy.asset_name}
-                  onClick={() => showCollection(policy)}
                 />
+                </div>
+
               );
             } else {
-              singleGrid.push(
-                <Image
-                  className="grid-item"
-                  key={policy.asset_name}
+              singleGrid.push(<Link href={"/" + policy.policy_id + policy.asset_name} key={policy.policy_id + policy.asset_name}>
+                  <Image
+                  className="grid-img"
                   src={policy.ipfs}
                   height={200}
                   width={200}
                   alt={policy.asset_name}
-                  onClick={() =>
-                    router.push(
-                      "/" + policy.policy_id + policy.asset_name
-                    )
-                  }
                 />
+              </Link>
+
               );
             }
           }
@@ -80,54 +80,50 @@ export default function Nfts (props){
         for (const [index, element] of filteredNfts.entries()) {
           let policy = element;
           if (!policy) {
-            singleGrid.push(
-              <Image
-                key={"noimg-" + index}
+            singleGrid.push(<div key={"noimg-" + index} className="grid-item">
+                <Image
                 width={200}
                 height={200}
-                className="grid-item"
+                className="grid-img"
                 src={"/black.jpeg"}
               />
-            );
+            </div>);
           } else {
             if (policy[0].ipfs == "") {
-              singleGrid.push(
-                <Image
-                  key={element.policy_id + "-noimg-" + index}
+              singleGrid.push(<div key={element.policy_id + "-noimg-" + index} className="grid-item">
+                  <Image
                   width={200}
                   height={200}
-                  className="grid-item"
+                  className="grid-img"
                   src={"/black.jpeg"}
                 />
+              </div>
+
               );
             } else {
               if (policy.length > 1) {
-                collectionGrid.push(
-                  <Image
-                    className="grid-item-collection"
-                    key={policy[0].asset_name}
+                collectionGrid.push(<div key={policy[0].asset_name} className="grid-item-collection" onClick={() => showCollection(policy)}>
+                  <Image                    
+                    className="grid-img"
                     src={policy[0].ipfs}
                     height={200}
                     width={200}
                     alt={policy[0].asset_name}
-                    onClick={() => showCollection(policy)}
                   />
+                </div>
+
                 );
               } else {
-                singleGrid.push(
+                singleGrid.push(<Link href = {'/' + policy[0].policy_id + policy[0].asset_name} key={policy[0].asset_name} className="grid-item">
                   <Image
-                    className="grid-item"
-                    key={policy[0].asset_name}
+                    className="grid-img"
                     src={policy[0].ipfs}
                     height={200}
                     width={200}
                     alt={policy[0].asset_name}
-                    onClick={() =>
-                      router.push(
-                        "/" + policy[0].policy_id + policy[0].asset_name
-                      )
-                    }
                   />
+                </Link>
+
                 );
               }
             }
@@ -149,19 +145,26 @@ export default function Nfts (props){
       for(const element of props.data.nfts){
         let policy = element;
         if(policy[0].ipfs == "" || policy[0].ipfs == null){
-          singleGrid.push(          <Image
-            key={element.policy_id + "-noimg-"}
+          singleGrid.push(<Link href={'/'+policy[0].policy_id + policy[0].asset_name} className="grid-item" key={element.policy_id + "-noimg-"} >
+            <Image
             width={200}
             height={200}
-            className="grid-item"
-            src={"/black.jpeg"}/>)
+            className="grid-img"
+            src={"/black.jpeg"}/>
+          </Link> )
         }
         else{
           if(policy.length > 1){
-            collectionGrid.push(<Image className="grid-item-collection"  key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
+            collectionGrid.push(<div className="grid-item-collection" onClick={() => showCollection(policy)} key = {policy[0].asset_name}>
+              <Image className="grid-img" 
+                src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} 
+                />
+            </div>  );
           }
           else{
-            singleGrid.push(<Image className="grid-item"  key = {policy[0].asset_name} src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} onClick={() => showCollection(policy)}/>);
+            singleGrid.push(<Link className="grid-item" key = {policy[0].asset_name} href = {'/'+policy[0].policy_id + policy[0].asset_name}>
+              <Image className="grid-img"  src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} />
+            </Link>);
           }
         }
       }
@@ -180,26 +183,25 @@ export default function Nfts (props){
       let singleGrid = [];
       for (const [index, element] of policy.entries()) {
         if (element.ipfs == null) {
-          singleGrid.push(
-          <Image
-            key={element.policy_id + "-noimg-" + index}
+          singleGrid.push(<Link href={"/" + element.policy_id + element.asset_name} className="grid-item" key={element.policy_id + "-noimg-" + index}>
+            <Image
             width={200}
             height={200}
-            className="grid-item"
+            className="grid-img"
             src={"/black.jpeg"}/>
+            </Link>
           );
         } else {
-            singleGrid.push(
+            singleGrid.push(<Link href={"/" + element.policy_id + element.asset_name} className="grid-item" key={element.asset_name}>
               <Image
-              className="grid-item"
-              key={element.asset_name}
+              className="grid-img"
               src={element.ipfs}
               alt={element.asset_name}
               width={200}
               height={200}
-              onClick={() =>
-              router.push("/" + element.policy_id + element.asset_name)
-              }/>);
+              />
+            </Link>
+              );
           }
       }
       setShowing("Back");
@@ -276,11 +278,11 @@ return (
       </nav>
         <h2>NFT Collections</h2>
       <div className="grid-nft">
-        <div className="collection-grid">{display.collections}</div>
+      {display.collections}
       </div>
       <h2>NFTs</h2>
       <div className="grid-nft">
-        <div className="single-grid">{display.singles}</div>
+        {display.singles}
       </div>
   </div>
 );

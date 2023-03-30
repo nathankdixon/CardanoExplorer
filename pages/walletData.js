@@ -15,7 +15,7 @@ function WalletData (props) {
 
   const [walletData, setWalletData] = useState({stake: null, tokenNumber: 0, projectNumber: 0, nfts: [], fts: []});
   const [stakeAddress, setStakeAddress] = useState(null);
-  const [loadedTokens, setLoadedTokens] = useState('-');
+  const [loadedTokens, setLoadedTokens] = useState('Wallet not connected');
   const [currency, setCurrency] = useState({name: 'USD', value: {price : 1, change24hr: 0}, symbol: '$'});
   const [prices, setPrices] = useState({usd: 1, gbp: 1, btc: 1, eth:1, eur: 1});
 
@@ -30,6 +30,7 @@ function WalletData (props) {
   useEffect(() => {
     if(props.stake != null){
       setStakeAddress(props.stake);
+
     }
   }, [props.stake]);
 
@@ -43,7 +44,12 @@ function WalletData (props) {
           }
           else{
             walletData = await createWalletDataFromStake(props.stake);
-            localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+            try{
+              localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+            }
+            catch(err){
+              console.log(err);
+            }
           }
         }
         catch(err){
@@ -227,6 +233,12 @@ function WalletData (props) {
     router.reload();
   }
 
+  function clearLocalStorage(){
+    localStorage.clear();
+    window.location.reload();
+    router.reload();
+  }
+
   function setPriceData (data){
     console.log(data);
     setPrices(data);
@@ -260,6 +272,7 @@ function WalletData (props) {
         <header className="home-header">
           <h1>Cardano Explorer</h1>
           <SearchBar/>
+          <button onClick={clearLocalStorage} className="refresh-button">Clear</button>
           <button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
           <button className="currency-button" onClick={() => changeCurrency()}>Currency: {currency.name}</button>
           <WalletButton/>

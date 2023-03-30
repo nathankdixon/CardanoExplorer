@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Policy from "./policy";
@@ -14,65 +15,54 @@ import WalletButton from "./walletButton";
 function PolicyData (props) {
 
       // react hook used to store user inputed strings
-      const [searchQuery, setSearchQuery] = useState('');
-      const [assets, setAssets] = useState(null);
-      const [displayedAssets, setDisplayedAssets] = useState([]);
-      const [total, setTotal] = useState(0);
-      const [minIndex, setMinIndex] = useState(0)
-      const [maxIndex, setMaxIndex] = useState(20);
-      const [itemPage, setItemPage] = useState(10);
+
       const [policy, setPolicy] = useState(null);
-      const [ipfs, setIpfs] = useState('/black.jpeg');
-      const [floor, setFloor] = useState(null);
-      const [highestSale, setHighestSale] = useState(null);
-      const [volume, setVolume] = useState(null);
-      const [supply, setSupply] = useState(null);
-      const [holderCount, setHolderCount] = useState(null);
       const [display, setDisplay] = useState([]);
+      const [tokensPerPage, setTokensPerPage] = useState(25);
+      const [currentIndex, setCurrentIndex] = useState(0);
+
+
+      const [policyData, setPolicyData] = useState({assets: [], 
+                                                    tokens: [],   
+                                                    policy: '', 
+                                                    thumbnail: '/black.jpeg', 
+                                                    floor_price: 1, 
+                                                    highest_sale: {asset_name: '', name: '', price: 1}, 
+                                                    total_volume: 1, 
+                                                    asset_minted: 1, 
+                                                    asset_holders: 1});
 
       const router = useRouter();
   
       useEffect(() => {
         async function getAssetPageFromBlockfrost(){
-            if(props == null || props.policy == null){
+            if(props.policy == null || policy == null){
                 // do nothing
             }
             else{
                 let policy = props.policy;
-  
+                let policyData = {};
+                
+                
+                setDisplay(<h1>Loading Tokens</h1>);
                 //setTokens(assets);
-  
-              let policyData = await getCnftPolicyData(policy);
-              let thumbnail = policyData.thumbnail;
-              let ipfs = getIpfs(thumbnail);
-              let floor = policyData.floor_price;
-              let highestSale = policyData.highest_sale;
-              let volume = policyData.total_volume;
-              let supply = policyData.asset_minted;
-              let holderCount = policyData.asset_holders;
-              setHighestSale(highestSale);
-              setVolume(volume);
-              setSupply(supply);
-              setHolderCount(holderCount);
 
-              console.log(policyData);
-              setIpfs(ipfs);
-              setFloor(floor);
+                if(localStorage.getItem(policy) != null){
+                  policyData = JSON.parse(localStorage.getItem(policy));
+                }
+                else{
+                  policyData = await getPolicyData(policy);
+                  try{
+                    localStorage.setItem(policy, JSON.stringify(policyData));
+                  }
+                  catch(e){
+                    console.log(e);
+                  }
 
-              let assets = await loadAllTokenData(policy);
+                }
 
-              let display = [];
-
-              for(let i =0; i<20; i++){
-                  let assetName = (assets[i].asset).substring(56);
-                  let policy = (assets[i].asset).substring(0,56);
-                  let quantity = assets[i].quantity;
-                  let token = new Token(assetName, policy, quantity);
-                  await token.fetchTokenMetadata();
-                  display.push(<div className="grid-item-policy" key={token.asset_name}><Image src={token.ipfs} className='policy-img' width = {200} height = {200} alt = {token.asset_name}/></div>);
-              }
-              setDisplay(display);
-
+                setPolicyData(policyData);
+                console.log(policyData);
             }
         }
         getAssetPageFromBlockfrost()
@@ -83,82 +73,41 @@ function PolicyData (props) {
         setPolicy(props.policy);
       }
     }, [props.policy])
-  
-      useEffect(() => {
-          async function func(){
-              let matches = [];
-              if(assets != null && searchQuery == ''){
-  
-              }
-              if(searchQuery.length >0 && assets != null){
-                  let decodedAsset = '';
-      
-                  // find matches
-                  for(const element of assets){
-                      let assetName = (element.asset).substring(56);
-                      decodedAsset = Buffer.from(assetName, 'hex').toString();
-  
-                      let assetId = (element.asset).toLowerCase();
-                      let assetNameL = assetName.toLowerCase();
-                      let decodedAssetL = decodedAsset.toLowerCase();
-  
-                      if((assetId).includes(searchQuery) || decodedAssetL.includes(searchQuery) || assetNameL.includes(searchQuery)){
-                          matches.push((element));
-                      }
-                  }
-                  // display matches
-                  if(matches.length != 0){
-                      setTotal(matches.length);
-                      setDisplayedAssets(<div className="value">{matches.length} matches</div>)
-                      let display = []
-                      setTotal(matches.length);
-                      for(const element of matches){
-                      
-                      let assetName = (element.asset).substring(56);
-                      let policy = (element.asset).substring(0,56);
-                      let decodedAsset = Buffer.from(assetName, 'hex').toString();
-  
-                      
-  
-                      let token = new Token(assetName, policy, element.quantity);
-                      await token.fetchTokenData();
-  
-                      let ipfs = '/black.jpeg';
-  
-  
-                      let path = 'asset';
-  
-                      display.push(
-                      <div key = {token.asset_name + 'poly'} className = "grid-item" 
-                      onClick={() => router.push('/'+path+'/'+token.policy_id+token.asset_name+'?stake='+props.stake)}>
-                          <Image className="grid-img" src= {ipfs} alt = 'failed to load image' width={270} height={270}/>
-                              <div className="grid-item-text" style={{fontWeight: "bolder"}}>
-                                  {decodedAsset}
-                              </div>
-                              <div className="grid-item-text">
-                                  <button className="policy-button" onClick={(e) => copyText(e, token.asset_name)}>Copy</button>
-                                  <Link className = 'policy-button' href={'https://www.jpg.store/asset/'+element.asset}>JPG.store</Link>
-                              </div>   
-       
-                    </div>);
-                      }
-                      setDisplay(display);
-  
-                  }
-                  // no matches
-                  else{
-                      setTotal(0);
-                      setDisplay(<div className="value">No matches</div>)
-                  }
-  
-              }
-              // no search query
-              else{
-                  
-              }
-          }
-          func();
-      }, [searchQuery])
+
+    async function getPolicyData(policy){
+      let policyData = await getCnftPolicyData(policy);
+      let thumbnail = policyData.thumbnail;
+      let ipfs = getIpfs(thumbnail);
+      let floor = policyData.floor_price;
+      let highestSale = policyData.highest_sale;
+      let volume = policyData.total_volume;
+      let supply = policyData.asset_minted;
+      let holderCount = policyData.asset_holders;
+
+      setPolicyData({assets: [], tokens: [], policy: policy, thumbnail: ipfs, floor_price: floor, highest_sale: highestSale, total_volume: volume, asset_minted: supply, asset_holders: holderCount});
+
+      let assets = await loadAllTokenData(policy);
+
+      let maxTokensToGenerate = 75;
+      if(assets.length < maxTokensToGenerate){
+        maxTokensToGenerate = assets.length;
+      }
+
+      let tokens = [];
+
+      for(let i = 0; i < maxTokensToGenerate; i++){
+        let asset = assets[i];
+
+        let assetName = asset.asset.substring(56);
+        let quantity = asset.quantity;
+        let token = new Token(assetName, props.policy, quantity);
+        await token.fetchTokenMetadata();
+        tokens.push(token);
+      }
+
+      let data = {assets: assets, tokens: tokens, thumbnail: ipfs, floor_price: floor, highest_sale: highestSale, total_volume: volume, asset_minted: supply, asset_holders: holderCount};
+      return data;
+    }
 
       async function getCnftPolicyData(policy){
         try{
@@ -253,27 +202,101 @@ function PolicyData (props) {
               return null;
           }
       }
-  
+
+      const handleClick = (e, href) => {
+        e.preventDefault();
+        router.push(href);
+      };
+
+      useEffect(() => {
+        showTokens(0, 25);
+      }, [policyData])
+
+      function showTokens(index, tokensPerPage){
+        if(policyData != null){
+
+          let tokens = policyData.tokens;
+          let display = [];
+          for(let i = index; i < tokensPerPage; i++){
+            let token = tokens[i];
+            if(token){
+              display.push(<Link key = {token.asset_name} className="grid-item-policy" href={'/'+token.policy_id + token.asset_name} onClick={() => router.push('/'+token.policy_id+token.asset_name)}>
+                <Image src={token.ipfs} width= {200} height = {200} alt = 'no-img'/><label>{token.decoded_name}</label></Link>)
+
+            }
+          }
+          setDisplay(display);
+        }
+      }
+
+      function next(){
+
+        
+        let index = currentIndex + 25;
+
+        if(index >= policyData.tokens.length){
+          index = 0;
+          setCurrentIndex(0);
+        }
+
+        showTokens(index, index+25);
+        setCurrentIndex(index);
+      }
+
+      function prev(){
+        let index = currentIndex - 25;
+
+        if(index < 0){
+          index = policyData.tokens.length - 25;
+          setCurrentIndex(index);
+        }
+
+        showTokens(index, index+25);
+        setCurrentIndex(index);
+      }
+
+      function deleteLocalStorage(){
+        localStorage.removeItem(props.policy);
+        router.reload();
+        window.location.reload();
+      }
+
+      function clearLocalStorage(){
+        localStorage.clear();
+        window.location.reload();
+        router.reload();
+      }
+
+
 
     return(<div>
             <header className="home-header">
               <h1>Cardano Explorer</h1>
               <SearchBar />
+              <button onClick={clearLocalStorage} className="refresh-button">Clear</button>
+              <button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
               <button className="currency-button">Currency: USD</button>
               <WalletButton />
             </header>
-            <div className="policy-data">
-              <div className = "policy-item"><Image alt='thumb' className = 'policy-thumbnail' src = {ipfs} width = {200} height = {200}/></div>
-              <div className="policy-item">Policy: {props.policy}</div>
-              <div className="policy-item-data">
-                <div className="policy-item">Floor Price: {floor/1000000} ADA</div>
-                <div className="policy-item">Collection Volume: {volume/1000000} ADA</div>
-                <div className="policy-item">Supply: {supply}</div>
-                <div className="policy-item">Number of Holders: {holderCount}</div>
-                </div>
+            <div className="policy-info">
+              <h1>Policy Information</h1>
+              <div className="policy-data">
+              <Image alt='thumb' className = 'policy-item' src = {policyData.thumbnail} width = {150} height = {150}/>
+                <div className="policy-item-data">
+                  <div className="policy-item-policy">Policy:<Link href = {'/'+props.policy}>{props.policy}</Link></div>
+                  <div className="policy-item-container">
+                    <div className="policy-item-stat">Floor Price: {policyData.floor_price/1000000} ADA</div>
+                    <div className="policy-item-stat">Volume: {policyData.total_volume/1000000} ADA</div>
+                    <div className="policy-item-stat">Supply: {policyData.asset_minted}</div>
+                    <div className="policy-item-stat">Number of Holders: {policyData.asset_holders}</div>
+                  </div>
+                  </div>
+              </div>
             </div>
-            <h1>Collection</h1>
-            <div className='grid-nft-policy'>{display}</div>
+            <div className="policy-grid">
+              <nav><h1>Explore Collection</h1><form><input></input></form><label>Showing items : {currentIndex+25} of {policyData.tokens.length}</label><button className = 'page-button' onClick = {() => prev()}>Prev</button><button className = 'page-button' onClick = {() => next()}>Next</button></nav>
+              <div className='grid-nft-policy'>{display}</div>
+            </div>
           </div>)
 }
 export default PolicyData;
