@@ -20,7 +20,6 @@ export default function Fts (props){
 
         else{
         // Sort the fts array by the value
-        console.log(props.data.fts)
           const sortedFts = [...props.data.fts].sort((a, b) => {
             const aValue = a[0].prices?.current * a[0].quantity || 0;
             const bValue = b[0].prices?.current * b[0].quantity || 0;

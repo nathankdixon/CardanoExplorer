@@ -55,7 +55,6 @@ function WalletData (props) {
         catch(err){
           console.log(err);
         }
-        console.log(walletData);
         setWalletData(walletData);
         setLoadedTokens('scroll to view wallet')
       }
@@ -240,7 +239,6 @@ function WalletData (props) {
   }
 
   function setPriceData (data){
-    console.log(data);
     setPrices(data);
   }
 

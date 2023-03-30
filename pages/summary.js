@@ -48,16 +48,9 @@ export default function Summary(props){
                     setTopCoin(topCoin);
                 }
 
-
-
-
-
-
-
                 if(stakeInfo != null && props.currency.value.price != null){
                     let adaBalance = stakeInfo[0].total_balance/1000000;
                     let value = (adaBalance + tokenBalance) * props.currency.value.price;
-                    console.log(adaBalance +' + '+ tokenBalance);
                     setAdaBalance(adaBalance.toFixed(2));
                     setTokenBalance((tokenBalance * props.currency.value.price).toFixed(2));
                     setValue(value.toFixed(2));

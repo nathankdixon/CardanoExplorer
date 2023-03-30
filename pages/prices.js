@@ -116,7 +116,7 @@ export default function Prices (props) {
         
 
     return (
-        <div className="ada">
+        <div className="prices">
             <div className="titles-price"><h1>Top 5 cryptocurrencies</h1><h1 className="">Cardano (ADA) Prices</h1></div>
         <div className="price-nav">
           <table className="crypto-prices">

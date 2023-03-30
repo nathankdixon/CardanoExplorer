@@ -36,7 +36,6 @@ function AssetData(props) {
   useEffect(() => {
     const getTokenData = async () => {
       if (props.assetId == null) {
-        console.log("asset ID was undefined");
       } else {
         let assetId = props.assetId;
 
@@ -53,13 +52,17 @@ function AssetData(props) {
         }
         let assetData = await fetchAssetData(assetId);
         let ownerData = await fetchOwner(assetId);
-        console.log(ownerData[0].payment_address);
-        setOwner(ownerData[0].payment_address);
+        if(ownerData.length == 0){
+          setOwner("No owner");
+        }
+        else{
+          setOwner(ownerData[0].payment_address);
+        }
+
 
 
         let policyData = await fetchPolicyData(policy);
         setFloorPrice(policyData.floor_price/1000000);
-        console.log(policyData);
         setName(assetData.name);
         setRank(assetData.rarity_rank);
         setAttributes(assetData.traits);

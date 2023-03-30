@@ -16,6 +16,7 @@ function PolicyData (props) {
       const [display, setDisplay] = useState([]);
       const [tokensPerPage, setTokensPerPage] = useState(25);
       const [currentIndex, setCurrentIndex] = useState(0);
+      const [tokens, setTokens] = useState([]);
 
 
       const [policyData, setPolicyData] = useState({
@@ -26,19 +27,22 @@ function PolicyData (props) {
                                                     total_volume: 1, 
                                                     asset_minted: 1, 
                                                     asset_holders: 1});
-      const [tokens, setTokens] = useState([]);
       const [assets, setAssets] = useState([]);
       const [searchTerm, setSearchTerm] = useState("");
       const router = useRouter();
 
       useEffect(() => {
-        console.log(searchTerm);
         if(searchTerm == ""){
           showTokens(0,25, tokens);
         }
         else{
           let filteredTokens = tokens.filter(token => token.decoded_name.toLowerCase().includes(searchTerm.toLowerCase()));
-          showTokens(0,25, filteredTokens);
+          if(filteredTokens.length == 0){
+            setDisplay(<h1>No results</h1>);
+          }
+          else{
+            showTokens(0,25, filteredTokens);
+          }
         }
       }, [searchTerm])
   
@@ -51,8 +55,6 @@ function PolicyData (props) {
                 let policy = props.policy;
                 let policyData = await getPolicyData(policy);
                 setPolicyData(policyData);
-
-                console.log(policyData);
 
                 let tokens = [];
 
@@ -93,6 +95,7 @@ function PolicyData (props) {
     async function getPolicyTokens(policy){
       let assets = await loadAllTokenData(policy);
       setAssets(assets);
+      console.log(assets);
 
       let maxTokensToGenerate = 100;
       if(assets.length < maxTokensToGenerate){
@@ -221,7 +224,7 @@ function PolicyData (props) {
           let token = tokens[i];
           if(token){
             display.push(<Link key = {token.asset_name} className="grid-item-policy" href={'/'+token.policy_id + token.asset_name} >
-              <Image src={token.ipfs} width= {200} height = {200} alt = 'no-img'/><label>{token.decoded_name}</label></Link>)
+              <Image src={token.ipfs} width= {200} height = {200} alt = 'no-img' className="grid-img"/><label>{token.decoded_name}</label></Link>)
 
           }
         }
