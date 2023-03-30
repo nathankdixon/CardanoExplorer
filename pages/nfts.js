@@ -208,17 +208,6 @@ export default function Nfts (props){
       setDisplay({ collections: collectionGrid, singles: singleGrid });
       }
 
-    function copyText(event, text) {
-      navigator.clipboard.writeText(text).then(() => {
-        // Update the button text to "Copied!"
-        const button = event.target;
-        event.target.innerText = "Copied";
-        setTimeout(() => {
-          // Reset the button text after 1 second
-          button.textContent = "Copy";
-        }, 1000);
-      });
-    }
     const scrollToSection = (id) => {
       const element = document.getElementById(id);
       element.scrollIntoView({ behavior: "smooth" });

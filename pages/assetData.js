@@ -19,7 +19,6 @@ function AssetData(props) {
   const [ipfs, setIpfs] = useState("/black.jpeg");
   const [prices, setPrices] = useState({});
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [owner, setOwner] = useState("");
   const [attributes, setAttributes] = useState([]);
   const [metadata, setMetadata] = useState({});

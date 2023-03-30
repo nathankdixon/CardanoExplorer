@@ -2,7 +2,6 @@ import { Lucid } from "lucid-cardano";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import ColorPicker from "./colorPicker";
 
 // button which connects to a wallet
 //  - displays the stake address of the connected wallet
