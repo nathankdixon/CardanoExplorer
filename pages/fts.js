@@ -96,28 +96,6 @@ export default function Fts (props){
       getData();
     }, [props.data, props.currency]);
 
-    // requests account info from stake address from koios api -- ada balance used
-    async function getAccountBalance(stakeAddress){
-      try{
-          const req = await fetch('https://api.koios.rest/api/v0/account_info', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                "_stake_addresses": [
-                  stakeAddress
-                ]
-              })
-            });
-        
-        const res = await req.json();
-        return res[0].total_balance;
-      }catch(error){
-          return null;
-      }
-  }
-
       // Function to get the color based on the value
     const getColor = (value) => {
       if (value > 0) {

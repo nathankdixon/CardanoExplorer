@@ -15,6 +15,10 @@ const customJestConfig = {
     '^@/pages/(.*)$': '<rootDir>/pages/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
+  reporters: [
+    "default",
+    ["jest-junit", { outputDirectory: "test-results/jest" }],
+  ],
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

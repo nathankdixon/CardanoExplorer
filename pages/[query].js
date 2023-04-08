@@ -13,7 +13,7 @@ function Query(){
     const [display, setDisplay] = useState();
 
     useEffect(() => {
-      async function checkIfPolicyOrAsset() {
+      async function parseUrlParameter() {
     
         if (query) {
 
@@ -39,7 +39,7 @@ function Query(){
           }
         }
       }
-      checkIfPolicyOrAsset();
+      parseUrlParameter();
     }, [query, stake]);
 
             // no asset limit on how many assets gets returned on one request
@@ -52,7 +52,6 @@ function Query(){
       const req = await fetch('https://api.koios.rest/api/v0/asset_nft_address?_asset_policy='+policyID+'&_asset_name='+assetName);
 
       const res = await req.json();
-      console.log(res);
       if(res[0].payment_address != null){
         return res[0].payment_address;
       }

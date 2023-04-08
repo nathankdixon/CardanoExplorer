@@ -12,6 +12,7 @@ export default function WalletButton(props){
     const [colors, setColors] = useState();
     const [isVisable, setIsVisable] = useState(false);
     const [stake, setStake] = useState();
+    const [toggle, setToggle] = useState(false);
 
     const router = useRouter();
 
@@ -104,6 +105,7 @@ export default function WalletButton(props){
 
     // used to connect to wallet
     const handleSelect = async (wallet) => {
+        hideMenu();
         // used to show dropdown options list 
         let stake = await getStakeAddressFromWallet(wallet);
         if(stake != null){
@@ -158,6 +160,7 @@ export default function WalletButton(props){
         // removes stake data from local storage
         // refreshes page
          // loads new token data from blockfrost /koios
+        hideMenu();
         let stake = '';
         if(props.stake.startsWith('$')){
             // if handle
@@ -193,6 +196,7 @@ export default function WalletButton(props){
     const disconnectWallet = async () => {
         // removes stake data from local storage
         // routes to start page
+        hideMenu();
         let stake = '';
         if(props.stake.startsWith('$')){
             // if handle fetch stake address from handle
@@ -236,13 +240,22 @@ export default function WalletButton(props){
         setIsVisable(false);
     }
 
+    function toggleMenu(){
+        if(isVisable){
+            hideMenu();
+        }
+        else{
+            showMenu();
+        }
+    }
+
+
     // need options to still be present but hidden so color picker will work
-    return(<div className="connect-wallet">
-        <button className="connect-wallet-button" onMouseEnter={showMenu} onMouseLeave={hideMenu} 
-        onClick={() => router.push('/wallet/'+props.stake)}>{buttonText}  <Image src={'/wallet.svg'} width={30} height={30} alt='no-img' className='wallet-img'/></button>
-        <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} onMouseEnter={showMenu} onMouseLeave={hideMenu}>
-            <div className="options">
-                <div className="option">
+    return(<div className="connect-wallet" onClick={() => toggleMenu()} >
+        <button className="connect-wallet-button"><Image src={'/wallet.svg'} width={30} height={30} alt='no-img' className='wallet-img'/>
+        <div className="wallet-button-text">{buttonText}</div></button>
+        <div className="dropdown" style={{display: isVisable ? 'block' : 'none'}} >
+        <div className="option">
                     <button className="option-button" onClick={() => handleSelect('Typhon Wallet')}>Typhon<img className = 'connect-wallet-img' src="/typhon.svg"></img></button>
                 </div>
                 <div className="option">
@@ -260,7 +273,6 @@ export default function WalletButton(props){
                 <div className="option">
                     <button className="option-button" onClick={() => disconnectWallet()}>✗ Disconnect</button>
                 </div>
-            </div>
         </div>
     </div>
     );

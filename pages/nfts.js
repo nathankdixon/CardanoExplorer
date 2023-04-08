@@ -27,8 +27,6 @@ export default function Nfts (props){
       let filteredNfts = filterNFTs(props.data.nfts);
       if (expanded) {
         setInfo("NFTs: " + filteredNfts.length);
-        setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
-
         for (const nft of filteredNfts) {
           let policy = nft;
           if (!policy) continue;
@@ -45,40 +43,26 @@ export default function Nfts (props){
 
             );
           } else {
-            if (policy.length > 1) {
-              collectionGrid.push(
-                <div key={policy[0].asset_name} className="grid-item-collection" onClick={() => showCollection(policy)}>
-                  <Image
-                  className="grid-img"
-                  key={policy.asset_name}
-                  src={policy.ipfs}
-                  height={200}
-                  width={200}
-                  alt={policy.asset_name}
-                />
-                </div>
+            singleGrid.push(<Link href={"/" + policy.policy_id + policy.asset_name} key={policy.policy_id + policy.asset_name} className='grid-item'>
+            <Image
+            className="grid-img"
+            src={policy.ipfs}
+            height={200}
+            width={200}
+            alt={policy.asset_name}
+          />
+          <label className="item-name">{(policy.decoded_name).substring(0,20)}</label>
 
-              );
-            } else {
-              singleGrid.push(<Link href={"/" + policy.policy_id + policy.asset_name} key={policy.policy_id + policy.asset_name}>
-                  <Image
-                  className="grid-img"
-                  src={policy.ipfs}
-                  height={200}
-                  width={200}
-                  alt={policy.asset_name}
-                />
-              </Link>
-
-              );
-            }
+        </Link>);
           }
         }
       } else {
         setInfo("Collections: " + filteredNfts.length);
+        
 
         for (const [index, element] of filteredNfts.entries()) {
           let policy = element;
+
           if (!policy) {
             singleGrid.push(<div key={"noimg-" + index} className="grid-item">
                 <Image
@@ -110,6 +94,7 @@ export default function Nfts (props){
                     width={200}
                     alt={policy[0].asset_name}
                   />
+                  <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
                 </div>
 
                 );
@@ -122,6 +107,7 @@ export default function Nfts (props){
                     width={200}
                     alt={policy[0].asset_name}
                   />
+                <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
                 </Link>
 
                 );
@@ -159,11 +145,14 @@ export default function Nfts (props){
               <Image className="grid-img" 
                 src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} 
                 />
+              <label className="item-name">{(policy[0].decoded_name)}</label>
+
             </div>  );
           }
           else{
             singleGrid.push(<Link className="grid-item" key = {policy[0].asset_name} href = {'/'+policy[0].policy_id + policy[0].asset_name}>
               <Image className="grid-img"  src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} />
+              <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
             </Link>);
           }
         }
@@ -176,6 +165,7 @@ export default function Nfts (props){
   
     function showCollection(policy) {
       scrollToSection("nfts");
+      
       setInfo("Showing Policy: " +policy[0].policy_id +" with " +policy.length +" NFTs");
       setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
 
@@ -189,6 +179,8 @@ export default function Nfts (props){
             height={200}
             className="grid-img"
             src={"/black.jpeg"}/>
+           <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
+
             </Link>
           );
         } else {
@@ -200,6 +192,8 @@ export default function Nfts (props){
               width={200}
               height={200}
               />
+            <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
+
             </Link>
               );
           }

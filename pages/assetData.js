@@ -88,14 +88,16 @@ function AssetData(props) {
     try{
       let policy = asset.substring(0, 56);
       let name = asset.substring(56);
-      let req = await fetch("https://api.koios.rest/api/v0/asset_nft_address?_asset_policy=" + policy + "&_asset_name=" + name);
-      let data = await req.json();
+      let response = await fetch("https://api.koios.rest/api/v0/asset_nft_address?_asset_policy=" + policy + "&_asset_name=" + name);
+      if(!response.ok){
+        return null;
+      }
+      let data = await response.json();
       return data;
     }
     catch(e) {
       return null;
     }
-
   }
 
   const isUrl = (value) => {
@@ -190,9 +192,6 @@ function AssetData(props) {
     );
   }
 
-  function setPriceData (data) {
-    setPrices(data);
-  }
   
   function clearLocalStorage(){
     localStorage.clear();

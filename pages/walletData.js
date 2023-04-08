@@ -73,6 +73,7 @@ function WalletData (props) {
     let walletData = '';
     // json list of assets in stake address
     let assets = await getAssetsFromKoios(stake);
+    console.log(assets);
     // no assets
     if(assets == null || assets.length == 0){
       walletData = {stake : stake, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
@@ -98,6 +99,7 @@ function WalletData (props) {
 
         // wallet data object which is stored in local storage for quick retrieval
         walletData = {stake: stake, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: sortedTokens.nfts, fts: sortedTokens.fts};
+        console.log(walletData);
 
       }catch(error){
         console.log(error);
@@ -232,12 +234,6 @@ function WalletData (props) {
     router.reload();
   }
 
-  function clearLocalStorage(){
-    localStorage.clear();
-    window.location.reload();
-    router.reload();
-  }
-
   function setPriceData (data){
     setPrices(data);
   }
@@ -270,10 +266,9 @@ function WalletData (props) {
         <header className="home-header">
           <h1>Cardano Explorer</h1>
           <SearchBar/>
-          <button onClick={clearLocalStorage} className="refresh-button">Clear</button>
-          <button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
-          <button className="currency-button" onClick={() => changeCurrency()}>Currency: {currency.name}</button>
-          <WalletButton/>
+          <button className="currency-button" onClick={() => changeCurrency()}>Currency: <span style={{color: 'gold'}}>{currency.name}</span></button>
+          <div className="wallet-section"><button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
+          <WalletButton/></div>
       </header>
       <div className="wallet-data-header">
         <span className="wallet-button" id='h' onClick={() => scrollToTop()}>

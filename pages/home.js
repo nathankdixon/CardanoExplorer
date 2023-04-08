@@ -1,10 +1,9 @@
 import { Lucid } from "lucid-cardano";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import Prices from "./prices";
-import SearchBar from "./searchbar";
-import WalletButton from "./walletButton";
+
 
 export default function Home(props){
 
@@ -99,7 +98,7 @@ export default function Home(props){
                     </div>
                     <Prices data={setPriceData}/>
                     <div className="home-body-wallets">
-                        <div className="arrow"><h1>Connect your Wallet</h1><Image src={'/arrow.png'} width={50} height={50} alt={'arrow'}/></div>
+                        <div className="arrow"><h2>Connect your Wallet</h2><Image src={'/arrow.png'} width={50} height={50} alt={'arrow'}/></div>
                         <button className="home-wallet-button" onClick={() => handleSelect('Typhon Wallet')}><img className="wallet-img" src='/typhon.svg'></img></button>
                         <button className="home-wallet-button" onClick={() => handleSelect('eternl')}><img className="wallet-img" src='/eternl.png'></img></button>
                         <button className="home-wallet-button" onClick={() => handleSelect('Nami')}><img className="wallet-img" src='/nami.svg'></img></button>

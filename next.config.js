@@ -1,7 +1,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['dweb.link'],
+    domains: ['dweb.link', 'ipfs.io', 'arweave.net']
   },
   webpack: function (config, options) {
     config.experiments = {

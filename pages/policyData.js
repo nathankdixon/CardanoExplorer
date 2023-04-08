@@ -238,11 +238,14 @@ function PolicyData (props) {
 
         if(index >= tokens.length){
           index = 0;
+          showTokens(index, tokens.length, tokens);
           setCurrentIndex(0);
         }
+        else{
+          showTokens(index, index+25, tokens);
+          setCurrentIndex(index);
+        }
 
-        showTokens(index, index+25, tokens);
-        setCurrentIndex(index);
       }
 
       function prev(){

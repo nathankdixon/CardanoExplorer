@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="43" failures="0" errors="0" time="2.802">
+  <testsuite name="getStakeAddressFromWallet" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:23" time="1.259" tests="6">
+    <testcase classname="getStakeAddressFromWallet should return the stake address for Typhon Wallet" name="getStakeAddressFromWallet should return the stake address for Typhon Wallet" time="0.003">
+    </testcase>
+    <testcase classname="getStakeAddressFromWallet should return the stake address for Eternl" name="getStakeAddressFromWallet should return the stake address for Eternl" time="0.001">
+    </testcase>
+    <testcase classname="getStakeAddressFromWallet should return the stake address for Nami" name="getStakeAddressFromWallet should return the stake address for Nami" time="0.006">
+    </testcase>
+    <testcase classname="getStakeAddressFromWallet should return the stake address for Flint Wallet" name="getStakeAddressFromWallet should return the stake address for Flint Wallet" time="0">
+    </testcase>
+    <testcase classname="getStakeAddressFromWallet should return null for an unknown wallet" name="getStakeAddressFromWallet should return null for an unknown wallet" time="0">
+    </testcase>
+    <testcase classname="getStakeAddressFromWallet should return null when an error is thrown" name="getStakeAddressFromWallet should return null when an error is thrown" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="createWalletDataFromStake" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:23" time="1.285" tests="4">
+    <testcase classname="createWalletDataFromStake should return wallet data with no assets" name="createWalletDataFromStake should return wallet data with no assets" time="0.006">
+    </testcase>
+    <testcase classname="createWalletDataFromStake should return wallet data with 1 asset" name="createWalletDataFromStake should return wallet data with 1 asset" time="0.014">
+    </testcase>
+    <testcase classname="createWalletDataFromStake should return wallet data with 2 assets of the same policy" name="createWalletDataFromStake should return wallet data with 2 assets of the same policy" time="0.002">
+    </testcase>
+    <testcase classname="createWalletDataFromStake should return wallet data with 2 assets with different policy Ids" name="createWalletDataFromStake should return wallet data with 2 assets with different policy Ids" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="getStakeFromAddress" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:23" time="1.318" tests="3">
+    <testcase classname="getStakeFromAddress returns the stake address when API call is successful" name="getStakeFromAddress returns the stake address when API call is successful" time="0.014">
+    </testcase>
+    <testcase classname="getStakeFromAddress returns null when stake address is not found" name="getStakeFromAddress returns null when stake address is not found" time="0.002">
+    </testcase>
+    <testcase classname="getStakeFromAddress returns null when an error occurs" name="getStakeFromAddress returns null when an error occurs" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getAddressFromHandle" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:23" time="1.364" tests="3">
+    <testcase classname="getAddressFromHandle returns the payment address when API call is successful" name="getAddressFromHandle returns the payment address when API call is successful" time="0.006">
+    </testcase>
+    <testcase classname="getAddressFromHandle returns null when payment address is not found" name="getAddressFromHandle returns null when payment address is not found" time="0.001">
+    </testcase>
+    <testcase classname="getAddressFromHandle returns null when an error occurs" name="getAddressFromHandle returns null when an error occurs" time="0.023">
+    </testcase>
+  </testsuite>
+  <testsuite name="getIpfsFromMetadata" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:23" time="1.264" tests="9">
+    <testcase classname="getIpfsFromMetadata should return the IPFS link for an &quot;image&quot; key" name="getIpfsFromMetadata should return the IPFS link for an &quot;image&quot; key" time="0.002">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should return the IPFS link for a &quot;logo&quot; key" name="getIpfsFromMetadata should return the IPFS link for a &quot;logo&quot; key" time="0.001">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should handle IPFS link in an array" name="getIpfsFromMetadata should handle IPFS link in an array" time="0">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should return default image for invalid metadata" name="getIpfsFromMetadata should return default image for invalid metadata" time="0.001">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should handle &quot;ba&quot; prefix" name="getIpfsFromMetadata should handle &quot;ba&quot; prefix" time="0.001">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should handle &quot;Qm&quot; prefix" name="getIpfsFromMetadata should handle &quot;Qm&quot; prefix" time="0">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should handle &quot;ipfs/&quot; prefix" name="getIpfsFromMetadata should handle &quot;ipfs/&quot; prefix" time="0.001">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should handle &quot;ipfs://&quot; prefix" name="getIpfsFromMetadata should handle &quot;ipfs://&quot; prefix" time="0">
+    </testcase>
+    <testcase classname="getIpfsFromMetadata should handle no image or logo key" name="getIpfsFromMetadata should handle no image or logo key" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="isUrl" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:23" time="1.537" tests="3">
+    <testcase classname="isUrl returns the correct result based on the input string" name="isUrl returns the correct result based on the input string" time="0.009">
+    </testcase>
+    <testcase classname="createAttributeTable renders an attribute table with the correct structure" name="createAttributeTable renders an attribute table with the correct structure" time="0.041">
+    </testcase>
+    <testcase classname="createNestedTable renders a nested table with the correct structure" name="createNestedTable renders a nested table with the correct structure" time="0.012">
+    </testcase>
+  </testsuite>
+  <testsuite name="parseUrlParameter" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:24" time="0.422" tests="12">
+    <testcase classname="parseUrlParameter returns WalletData when input is &quot;stake123&quot;" name="parseUrlParameter returns WalletData when input is &quot;stake123&quot;" time="0.002">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletData when input is &quot;stake1uy9mf6hjqfgug2n0r309knp8j4re9d8s7qrq7pt57hyqn4q9q63km&quot;" name="parseUrlParameter returns WalletData when input is &quot;stake1uy9mf6hjqfgug2n0r309knp8j4re9d8s7qrq7pt57hyqn4q9q63km&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromHandle when input is &quot;$handle123&quot;" name="parseUrlParameter returns WalletDataFromHandle when input is &quot;$handle123&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromHandle when input is &quot;$nath&quot;" name="parseUrlParameter returns WalletDataFromHandle when input is &quot;$nath&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromHandle when input is &quot;$alex&quot;" name="parseUrlParameter returns WalletDataFromHandle when input is &quot;$alex&quot;" time="0.001">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1qypqdhr0t4r7as4crn6dla8hts7swl0u2jl0rudfyhmykcgtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82q0gwpgh&quot;" name="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1qypqdhr0t4r7as4crn6dla8hts7swl0u2jl0rudfyhmykcgtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82q0gwpgh&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1q9f2fmdnsfc8fvte3wh7vgcuuasxk8qn07axca2mgzt7lqqtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qu3wmmk&quot;" name="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1q9f2fmdnsfc8fvte3wh7vgcuuasxk8qn07axca2mgzt7lqqtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qu3wmmk&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1qyndypcnxuszyzuvmlyrac85vkh8tz9r4dvpkrrudg90n7qtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qceqc0p&quot;" name="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1qyndypcnxuszyzuvmlyrac85vkh8tz9r4dvpkrrudg90n7qtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qceqc0p&quot;" time="0.001">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1q9j7hln9wuu2fsf2luvc2c36ar4kdmh3ksmhdzvxac70txgtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qmkuecv&quot;" name="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1q9j7hln9wuu2fsf2luvc2c36ar4kdmh3ksmhdzvxac70txgtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qmkuecv&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1qypr9jqy7es4tk05dpelgczq7cgl0zy7rg47fyd5qw9rcwstkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qzuc8lu&quot;" name="parseUrlParameter returns WalletDataFromAddress when input is &quot;addr1qypr9jqy7es4tk05dpelgczq7cgl0zy7rg47fyd5qw9rcwstkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qzuc8lu&quot;" time="0.001">
+    </testcase>
+    <testcase classname="parseUrlParameter returns PolicyData when input is &quot;3bcc312ebe7cd9281ab3e3d641bf70f207012e539b0e6e7c3f1560d7&quot;" name="parseUrlParameter returns PolicyData when input is &quot;3bcc312ebe7cd9281ab3e3d641bf70f207012e539b0e6e7c3f1560d7&quot;" time="0">
+    </testcase>
+    <testcase classname="parseUrlParameter returns PolicyData when input is &quot;bddc4b369225979ed3cdda5949ba7ac05091024684c2cdeb097b0e31&quot;" name="parseUrlParameter returns PolicyData when input is &quot;bddc4b369225979ed3cdda5949ba7ac05091024684c2cdeb097b0e31&quot;" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="sortTokenFungibilities" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:24" time="0.368" tests="2">
+    <testcase classname="sortTokenFungibilities correctly separates fungible and non-fungible tokens" name="sortTokenFungibilities correctly separates fungible and non-fungible tokens" time="0.003">
+    </testcase>
+    <testcase classname="sortTokenFungibilities returns empty arrays for empty input" name="sortTokenFungibilities returns empty arrays for empty input" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="groupTokensByPolicyId" errors="0" failures="0" skipped="0" timestamp="2023-04-08T10:40:24" time="0.359" tests="1">
+    <testcase classname="groupTokensByPolicyId groups token objects by policy Id" name="groupTokensByPolicyId groups token objects by policy Id" time="0.003">
+    </testcase>
+  </testsuite>
+</testsuites>

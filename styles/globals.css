@@ -1,11 +1,13 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #ea52fb;
-    --second-color:#02179c;
-    --third-color: #61e584;
-    --fourth-color: #f3f3f38c;
+    --main-color: #92e2e2;
+    --second-color:#431438;
+    --third-color: #ffffff;
+    --fourth-color: #ffffff;
     --fifth-color: rgba(255, 255, 255, 0.291);
     --sixth-color: rgba(0, 0, 0, 0.20);
+    --seventh-color: black;
+    --eigth-color: white;
     --main-font: 'Courier New', sans-serif;
     width: 100vw;
     
@@ -30,7 +32,7 @@ body {
 h1{
     font-size: xx-large;
     font-weight: bold;
-    color: var(--main-color);
+    color: var(--second-color);
     font-family: var(--main-font);
 }
 h2{
@@ -138,19 +140,19 @@ h3{
 }
 
 .currency-button{
-    height: 50%;
     text-align: center;
-    font-size: 20px;
+    font-size: 25px;
     font-family: var(--main-font);
-    margin-top:20px;
     background-color: var(--main-color);
     color: var(--third-color);
     border: 2px solid white;
     padding: 10px;
+    margin: 15px;
     font-weight: bold;
-    border-radius: 20px;
+    border-radius: 10px;
     color: var(--second-color);
 }
+
 .currency-button:hover{
     background-color: var(--third-color);
     color: var(--second-color);
@@ -161,9 +163,7 @@ h3{
     color: var(--second-color);
     cursor: pointer;
 }
-.title{
-    margin-top:90px;
-}
+
 
 .summary{
     display: flex;
@@ -216,7 +216,7 @@ h3{
     justify-content: center;
     background-color: var(--main-color);
     color: var(--second-color);
-    border: 2px solid black;
+    border: 3px solid rgb(255, 255, 255);
     padding: 10px;
     width: 60px;
     height: 60px;
@@ -227,6 +227,8 @@ h3{
     font-weight: bold;
     font: var(--main-font);
  } 
+
+ 
 .wallet-button:hover {
     background-color: var(--third-color);
 }
@@ -271,6 +273,7 @@ h3{
     transform: translateX(-50%);
 }
 
+
 .scroll-image {
     transition: transform 0.3s ease-in-out;
 }
@@ -284,15 +287,15 @@ p{
 }
 
 #wallet{
-    background-color: #efccff; /* light green */
+    background-color: var(--main-color); /* light green */
 }
 
 #nfts {
-    background-color: #ffcccc; /* light red */
+    background-color: var(--second-color); /* light red */
   }
   
   #fts {
-    background-color: #ccffcc; /* light green */
+    background-color: var(--main-color); /* light green */
   }
   
   #txs {
@@ -300,15 +303,15 @@ p{
   }
   
   #w{
-    background-color: #efccffee; /* light green */
+    background-color: var(--main-color); /* light green */
 }
 
 #n {
-    background-color: #ffe4cce8; /* light red */
+    background-color: var(--second-color); /* light red */
   }
   
   #f {
-    background-color: #ccffccf5; /* light green */
+    background-color: var(--main-color); /* light green */
   }
   
 
@@ -425,25 +428,39 @@ color: var(--main-color);/* light green */
 
 .grid-img {
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 5px;
+}
+
+.item-name{
+    color: var(--main-color);
+    padding: 10px;
+}
+
+.item-name:hover{
+    cursor: pointer;
 }
 
 .grid-item{
-    width: 200px;
-    height: 200px;
     padding: 10px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 5px;
-    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 2px 0px rgba(0,0,0,0.75);
     margin: 10px;
     background-color: var(--fifth-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
 .grid-item-collection{
-    width: 200px;
-    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
     padding: 10px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
@@ -515,8 +532,7 @@ color: var(--main-color);/* light green */
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40%;
-
+    width: 50%;
 }
 
 .search-input{
@@ -524,8 +540,7 @@ color: var(--main-color);/* light green */
     width: 100%;
     background-color: var(--main-color);
     color:var(--second-color);
-    padding: 12px 20px;
-    margin: 8px 0;
+    padding: 18px;
     box-sizing: border-box;
     border: 2px solid var(--third-color);
     border-radius: 4px;
@@ -566,32 +581,46 @@ color: var(--main-color);/* light green */
     font-weight: bold;
     border-color: white;
     border-width: 2px;
-    border-radius: var(--radius);
+    border-radius: 10px;
     object-fit: cover;
     cursor: pointer;
     transition: background-color 0.2s;
-    height: 55%;
+    padding: 12px;
+    font-size: 25px;
 }
 
 .search-button:hover{
     background-color:var(--third-color);
 }
 
+.wallet-section{
+    display: flex;
+    flex-direction:row;
+}
+
+.wallet-button-text{
+    font-family: var(--main-font);
+    font-size: 25px;
+    font-weight: bold;
+    color: var(--main-color);
+    margin: 0px 0px 0px 10px;
+}
+
 .connect-wallet-button{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--main-color);
-    color: var(--second-color);
+
+    background-color: var(--second-color);
     font-family: var(--main-font);
     font-weight: bold;
     font-size:25px;
     border: 2px solid white;
-    padding: 10x;
-    border-radius: 20px;
-    height: 60%;
-    margin: 19px 0;
+    padding: 15px;
+    margin: 13px;
     margin-right: 20px;
+    border-radius: 20px;
+
 }
 
 .connect-wallet-img{
@@ -603,17 +632,22 @@ color: var(--main-color);/* light green */
 
 .connect-wallet-button:hover{
     background-color:var(--third-color);
+    cursor: pointer;
+}
+
+.conneect-wallet{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown{
+
 }
 
 .options {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    top: 65px;
-    right: 20px;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+
 
 }
 
@@ -622,6 +656,7 @@ color: var(--main-color);/* light green */
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    width: 100%;
 
 }
 
@@ -631,13 +666,15 @@ color: var(--main-color);/* light green */
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 150px;
-    height: 40px;
-    font-size: medium;
+    width: 100%;
+    font-size: 25px;
     font-weight: bold;
-    background-color:var(--main-color);
-    color:var(--second-color);
+    background-color:var(--second-color);
+    color:var(--main-color);
     font-family: var(--main-font);
+    padding: 12px;
+    margin-right: 5px;
+    border: 3px solid var(--eigth-color);
 
 }
   
@@ -660,31 +697,20 @@ color: var(--main-color);/* light green */
 
   }
 
-
-  .crypto-prices th {
+  .title{
+    padding: 1rem;
+    text-align: left;
+    font-size: 28px;
     background-color: var(--fifth-color);
     color: var(--main-color);
   }
-  
-  .crypto-prices tbody tr:nth-child(even) {
-    background-color: var(--second-color);
-  }
-  
-  .crypto-prices tbody tr:hover {
-    background-color: var(--fifth-color);
-  }
-  
-  .crypto-prices,
-  .crypto-prices td {
-    padding: 1rem;
-    text-align: center;
-    font-size: 24px;
-  }
 
-  .crypto-prices th{
+  .title-change{
     padding: 1rem;
     text-align: center;
-    font-size: 25px;
+    font-size: 28px;
+    background-color: var(--fifth-color);
+    color: var(--main-color);
   }
 
   
@@ -699,17 +725,24 @@ color: var(--main-color);/* light green */
     display: flex;
     flex-direction: column;
   }
-  .price-label {
+.price-label {
     font-size: 1.5rem;
     font-weight: bold;
-    white-space: nowrap;
+    color: var(--eigth-color);
+    padding: 10px;
+    text-align: left;
+    font-size: 26px;
+  }
+
+  .price-label-change {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--eigth-color);
+    padding: 10px;
+    text-align: center;
+    font-size: 26px;
   }
   
-  .currency {
-    font-size: 1.7rem;
-    color: #999;
-    margin-bottom: 0.5rem;
-  }
   
   .out-price {
     border-bottom: 1px solid #ddd;
@@ -727,6 +760,8 @@ color: var(--main-color);/* light green */
 
 .currency{
     color:gold;
+    padding: 15px;
+    font-size: 30px;
 }
 
 .setting-button {
@@ -932,7 +967,7 @@ label{
     text-align: center;
     font-weight: bold;
     font-size: large;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 
@@ -1008,9 +1043,6 @@ a:hover {
 
 }
 
-td{
-    padding: 5px;
-}
 .key{
     color:var(--main-color);
     font-weight: bold;

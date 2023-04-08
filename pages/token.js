@@ -1,5 +1,5 @@
 // if metadata has been fetched
-    // find the ipfs link under 'image' metadata tag and store it
+// find the ipfs link under 'image' metadata tag and store it
 const getIpfsFromMetadata = (metadata) =>{
       const keys = Object.keys(metadata);
       const values = Object.values(metadata);
@@ -13,10 +13,9 @@ const getIpfsFromMetadata = (metadata) =>{
         
         // fungible tokens will have a 'logo' instead of 'image' tag
         else if(keys[i] == "logo"){
-          ipfs = "data:image/png;base64,"+values[i]
+          return "data:image/png;base64,"+values[i];
         }
       }
-
       // convert all ipfs formats to the a searchable format that can be fetched in a <img> tag
       try{
 
@@ -27,9 +26,22 @@ const getIpfsFromMetadata = (metadata) =>{
           for(const element of ipfs){
             newipfs = newipfs + element;
           }
-          if(newipfs.startsWith('ba')){
-            newipfs = "http://dweb.link/ipfs/"+ipfs;
-            newipfs = newipfs.replace(/,/g, '');
+
+          if(newipfs.startsWith('ipfs://')){
+            newipfs = newipfs.slice(7);
+            if(newipfs.startsWith('ipfs/')){
+              newipfs = newipfs.slice(5);
+            }
+            newipfs = "http://dweb.link/ipfs/"+newipfs;
+          }
+
+          else if(newipfs.startsWith('ipfs/')){
+            newipfs = newipfs.slice(5);
+            newipfs = "http://dweb.link/ipfs/"+newipfs;
+          }
+
+          else if(newipfs.startsWith('Qm')){
+            newipfs = "http://dweb.link/ipfs/"+newipfs;
           }
           return newipfs;
         }
@@ -53,8 +65,11 @@ const getIpfsFromMetadata = (metadata) =>{
       }catch{
         return '/black.jpeg';
       }
+
+      if(ipfs.startsWith('ba')){
+        ipfs = "http://dweb.link/ipfs/"+ipfs;
+      }
       return ipfs;
-    
     }
 
 
@@ -66,10 +81,8 @@ export default class Token {
     this.quantity = quantity;
     this.onchain_metadata = null;
     this.metadata = null;
-    this.txs = null;
     this.ipfs = '/black.jpeg';
     this.prices = null;
-    this.image = null;
     this.decoded_name =  Buffer.from(asset_name, 'hex').toString();
   }
 

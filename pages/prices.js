@@ -124,70 +124,70 @@ export default function Prices (props) {
               <tr>
                 <th className="title">Currency</th>
                 <th className="title">Price</th>
-                <th className="title">24h Change % </th>
+                <th className="title-change">24h Change % </th>
               </tr>
             </thead>
             <tbody>
               <tr className="out-price">
                 <td className="price-label">{top5[0].name}</td>
-                <td className="price-label"><div className="currency">${top5[0].price}</div></td>
-                <td className="price-label" style={{color: top5[0].color}}>{top5[0].priceChange}%</td>
+                <td className="price-label"><span className="currency">$</span>{top5[0].price}</td>
+                <td className="price-label-change" style={{color: top5[0].color}}>{top5[0].priceChange}%</td>
               </tr>
               <tr className="out-price">
                 <td className="price-label">{top5[1].name}</td>
-                <td className="price-label"><div className="currency">${top5[1].price}</div></td>
-                <td className="price-label" style={{color: top5[1].color}}>{top5[1].priceChange}%</td>
+                <td className="price-label"><span className="currency">$</span>{top5[1].price}</td>
+                <td className="price-label-change" style={{color: top5[1].color}}>{top5[1].priceChange}%</td>
               </tr>
               <tr className="out-price">
                 <td className="price-label">{top5[2].name}</td>
-                <td className="price-label"><div className="currency">${top5[2].price}</div></td>
-                <td className="price-label" style={{color: top5[2].color}}>{top5[2].priceChange}%</td>
+                <td className="price-label"><span className="currency">$</span>{top5[2].price}</td>
+                <td className="price-label-change" style={{color: top5[2].color}}>{top5[2].priceChange}%</td>
               </tr>
               <tr className="out-price">
                 <td className="price-label">{top5[3].name}</td>
-                <td className="price-label"><div className="currency">${top5[3].price}</div></td>
-                <td className="price-label" style={{color: top5[3].color}}>{top5[3].priceChange}%</td>
+                <td className="price-label"><span className="currency">$</span>{top5[3].price}</td>
+                <td className="price-label-change" style={{color: top5[3].color}}>{top5[3].priceChange}%</td>
               </tr>
               <tr className="out-price">
                 <td className="price-label">{top5[4].name}</td>
-                <td className="price-label"><div className="currency">${top5[4].price}</div></td>
-                <td className="price-label" style={{color: top5[4].color}}>{top5[4].priceChange}%</td>
+                <td className="price-label"><span className="currency">$</span>{top5[4].price}</td>
+                <td className="price-label-change" style={{color: top5[4].color}}>{top5[4].priceChange}%</td>
               </tr>
             </tbody>
           </table>
           <table className="crypto-prices">
             <thead>
               <tr>
-                <th>Currency</th>
-                <th>Price</th>
-                <th>24h Change %</th>
+                <th className="title">Currency</th>
+                <th className="title">Price</th>
+                <th className="title-change">24h Change % </th>
               </tr>
             </thead>
             <tbody>
               <tr className="out-price">
                 <td className="price-label">ADA / US Dollar</td>
-                <td className="price-label"><div className="currency">${adaPrice.usd.price}</div></td>
-                <td className="price-label" style={{color: priceColors.usd}}>{adaPrice.usd.change24hr}%</td>
+                <td className="price-label"><span className="currency">$</span>{adaPrice.usd.price}</td>
+                <td className="price-label-change" style={{color: priceColors.usd}}>{adaPrice.usd.change24hr}%</td>
               </tr>
               <tr className="out-price">   
                 <td className="price-label">ADA / GBP</td>
-                <td className="price-label"><div className="currency">£{adaPrice.gbp.price}</div></td>
-                <td className="price-label" style={{color: priceColors.gbp}}>{adaPrice.gbp.change24hr}%</td>
+                <td className="price-label"><span className="currency">£</span>{adaPrice.gbp.price}</td>
+                <td className="price-label-change" style={{color: priceColors.gbp}}>{adaPrice.gbp.change24hr}%</td>
               </tr>
               <tr className="out-price">
                 <td className="price-label">ADA / Ethereum</td>
-                <td className="price-label"><div className="currency">Ξ{adaPrice.eth.price}</div></td>
-                <td className="price-label" style={{color: priceColors.eth}}>{adaPrice.eth.change24hr}%</td>
+                <td className="price-label"><span className="currency">Ξ</span>{adaPrice.eth.price}</td>
+                <td className="price-label-change" style={{color: priceColors.eth}}>{adaPrice.eth.change24hr}%</td>
             </tr>
             <tr className="out-price">
                 <td className="price-label">ADA / Bitcoin</td>
-                <td className="price-label"><div className="currency">฿{adaPrice.btc.price}</div></td>
-                <td className="price-label" style={{color: priceColors.btc}}>{adaPrice.btc.change24hr}%</td>
-                </tr>
-                <tr className="out-price">
+                <td className="price-label"><span className="currency">฿</span>{adaPrice.btc.price}</td>
+                <td className="price-label-change" style={{color: priceColors.btc}}>{adaPrice.btc.change24hr}%</td>
+              </tr>
+              <tr className="out-price">
                 <td className="price-label">ADA / Euros</td>
-                <td className="price-label"><div className="currency">€{adaPrice.eur.price}</div></td>
-                <td className="price-label" style={{color: priceColors.eur}}>{adaPrice.eur.change24hr}%</td>
+                <td className="price-label"><span className="currency">€</span>{adaPrice.eur.price}</td>
+                <td className="price-label-change" style={{color: priceColors.eur}}>{adaPrice.eur.change24hr}%</td>
                 </tr>
         </tbody>
         </table>
