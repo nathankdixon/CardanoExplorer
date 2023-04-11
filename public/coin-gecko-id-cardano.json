@@ -1,0 +1,222 @@
+[
+    {
+    "id": "world-mobile-token",
+    "symbol": "wmt",
+    "name": "World Mobile Token"
+    },
+    {
+    "id": "meld",
+    "symbol": "meld",
+    "name": "MELD"
+    },
+    {
+    "id": "indigo-dao-governance-token",
+    "symbol": "indy",
+    "name": "Indigo Protocol"
+    },
+    {
+    "id": "charli3",
+    "symbol": "c3",
+    "name": "Charli3"
+    },
+    {
+    "id": "nft-maker",
+    "symbol": "$nmkr",
+    "name": "NMKR"
+    },
+    {
+    "id": "revuto",
+    "symbol": "revu",
+    "name": "Revuto"
+    },
+    {
+    "id": "kick-io",
+    "symbol": "kick",
+    "name": "KICK.IO"
+    },
+    {
+    "id": "ardana",
+    "symbol": "dana",
+    "name": "Ardana"
+    },
+    {
+    "id": "ravendex",
+    "symbol": "rave",
+    "name": "Ravendex"
+    },
+    {
+    "id": "doex",
+    "symbol": "doex",
+    "name": "DOEX"
+    },
+    {
+    "id": "raggiecoin",
+    "symbol": "rag",
+    "name": "RaggieCoin"
+    },
+    {
+    "id": "tangent",
+    "symbol": "tang",
+    "name": "Tangent"
+    },
+    {
+    "id": "vyfinance",
+    "symbol": "vyfi",
+    "name": "VyFinance"
+    },
+    {
+    "id": "mocossi-planet",
+    "symbol": "mcos",
+    "name": "Mocossi Planet"
+    },
+    {
+    "id": "egoplatform",
+    "symbol": "ego",
+    "name": "EGO"
+    },
+    {
+    "id": "ibtc-2",
+    "symbol": "ibtc",
+    "name": "iBTC"
+    },
+    {
+    "id": "yummi-universe",
+    "symbol": "yummi",
+    "name": "Yummi Universe"
+    },
+    {
+    "id": "deadpxlz",
+    "symbol": "ding",
+    "name": "DEADPXLZ"
+    },
+    {
+    "id": "pavia",
+    "symbol": "pavia",
+    "name": "Pavia"
+    },
+    {
+    "id": "iusd",
+    "symbol": "iusd",
+    "name": "iUSD"
+    },
+    {
+    "id": "clay-nation",
+    "symbol": "clay",
+    "name": "Clay Nation"
+    },
+    {
+    "id": "cneta",
+    "symbol": "cneta",
+    "name": "cNETA"
+    },
+    {
+    "id": "ray-network",
+    "symbol": "xray",
+    "name": "Ray Network"
+    },
+    {
+    "id": "liqwid-finance",
+    "symbol": "lq",
+    "name": "Liqwid Finance"
+    },
+    {
+    "id": "yayswap",
+    "symbol": "yay",
+    "name": "YaySwap"
+    },
+    {
+    "id": "newm",
+    "symbol": "newm",
+    "name": "NewM"
+    },
+    {
+    "id": "muesliswap-milk",
+    "symbol": "milk",
+    "name": "MuesliSwap MILK"
+    },
+    {
+    "id": "drip-network",
+    "symbol": "drip",
+    "name": "Drip Network"
+    },
+    {
+    "id": "djed",
+    "symbol": "djed",
+    "name": "Djed"
+    },
+    {
+    "id": "genius-yield",
+    "symbol": "gens",
+    "name": "Genius Yield"
+    },
+    {
+    "id": "kubecoin",
+    "symbol": "kube",
+    "name": "KubeCoin"
+    },
+    {
+    "id": "minswap",
+    "symbol": "min",
+    "name": "Minswap"
+    },
+    {
+    "id": "gerowallet",
+    "symbol": "gero",
+    "name": "GeroWallet"
+    },
+    {
+    "id": "camelcoin",
+    "symbol": "cml",
+    "name": "Camelcoin"
+    },
+    {
+    "id": "blueshift",
+    "symbol": "blues",
+    "name": "Blueshift"
+    },
+    {
+    "id": "the-ape-society",
+    "symbol": "society",
+    "name": "The Ape Society"
+    },
+    {
+    "id": "tosidrop",
+    "symbol": "ctosi",
+    "name": "TosiDrop"
+    },
+    {
+    "id": "shen",
+    "symbol": "shen",
+    "name": "Shen"
+    },
+    {
+    "id": "greens",
+    "symbol": "greens",
+    "name": "Greens"
+    },
+    {
+    "id": "wingriders",
+    "symbol": "wrt",
+    "name": "WingRiders"
+    },
+    {
+    "id": "aada-finance",
+    "symbol": "aada",
+    "name": "Aada Finance"
+    },
+    {
+    "id": "hosky",
+    "symbol": "hosky",
+    "name": "Hosky"
+    },
+    {
+    "id": "iethereum",
+    "symbol": "ieth",
+    "name": "iEthereum"
+    },
+    {
+    "id": "empowa",
+    "symbol": "emp",
+    "name": "Empowa"
+    }
+]

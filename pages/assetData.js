@@ -161,6 +161,8 @@ function AssetData(props) {
       return <p>No data found.</p>;
     }
   
+    const maxLength = 300; // Change this value to your preferred max length
+  
     const processValue = (value) => {
       if (typeof value === 'object' && value !== null) {
         return createNestedTable(value);
@@ -171,12 +173,29 @@ function AssetData(props) {
             const ipfsGatewayUrl = `https://dweb.link/ipfs/${ipfsHash}`;
             return <a href={ipfsGatewayUrl} target="_blank" rel="noopener noreferrer">{value}</a>;
           }
-          return <a href={value.startsWith("http") ? value : "https://" + value} target="_blank" rel="noopener noreferrer">{value}</a>;
         }
+  
+        if (typeof value === 'string' && value.length > maxLength) {
+          const shortenedValue = value.substring(0, maxLength) + '...';
+          return (
+            <>
+              {shortenedValue}
+              <button
+                className="copy-button"
+                onClick={() => {
+                  navigator.clipboard.writeText(value);
+                  alert('Value copied to clipboard');
+                }}
+              >
+                Copy value
+              </button>
+            </>
+          );
+        }
+  
         return value;
       }
     };
-    
   
     return (
       <table>
@@ -184,7 +203,7 @@ function AssetData(props) {
           {Object.entries(input).map(([key, value], index) => (
             <tr key={index}>
               <td className="key">{key}:</td>
-              <td>{processValue(value)}</td>
+              <td className="value-td">{processValue(value)}</td>
             </tr>
           ))}
         </tbody>
@@ -200,21 +219,20 @@ function AssetData(props) {
   }
   
   return (
-    <div>
+    <div className="assetData">
       <header className="home-header">
-        <h1>Cardano Explorer</h1>
+        <div className="main-title">Cardano Explorer</div>
         <SearchBar />
-        <button onClick={clearLocalStorage} className="refresh-button">Clear</button>
         <button className="currency-button">Currency: USD</button>
         <WalletButton />
       </header>
       <div className="asset-display">
         <div className="asset-item">
           <div className="asset-text">
-            <h2 style={{marginTop: 30}}>{name}</h2>
+            <div className="asset-title">{name}</div>
           </div>
           <div className="asset-text">
-          <h3>Policy ID: <Link href={"/"+ policy}>{policy}</Link></h3>
+          <div>Policy ID: <Link href={"/"+ policy}>{policy}</Link></div>
           </div>
         </div>
         <div className="asset-item">
@@ -228,33 +246,31 @@ function AssetData(props) {
           />
         </div>
         <div className="asset-text">
-            <h3>
+            <div>
               Current Owner: <Link href={"/" + owner}>{owner.substring(0,20)+'...'}</Link>
-            </h3>
-            <h3>
+            </div>
+            <div>
               Floor Price: {floorPrice} ADA
-            </h3>
+            </div>
           </div>
         <div className="asset-item-data">
-        <div className="asset-text">
-          </div>
           <div className="asset-text">
-            <h2>Traits:</h2>
+            <div className="asset-text-header">Traits:</div>
             {createAttributeTable(attributes)}
           </div>
           <div className="asset-text">
-            <h2>On-Chain Metadata:</h2>
+            <div className="asset-text-header">On-Chain Metadata:</div>
             {createNestedTable(onchainMetadata)}
           </div>
           <div className="asset-text">
-            <h2>Off-Chain Metadata:</h2>
+            <div className="asset-text-header">Off-Chain Metadata:</div>
             {createNestedTable(metadata)}
           </div>
           <div className="asset-text">
-            <h2>Rarity Rank: </h2>{rank}
+            <div className="asset-text-header">Rarity Rank: </div>{rank}
           </div>
           <div className="asset-text">
-          <h2>Links:</h2><a href={"http://jpg.store/asset/"+props.assetId}><Image src={'/jpg.svg'} alt='jpg' width={80} height={80}/></a>
+          <div className="asset-text-header">Links:</div><a href={"http://jpg.store/asset/"+props.assetId}><Image src={'/jpg.svg'} alt='jpg' width={80} height={80}/></a>
           </div>
         </div>
       </div>

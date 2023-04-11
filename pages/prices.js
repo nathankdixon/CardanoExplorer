@@ -64,7 +64,7 @@ export default function Prices (props) {
               
                     return {
                       name: coin.name,
-                      price: coin.current_price,
+                      price: (coin.current_price).toFixed(2),
                       priceChange: formattedPriceChange,
                       color: getColor(priceChange),
                     };
@@ -91,7 +91,7 @@ export default function Prices (props) {
           const prices = {};
       
           currencies.forEach((currency) => {
-          const price = data.cardano[currency];
+          const price = (data.cardano[currency]).toFixed(5);
           const change24hrRaw = data.cardano[`${currency}_24h_change`].toFixed(2);
           const change24hr = change24hrRaw > 0 ? `+${change24hrRaw}` : `${change24hrRaw}`;
       
@@ -117,7 +117,7 @@ export default function Prices (props) {
 
     return (
         <div className="prices">
-            <div className="titles-price"><h1>Top 5 cryptocurrencies</h1><h1 className="">Cardano (ADA) Prices</h1></div>
+            <div className="titles-price"><h1>Top 5 Cryptocurrencies</h1><h1 className="">Cardano (ADA) Prices</h1></div>
         <div className="price-nav">
           <table className="crypto-prices">
             <thead>

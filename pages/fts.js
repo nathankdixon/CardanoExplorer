@@ -5,96 +5,95 @@ import { useEffect, useState } from "react";
 // exports a table of fungible tokens with prices, price changes and values
 export default function Fts (props){
 
-    const [display, setDisplay] = useState("Coins");
-    const [displayWithPrices, setDisplayWithPrices] = useState([]);
-    const [displayWithoutPrices, setDisplayWithoutPrices] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
+    const [cardanoPrice, setCardanoPrice] = useState(0);
+
+    const [combinedRows, setCombinedRows] = useState([]);
 
     const router = useRouter();
 
-    useEffect( () => {
-      const getData = async () =>{
-        if(props.data == null){
+    useEffect(() => {
+      const getData = async () => {
+        if (props.data == null) {
           //base
-        }
-
-        else{
-        // Sort the fts array by the value
+        } else {
           const sortedFts = [...props.data.fts].sort((a, b) => {
-            const aValue = a[0].prices?.current * a[0].quantity || 0;
-            const bValue = b[0].prices?.current * b[0].quantity || 0;
-            return bValue - aValue;
+            const aHasPrice = a[0].prices !== null;
+            const bHasPrice = b[0].prices !== null;
+          
+            if (aHasPrice && bHasPrice) {
+              const aValue = a[0].prices.current * a[0].quantity;
+              const bValue = b[0].prices.current * b[0].quantity;
+              return bValue - aValue;
+            } else if (aHasPrice) {
+              return -1;
+            } else if (bHasPrice) {
+              return 1;
+            } else {
+              return 0;
+            }
           });
-
-          let pricedGrid = [];
-          let unpricedGrid = [];
-
-          unpricedGrid.push(<div className='grid-ft-item' key = 'titlec' style={{fontWeight: "bold"}}>Coin</div>);
-          unpricedGrid.push(<div className='grid-ft-item' key = 'titley'style={{fontWeight: "bold"}}>Ticker</div>);
-          unpricedGrid.push(<div className='grid-ft-item' key = 'titleq'style={{fontWeight: "bold"}}>Quantity</div>);
-
-          pricedGrid.push(<div className='grid-ft-item' key = 'titlec'style={{fontWeight: "bold"}}>Coin</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titley'style={{fontWeight: "bold"}}>Ticker</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titleq'style={{fontWeight: "bold"}}>Quantity</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titlep'style={{fontWeight: "bold"}}>Price</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titlecd'style={{fontWeight: "bold"}}>24hr</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titleee'style={{fontWeight: "bold"}}>7d</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titledd'style={{fontWeight: "bold"}}>30d</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titlehh'style={{fontWeight: "bold"}}>1y</div>);
-          pricedGrid.push(<div className='grid-ft-item' key = 'titlev'style={{fontWeight: "bold"}}>Value</div>);
-
+          
+    
+          let combinedRows = [];
           let totalPrice = 0;
-
-
+    
           for (const element of sortedFts) {
             let coin = element[0];
-          
-            const ticker = coin.metadata?.ticker || coin.metadata?.name || coin.metadata?.[0] || 'unknown';
+    
+            const ticker = coin.metadata?.ticker || coin.metadata?.name || coin.metadata?.[0] || Buffer.from(coin.asset_name, 'hex').toString('utf8');
             let ipfs = '';
-
-            if(coin.ipfs != null || coin.ipfs != ''){
+    
+            if (coin.ipfs !== null || coin.ipfs !== '') {
               ipfs = coin.ipfs;
-            }
-            else if(coin.onchain_metadata.image != null){
+            } else if (coin.onchain_metadata.image != null) {
               ipfs = coin.onchain_metadata.image;
-            }
-            else{
+            } else {
               ipfs = '/black.jpeg';
             }
-
-          
-            if (coin.prices == null) {
-
-              unpricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name}>
-                <Image src={ipfs} height={50} width={50} alt={coin.asset_name}/>
-                </div>);
-              unpricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 't'}>{ticker}</div>);
-              unpricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'q'}>{coin.quantity}</div>);
-
-            } else {
-
-              totalPrice += (coin.prices.current * coin.quantity);
-
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name}>
-                <Image src={ipfs} height={50} width={50} alt={coin.asset_name}/>
-                </div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 't'}>{ticker}</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'q'}>{coin.quantity}</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'p'}>{((coin.prices.current) * props.currency.value.price).toFixed(2)} {props.currency.symbol}</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'c'} style={{ color: getColor(coin.prices.change24h) }}>{coin.prices.change24h}%</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'ee'} style={{ color: getColor(coin.prices.change7d) }}>{coin.prices.change7d}%</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'dd'} style={{ color: getColor(coin.prices.change30d) }}>{coin.prices.change30d}%</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'hh'} style={{ color: getColor(coin.prices.change1y) }}>{coin.prices.change1y}%</div>);
-              pricedGrid.push(<div className='grid-ft-item' key = {coin.asset_name + 'v'}>{((coin.prices.current) * props.currency.value.price * coin.quantity).toFixed(2)} {props.currency.symbol}</div>);
+    
+            const priceExists = coin.prices != null;
+            let price = 0;
+            let value = 0;
+    
+            if (priceExists) {
+              if (cardanoPrice !== 0) {
+                price = coin.prices.current / cardanoPrice;
+              }
+    
+              // prices are in ada
+              price = (price * props.currency.value.price).toFixed(2);
+              value = (price * coin.quantity).toFixed(2);
+              totalPrice += (price * coin.quantity);
             }
+    
+            combinedRows.push(
+              <tr key={coin.asset_name + (priceExists ? 'priced' : 'unpriced')} onClick={() => router.push('/'+coin.policy_id+coin.asset_name)}>
+                <td><Image src={ipfs} height={50} width={50} alt={coin.asset_name}/></td>
+                <td>{ticker}</td>
+                <td>{coin.quantity}</td>
+                <td>{priceExists ? <span className="currency">{props.currency.symbol}</span> : ''}{priceExists ? price : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change24h) : '' }}>{priceExists ? `${coin.prices.change24h}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change7d) : '' }}>{priceExists ? `${coin.prices.change7d}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change30d) : '' }}>{priceExists ? `${coin.prices.change30d}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change1y) : '' }}>{priceExists ? `${coin.prices.change1y}%` : ''}</td>
+                <td style={{ fontWeight: priceExists ? "bold" : "" }}>{priceExists ? <span className="currency">{props.currency.symbol}</span> : ''}{priceExists ? value : ''}</td>
+              </tr>
+            );
           }
-            setDisplayWithPrices(pricedGrid);
-            setDisplayWithoutPrices(unpricedGrid);
-            setTotalValue(totalPrice.toFixed(2));
+    
+          setCombinedRows(combinedRows);
+          setTotalValue(totalPrice.toFixed(2));
         }
-      }
+      };
       getData();
-    }, [props.data, props.currency]);
+    }, [props.data, props.currency, cardanoPrice]);
+    
+    
+
+    useEffect(() => {
+      getCardanoPrice();
+    }, []);
 
       // Function to get the color based on the value
     const getColor = (value) => {
@@ -106,14 +105,37 @@ export default function Fts (props){
       return "black";
     };
 
-  return (
-    <div className="fts">
-      <h1>Fungible Tokens (Coins)</h1>
-      <h2 style={{color: "black", fontSize: 'xx-large'}}>Coins with Prices (CoinGecko)</h2>
-      <div className="grid-ft">{displayWithPrices}</div>
-      <h3 style={{color: "black", fontSize: 'x-large'}}>Total Value: {totalValue} {props.currency.symbol}</h3>
-      <h2 style={{color: "black"}}>Other Coins</h2>
-      <div className="grid-ft-noprice">{displayWithoutPrices}</div>
-    </div>
-  );
+    function getCardanoPrice(){
+      fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd')
+      .then(response => response.json())
+      .then(data => {
+        setCardanoPrice(data.cardano.usd);
+      });
+    }
+
+    return (
+      <div className="fts">
+        <div style={{ fontSize: '30px', fontWeight: 'bold' }}>Fungible Tokens (Coins)</div>
+        <div style={{ color: "white", fontSize: '25px', fontWeight: "bold"}}>Total Value:<span className="currency">{props.currency.symbol}</span>{totalValue}</div>
+        <table className="coins-table">
+          <thead>
+            <tr>
+              <th>Coin</th>
+              <th>Ticker</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>24hr</th>
+              <th>7d</th>
+              <th>30d</th>
+              <th>1y</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {combinedRows}
+          </tbody>
+        </table>
+      </div>
+    );
+    
 }

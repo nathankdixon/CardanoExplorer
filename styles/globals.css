@@ -1,14 +1,14 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #92e2e2;
-    --second-color:#431438;
+    --main-color: #0b3447;
+    --second-color:#a774ea;
     --third-color: #ffffff;
     --fourth-color: #ffffff;
-    --fifth-color: rgba(255, 255, 255, 0.291);
+    --fifth-color: rgba(255, 255, 255, 0.433);
     --sixth-color: rgba(0, 0, 0, 0.20);
-    --seventh-color: black;
+    --seventh-color: rgba(0, 0, 0, 0.677);
     --eigth-color: white;
-    --main-font: 'Courier New', sans-serif;
+    --main-font: 'Lato', sans-serif;
     width: 100vw;
     
 }
@@ -19,6 +19,7 @@ body {
     background-color: var(--second-color);
     margin: 0;
     padding: 0;
+    width: 100vw;
 }
 
 ::-webkit-scrollbar {
@@ -32,7 +33,7 @@ body {
 h1{
     font-size: xx-large;
     font-weight: bold;
-    color: var(--second-color);
+    color: rgb(255, 255, 255);
     font-family: var(--main-font);
 }
 h2{
@@ -68,7 +69,6 @@ h3{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
     margin-top: 9rem;
     color:white;
 
@@ -84,12 +84,6 @@ h3{
     width:100%;
 
     
-}
-
-.arrow{
-    padding: 10px;
-
-
 }
 
 .home-body-wallets{
@@ -110,7 +104,7 @@ h3{
     display: inline-block;
     width: 150px;
     height: 150px;
-    background-color: var(--main-color);
+    background-color: var(--fifth-color);
     background-position: center;
     background-size: cover;
     font-weight: bold;
@@ -130,24 +124,21 @@ h3{
     color: var(--second-color);
     font-family: var(--main-font);
     font-weight: bold;
-    font-size:25px;
+    font-size:18px;
+    margin: 10px;
     border: 2px solid white;
-    padding: 2px;
-    border-radius: 50%;
-    height: 60%;
-    margin: 19px 0;
-
+    border-radius: 10px;
 }
 
 .currency-button{
     text-align: center;
-    font-size: 25px;
+    font-size: 18px;
     font-family: var(--main-font);
     background-color: var(--main-color);
     color: var(--third-color);
     border: 2px solid white;
     padding: 10px;
-    margin: 15px;
+    margin: 10px;
     font-weight: bold;
     border-radius: 10px;
     color: var(--second-color);
@@ -164,14 +155,10 @@ h3{
     cursor: pointer;
 }
 
-
-.summary{
-    display: flex;
-    justify-content: space-evenly;
-    font-weight: bold;
-    font-size: x-large;
-    width: 90vw;
+.summary-title{
+    margin-top: 100px;
 }
+
 .preview-img-item{
     font-size: x-large;
     display: flex;
@@ -215,7 +202,6 @@ h3{
     align-items: center;
     justify-content: center;
     background-color: var(--main-color);
-    color: var(--second-color);
     border: 3px solid rgb(255, 255, 255);
     padding: 10px;
     width: 60px;
@@ -223,9 +209,9 @@ h3{
     text-align: center;
     cursor: pointer;
     border-radius: 50%;
-    font-size: medium;
     font-weight: bold;
     font: var(--main-font);
+
  } 
 
  
@@ -298,26 +284,33 @@ p{
     background-color: var(--main-color); /* light green */
   }
   
-  #txs {
-    background-color: #ccccff; /* light blue */
-  }
-  
   #w{
     background-color: var(--main-color); /* light green */
+    color: var(--second-color);
+    font-weight: bold;
+    font-size: 22px;
 }
 
 #n {
-    background-color: var(--second-color); /* light red */
+    background-color: var(--second-color);
+    color: var(--main-color); /* light red */
+    font-size: 23px;
+    font-weight: bold;
   }
   
   #f {
-    background-color: var(--main-color); /* light green */
+    background-color: var(--main-color); 
+    color: var(--second-color);/* light green */
+    font-size: 22px;
+    font-weight: bold;
   }
   
-
 #h{
     background-color: var(--second-color);
     color: var(--main-color);/* light green */
+    font-size: 22px;
+    font-weight: bold;
+    
 }
 #h:hover{
 background-color: var(--fifth-color);
@@ -395,32 +388,14 @@ color: var(--main-color);/* light green */
 
 
   .grid-nft {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px;
+    width: 80vw;
+
   }
 
-.back-button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--main-color);
-    color: var(--second-color);
-    border: 2px solid white;
-    border-radius: 10px;
-    text-align: left;
-
-    cursor: pointer;
-    color: white;
-    font-size: medium;
-    font-weight: bold;
-    font: var(--main-font);
-    margin: 10px;
-    padding: 10px;
-    width: 50px;
-    height: 50px;
-
-}
 
 .back-button:hover{
     background-color: var(--second-color);
@@ -432,8 +407,12 @@ color: var(--main-color);/* light green */
 }
 
 .item-name{
-    color: var(--main-color);
-    padding: 10px;
+    color: var(--eigth-color);
+    font-size: 16px;
+    margin: 2px;
+    padding: 2px;
+    text-decoration: underline;
+
 }
 
 .item-name:hover{
@@ -441,17 +420,22 @@ color: var(--main-color);/* light green */
 }
 
 .grid-item{
-    padding: 10px;
+    padding: 5px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 5px;
     box-shadow: 5px 5px 2px 0px rgba(0,0,0,0.75);
-    margin: 10px;
+    margin: 5px;
     background-color: var(--fifth-color);
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-decoration: none;
+
+    width: 190px;
+    height: 200px;
+
 
 }
 
@@ -459,16 +443,16 @@ color: var(--main-color);/* light green */
     display: flex;
     flex-direction: column;
     align-items: center;
-
-
-    padding: 10px;
+    padding: 5px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 5px;
     box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-    margin: 10px;
+    margin: 5px;
     background-color: var(--fifth-color);
+    width: 190px;
+    height: 200px;
 }
 
 
@@ -487,32 +471,37 @@ color: var(--main-color);/* light green */
     transform: scale(1.05);
 }
 
-.fts{
-    font-size: 20px;
+.fts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 70vw;
-}
-
-.grid-ft{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* three columns each taking up equal space */
-    grid-gap: 10px;
-    color: black;
-    width: 100%;
-
-}
-
-.grid-ft-noprice{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* three columns each taking up equal space */
-    grid-gap: 10px;
-    color: black;
-    width: 100%;
-}
+  }
   
-.grid-ft-item{
-    padding: 5px;
+  .coins-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1rem 0;
+    width: 100%;
+    font-size: 1.4rem;
+  }
+  
+  .coins-table th, .coins-table td {
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem;
     text-align: center;
-}
+  }
+  
+  .coins-table th:last-child, .coins-table td:last-child {
+    border-right: none;
+  }
+  
+  .coins-table th {
+    background-color: var(--sifth-color);
+    font-weight: bold;
+  }
+  
+
 
 .nft-nav{
     display: flex;
@@ -540,7 +529,7 @@ color: var(--main-color);/* light green */
     width: 100%;
     background-color: var(--main-color);
     color:var(--second-color);
-    padding: 18px;
+    padding: 10px;
     box-sizing: border-box;
     border: 2px solid var(--third-color);
     border-radius: 4px;
@@ -585,8 +574,8 @@ color: var(--main-color);/* light green */
     object-fit: cover;
     cursor: pointer;
     transition: background-color 0.2s;
-    padding: 12px;
-    font-size: 25px;
+    padding: 7px;
+    font-size: 20px;
 }
 
 .search-button:hover{
@@ -596,14 +585,16 @@ color: var(--main-color);/* light green */
 .wallet-section{
     display: flex;
     flex-direction:row;
+    justify-content: space-between;
 }
 
 .wallet-button-text{
     font-family: var(--main-font);
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
     color: var(--main-color);
-    margin: 0px 0px 0px 10px;
+    padding-left: 5px;
+    text-align: center;
 }
 
 .connect-wallet-button{
@@ -614,10 +605,9 @@ color: var(--main-color);/* light green */
     background-color: var(--second-color);
     font-family: var(--main-font);
     font-weight: bold;
-    font-size:25px;
     border: 2px solid white;
-    padding: 15px;
-    margin: 13px;
+    padding: 8px;
+    margin: 10px;
     margin-right: 20px;
     border-radius: 20px;
 
@@ -666,15 +656,15 @@ color: var(--main-color);/* light green */
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 100%;
-    font-size: 25px;
+    width: 90%;
+    font-size: 20px;
     font-weight: bold;
-    background-color:var(--second-color);
+    background-color:var(--fifth-color);
     color:var(--main-color);
     font-family: var(--main-font);
     padding: 12px;
     margin-right: 5px;
-    border: 3px solid var(--eigth-color);
+    border: 1px solid var(--eigth-color);
 
 }
   
@@ -697,10 +687,22 @@ color: var(--main-color);/* light green */
 
   }
 
+  .main-title{
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--main-color);
+    padding: 15px;
+    text-align: center;
+    text-shadow: 10px 10px 10px var(--sixth-color);
+    text-decoration: underline;
+
+    
+  }
+
   .title{
     padding: 1rem;
     text-align: left;
-    font-size: 28px;
+    font-size: 21px;
     background-color: var(--fifth-color);
     color: var(--main-color);
   }
@@ -708,7 +710,7 @@ color: var(--main-color);/* light green */
   .title-change{
     padding: 1rem;
     text-align: center;
-    font-size: 28px;
+    font-size: 21px;
     background-color: var(--fifth-color);
     color: var(--main-color);
   }
@@ -726,21 +728,18 @@ color: var(--main-color);/* light green */
     flex-direction: column;
   }
 .price-label {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--eigth-color);
+    font-size: 1.5rem;    color: var(--eigth-color);
     padding: 10px;
     text-align: left;
-    font-size: 26px;
+    font-size: 21px;
   }
 
   .price-label-change {
     font-size: 1.5rem;
-    font-weight: bold;
     color: var(--eigth-color);
     padding: 10px;
     text-align: center;
-    font-size: 26px;
+    font-size: 21px;
   }
   
   
@@ -760,8 +759,9 @@ color: var(--main-color);/* light green */
 
 .currency{
     color:gold;
-    padding: 15px;
-    font-size: 30px;
+    margin-right: 8px;
+    margin-left: 5px;
+    font-weight: bold;
 }
 
 .setting-button {
@@ -961,13 +961,7 @@ tr:hover {
 
 
 label{
-    padding: 10px 10px 10px 10px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    font-weight: bold;
-    font-size: large;
-    color: rgb(255, 255, 255);
+
 }
 
 
@@ -985,6 +979,14 @@ label{
 
 }
 
+.assetData{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
 .asset-display{
     display: flex;
     flex-direction: column;
@@ -992,6 +994,7 @@ label{
     align-items: center;
     padding: 10px 10px 10px 10px;
     margin-top: 60px;
+
 }
 
 .asset-item{
@@ -999,7 +1002,7 @@ label{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    width: 100%;
 }
 .asset-img{
     width: 35vw;
@@ -1014,10 +1017,28 @@ label{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
     padding: 10px 10px 10px 10px;
-    font-size: x-large;
+    width: 80%;
+    font-size: 20px;
+
 }
+
+.value-td{
+    max-width: 100%; /* Adjust this value to your preferred maximum width */
+    word-break: break-word;
+    padding: 5px;
+
+  }
+
+  .asset-text-header{
+    font-size: 25px;
+    font-weight: bold;
+    padding: 5px;
+    color: var(--main-color);    
+  }
+  
 
 .asset-item-data{
     background-color: var(--sixth-color);
@@ -1030,20 +1051,42 @@ label{
     margin: 10px 10px 10px 10px;
     border: var(--fifth-color) 2px solid;
     box-shadow: 10px 10px 5px var(--fifth-color);
-
     text-align: center;
-
+    width: 80%;
 }
-a,
-a:visited,
-a:active,
+
 a:hover {
-  color: rgb(113, 210, 255);
-  text-decoration: underline;
+    background-color: var(--fifth-color);
+
 
 }
 
 .key{
-    color:var(--main-color);
+    color:var(--seventh-color);
     font-weight: bold;
+    padding: 5px;
+}
+
+.copy-button{
+    font-family: var(--main-font);
+    padding: 5px;
+    border: 3px solid white;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+
+
+}
+.copy-button:hover{
+    background-color: var(--third-color);
+    cursor: pointer;
+}
+
+.asset-title{
+    font-size: 30px;
+    font-weight: bold;
+    padding: 5px;
+    color: var(--main-color);
 }

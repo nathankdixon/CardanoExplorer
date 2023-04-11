@@ -34,11 +34,10 @@ export default function Nfts (props){
             singleGrid.push(<div key={policy.policy_id + "-noimg"} className="grid-item">
                 <Image
                 key={policy.policy_id + "-noimg"}
-                width={200}
-                height={200}
+                width={170}
+                height={170}
                 className="grid-img"
-                src={"/black.jpeg"}
-              />
+                src={"/black.jpeg"}/>
             </div>
 
             );
@@ -47,8 +46,8 @@ export default function Nfts (props){
             <Image
             className="grid-img"
             src={policy.ipfs}
-            height={200}
-            width={200}
+            height={170}
+            width={170}
             alt={policy.asset_name}
           />
           <label className="item-name">{(policy.decoded_name).substring(0,20)}</label>
@@ -66,8 +65,8 @@ export default function Nfts (props){
           if (!policy) {
             singleGrid.push(<div key={"noimg-" + index} className="grid-item">
                 <Image
-                width={200}
-                height={200}
+                width={170}
+                height={170}
                 className="grid-img"
                 src={"/black.jpeg"}
               />
@@ -76,8 +75,8 @@ export default function Nfts (props){
             if (policy[0].ipfs == "") {
               singleGrid.push(<div key={element.policy_id + "-noimg-" + index} className="grid-item">
                   <Image
-                  width={200}
-                  height={200}
+                  width={170}
+                  height={170}
                   className="grid-img"
                   src={"/black.jpeg"}
                 />
@@ -90,8 +89,8 @@ export default function Nfts (props){
                   <Image                    
                     className="grid-img"
                     src={policy[0].ipfs}
-                    height={200}
-                    width={200}
+                    height={170}
+                    width={170}
                     alt={policy[0].asset_name}
                   />
                   <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
@@ -103,8 +102,8 @@ export default function Nfts (props){
                   <Image
                     className="grid-img"
                     src={policy[0].ipfs}
-                    height={200}
-                    width={200}
+                    height={170}
+                    width={170}
                     alt={policy[0].asset_name}
                   />
                 <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
@@ -133,17 +132,18 @@ export default function Nfts (props){
         if(policy[0].ipfs == "" || policy[0].ipfs == null){
           singleGrid.push(<Link href={'/'+policy[0].policy_id + policy[0].asset_name} className="grid-item" key={element.policy_id + "-noimg-"} >
             <Image
-            width={200}
-            height={200}
+            width={170}
+            height={170}
             className="grid-img"
-            src={"/black.jpeg"}/>
+            src={"/black.jpeg"}
+            />
           </Link> )
         }
         else{
           if(policy.length > 1){
             collectionGrid.push(<div className="grid-item-collection" onClick={() => showCollection(policy)} key = {policy[0].asset_name}>
               <Image className="grid-img" 
-                src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} 
+                src={policy[0].ipfs} height={170} width={170} alt = {policy[0].asset_name} 
                 />
               <label className="item-name">{(policy[0].decoded_name)}</label>
 
@@ -151,7 +151,8 @@ export default function Nfts (props){
           }
           else{
             singleGrid.push(<Link className="grid-item" key = {policy[0].asset_name} href = {'/'+policy[0].policy_id + policy[0].asset_name}>
-              <Image className="grid-img"  src={policy[0].ipfs} height={200} width={200} alt = {policy[0].asset_name} />
+              <Image className="grid-img"  src={policy[0].ipfs} 
+              height={170} width={170} alt = {policy[0].asset_name} />
               <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
             </Link>);
           }
@@ -175,10 +176,11 @@ export default function Nfts (props){
         if (element.ipfs == null) {
           singleGrid.push(<Link href={"/" + element.policy_id + element.asset_name} className="grid-item" key={element.policy_id + "-noimg-" + index}>
             <Image
-            width={200}
-            height={200}
+            width={170}
+            height={170}
             className="grid-img"
-            src={"/black.jpeg"}/>
+            src={"/black.jpeg"}
+            />
            <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
 
             </Link>
@@ -189,11 +191,10 @@ export default function Nfts (props){
               className="grid-img"
               src={element.ipfs}
               alt={element.asset_name}
-              width={200}
-              height={200}
+              width={170}
+              height={170}
               />
             <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
-
             </Link>
               );
           }
@@ -233,7 +234,7 @@ export default function Nfts (props){
 
 return (
   <div className="nfts">
-    <h1>NFTs</h1>
+    <div style={{fontSize: '30px',fontWeight: 'bold'}}>NFTs</div>
     <nav className="nft-nav">{backButton}{info}
       <input
         type="search"
@@ -250,20 +251,12 @@ return (
       />
         Expand all collections
       </label>
-      <label>
-      <input
-        type="checkbox"
-        checked={sortByAssetName}
-        onChange={() => setSortByAssetName(!sortByAssetName)}
-      />
-        Sort by asset name
-      </label>
       </nav>
-        <h2>NFT Collections</h2>
+        <div style={{fontSize: '25px'}}>NFT Collections</div>
       <div className="grid-nft">
       {display.collections}
       </div>
-      <h2>NFTs</h2>
+      <div style={{fontSize: '25px'}}>NFTs</div>
       <div className="grid-nft">
         {display.singles}
       </div>

@@ -84,6 +84,7 @@ export default class Token {
     this.ipfs = '/black.jpeg';
     this.prices = null;
     this.decoded_name =  Buffer.from(asset_name, 'hex').toString();
+    this.floor_price = null;
   }
 
   async fetchTokenMetadata() {
@@ -112,7 +113,7 @@ export default class Token {
           }
           else{
           }
-        } else if (!res[0].minting_tx_metadata && !res[0].minting_tx_metadata) {
+        } else if (!res[0].minting_tx_metadata ) {
           console.log("no metadata found");
         }
       } catch (error) {
@@ -126,29 +127,50 @@ export default class Token {
 
 
   async getPrice() {
-    if (this.quantity === 1) {
-      return;
-    }try {
-      const request = await fetch('/coin-gecko.json');
-      const geckoData = await request.json();
-      const ticker = this.metadata?.ticker;
-    
-      if (!ticker) {
-        return;
-      }
-    
-      const foundGeckoCoin = geckoData.find(item => item.symbol === ticker.toLowerCase());
-      if (!foundGeckoCoin) {
-        return;
-      }
+    if (this.quantity == 1) {
+      try{
+        let request = await fetch('https://api.opencnft.io/2/collection/'+this.policy_id+'/floor_price',
+        {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
 
-      console.log(foundGeckoCoin.id);
-    
-      const req = await fetch(`https://api.coingecko.com/api/v3/coins/${foundGeckoCoin.id}`);
-      const res = await req.json();
-    
-      if (res.asset_platform_id === 'cardano') {
-        const priceData = res.market_data;
+        if(request.status == 429){
+
+          //wait 5 seconds and try again
+          await new Promise(r => setTimeout(r, 5000));
+          request = await fetch('https://api.opencnft.io/2/collection/'+this.policy_id+'/floor_price',
+          {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
+        }
+
+        let opencnftData = await request.json();
+        if(opencnftData.floor_price){
+          this.floor_price = (opencnftData.floor_price/1000000);
+          console.log("floor price: ", this.floor_price);
+        }
+        else{
+          this.floor_price = 0;
+        }
+      }
+      catch(error){
+        this.floor_price = 0;
+      }
+    }
+    else{
+      try {
+        let request = await fetch('/coin-gecko-id-cardano.json');
+        let geckoData = await request.json();
+        let ticker = (this.metadata?.ticker);
+      
+        if (!ticker) {
+          return;
+        }
+      
+        let foundGeckoCoin = geckoData.find(item => item.symbol === ticker.toLowerCase());
+        if (!foundGeckoCoin) {
+          return;
+        }
+      
+        let req = await fetch(`https://api.coingecko.com/api/v3/coins/${foundGeckoCoin.id}`);
+        let res = await req.json();
+        let priceData = res.market_data;
         this.prices = {
           current: priceData.current_price.usd.toFixed(2),
           change24h: priceData.price_change_percentage_24h.toFixed(2),
@@ -156,9 +178,11 @@ export default class Token {
           change30d: priceData.price_change_percentage_30d.toFixed(2),
           change1y: priceData.price_change_percentage_1y.toFixed(2),
         };
+      } catch (error) {
+        console.error('Error fetching price data:', error);
       }
-    } catch (error) {
-      console.error('Error fetching price data:', error);
     }
+    
+
   }
 }    

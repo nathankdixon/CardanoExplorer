@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Lucid } from "lucid-cardano";
 import WalletData from "./walletData";
 
 

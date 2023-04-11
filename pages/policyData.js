@@ -276,7 +276,6 @@ function PolicyData (props) {
             <header className="home-header">
               <h1>Cardano Explorer</h1>
               <SearchBar />
-              <button onClick={clearSessionStorage} className="refresh-button">Clear</button>
               <button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
               <button className="currency-button">Currency: USD</button>
               <WalletButton />

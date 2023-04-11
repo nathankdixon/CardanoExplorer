@@ -146,11 +146,14 @@ function WalletData (props) {
 
     for(let i =0; i<assets.length;i++){
       setLoadedTokens('loading '+i+'/'+assets.length);
-      let quantity = 1;
+      let quantity = 1; 
 
 
-      if(assets[i].decimals != 0){
-        quantity = assets[i].quantity / (10**(assets[i].decimals));
+      if(assets[i].quantity != 1){
+        quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
+      }
+      else{
+        quantity = assets[i].quantity;
       }
 
       let token = new Token(assets[i].asset_name, assets[i].policy_id, quantity);
@@ -264,27 +267,27 @@ function WalletData (props) {
   return(
     <div className="wallet-data">
         <header className="home-header">
-          <h1>Cardano Explorer</h1>
+          <div className="main-title">Cardano Explorer</div>
           <SearchBar/>
           <button className="currency-button" onClick={() => changeCurrency()}>Currency: <span style={{color: 'gold'}}>{currency.name}</span></button>
-          <div className="wallet-section"><button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
+          <div className="wallet-section"><button onClick={deleteLocalStorage} className="refresh-button">Refresh Wallet Data</button>
           <WalletButton/></div>
       </header>
       <div className="wallet-data-header">
         <span className="wallet-button" id='h' onClick={() => scrollToTop()}>
-          <span><Image src={'/home.png'} height={50} width={50} alt='home'/></span>
+          <span>Home</span>
           <span className="tooltip">Home</span>
         </span>
         <span className="wallet-button" id='w' onClick={() => scrollToSection('wallet')}>
-          <span><Image src={'/walelt.png'} height={50} width={50} alt='wallet'/></span>
+          <span>Wallet</span>
           <span className="tooltip">Wallet</span>
         </span>
         <span className="wallet-button" id='n' onClick={() => scrollToSection('nfts')}>
-          <span><Image src={'/images.png'} height={50} width={50} alt='NFT'/></span>
+          <span>NFTs</span>
           <span className="tooltip">NFTs</span>
         </span>
         <span className="wallet-button" id='f' onClick={() => scrollToSection('fts')}>
-          <span><Image src={'/cardanocoin.png'} height={50} width={50} alt='coin'/></span>
+          <span>Coins</span>
           <span className="tooltip">Coins</span>
         </span>
       </div>
