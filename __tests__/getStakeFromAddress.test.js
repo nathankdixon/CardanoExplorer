@@ -1,5 +1,4 @@
-import fetchMock from 'jest-fetch-mock';
-import { getStakeFromAddress } from './getStakeFromAddress';
+import { getStakeFromAddress } from '../pages/test/getStakeFromAddress';
 
 // Enable fetch mocking
 fetchMock.enableMocks();

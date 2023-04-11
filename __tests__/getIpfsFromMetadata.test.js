@@ -1,4 +1,4 @@
-import { getIpfsFromMetadata } from "./getIpfsFromMetadata";
+import { getIpfsFromMetadata } from '../pages/test/getIpfsFromMetadata';
 
 describe('getIpfsFromMetadata', () => {
   test('should return the IPFS link for an "image" key', () => {

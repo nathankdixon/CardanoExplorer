@@ -1,5 +1,5 @@
-import Token from '../token';
-import { createWalletDataFromStake } from './createWalletData';
+import { createWalletDataFromStake } from '../pages/test/createWalletData';
+import Token from '../pages/token';
 
 // Mock the fetch function
 global.fetch = jest.fn();

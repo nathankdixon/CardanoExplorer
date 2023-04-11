@@ -1,4 +1,4 @@
-import { parseUrlParameter } from "./parseUrlParameter";
+import { parseUrlParameter } from "../pages/test/parseUrlParameter";
 
 describe('parseUrlParameter', () => {
   it('returns WalletData when input is "stake123"', async () => {

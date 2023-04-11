@@ -1,5 +1,4 @@
-import fetchMock from 'jest-fetch-mock';
-import { getAddressFromHandle } from './getAddressFromHandle';
+import { getAddressFromHandle } from '../pages/test/getAddressFromHandle';
 
 // Enable fetch mocking
 fetchMock.enableMocks();

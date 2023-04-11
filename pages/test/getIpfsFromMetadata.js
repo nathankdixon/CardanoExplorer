@@ -1,3 +1,4 @@
+
 // if metadata has been fetched
 // find the ipfs link under 'image' metadata tag and store it
 export function getIpfsFromMetadata (metadata){

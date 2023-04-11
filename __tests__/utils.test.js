@@ -1,6 +1,5 @@
-import React from 'react';
 import { render, cleanup } from '@testing-library/react';
-import { createAttributeTable, createNestedTable, isUrl } from './utils';
+import { createAttributeTable, createNestedTable, isUrl } from '../pages/test/utils';
 
 describe('isUrl', () => {
   it('returns the correct result based on the input string', () => {

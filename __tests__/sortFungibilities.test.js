@@ -1,4 +1,4 @@
-import { sortTokenFungibilities } from "./sortFungibilities";
+import { sortTokenFungibilities } from '../pages/test/sortFungibilities';
 
 describe('sortTokenFungibilities', () => {
     it('correctly separates fungible and non-fungible tokens', () => {

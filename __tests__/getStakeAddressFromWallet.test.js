@@ -1,6 +1,5 @@
 // getStakeAddressFromWallet.test.js
-
-import { getStakeAddressFromWallet } from './getStakeAddressFromWallet';
+import { getStakeAddressFromWallet } from '../pages/test/getStakeAddressFromWallet';
 
 // Mock window.cardano
 global.window.cardano = {

@@ -1,4 +1,4 @@
-import { groupTokensByPolicyId } from "./groupTokensByPolicyId";
+import { groupTokensByPolicyId } from "../pages/test/groupTokensByPolicyId";
 
 describe("groupTokensByPolicyId", () => {
   test("groups token objects by policy Id", () => {
