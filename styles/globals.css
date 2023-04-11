@@ -13,6 +13,15 @@
     
 }
 
+@font-face {
+    font-family: 'Lato';
+    src: url('/Lato/Lato-Regular.ttf') format('truetype'),
+         url('/Lato/Lato-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+
 body {
     font-family: var(--main-font);
     color: rgb(255, 255, 255);
@@ -109,10 +118,12 @@ h3{
     background-size: cover;
     font-weight: bold;
     color: var(--second-color);
+        transition: background-color 0.2s;
+
 }
 
 .home-wallet-button:hover{
-    background-color: var(--fifth-color);
+    background-color: var(--sixth-color);
     color: var(--second-color);
     cursor: pointer;
 }
@@ -128,6 +139,8 @@ h3{
     margin: 10px;
     border: 2px solid white;
     border-radius: 10px;
+        transition: background-color 0.2s;
+
 }
 
 .currency-button{
@@ -142,6 +155,8 @@ h3{
     font-weight: bold;
     border-radius: 10px;
     color: var(--second-color);
+        transition: background-color 0.2s;
+
 }
 
 .currency-button:hover{
@@ -289,6 +304,8 @@ p{
     color: var(--second-color);
     font-weight: bold;
     font-size: 22px;
+        transition: background-color 0.2s;
+
 }
 
 #n {
@@ -296,6 +313,8 @@ p{
     color: var(--main-color); /* light red */
     font-size: 23px;
     font-weight: bold;
+        transition: background-color 0.2s;
+
   }
   
   #f {
@@ -303,6 +322,8 @@ p{
     color: var(--second-color);/* light green */
     font-size: 22px;
     font-weight: bold;
+        transition: background-color 0.2s;
+
   }
   
 #h{
@@ -310,6 +331,8 @@ p{
     color: var(--main-color);/* light green */
     font-size: 22px;
     font-weight: bold;
+        transition: background-color 0.2s;
+
     
 }
 #h:hover{
@@ -399,6 +422,7 @@ color: var(--main-color);/* light green */
 
 .back-button:hover{
     background-color: var(--second-color);
+    color: white;
 }
 
 .grid-img {
@@ -407,16 +431,16 @@ color: var(--main-color);/* light green */
 }
 
 .item-name{
-    color: var(--eigth-color);
+    color: var(--main-color);
     font-size: 16px;
-    margin: 2px;
+    margin: 6px;
     padding: 2px;
-    text-decoration: underline;
 
 }
 
 .item-name:hover{
     cursor: pointer;
+    
 }
 
 .grid-item{
@@ -461,6 +485,8 @@ color: var(--main-color);/* light green */
     cursor: pointer;
     transition: transform 0.3s;
     transform: scale(1.07);
+    color: var(--second-color);
+
     
 }
     
@@ -469,6 +495,7 @@ color: var(--main-color);/* light green */
     cursor: pointer;
     transition: transform 0.3s;
     transform: scale(1.05);
+    color: var(--second-color);
 }
 
 .fts {
@@ -476,6 +503,7 @@ color: var(--main-color);/* light green */
     flex-direction: column;
     align-items: center;
     width: 70vw;
+    margin-top: 80px;
   }
   
   .coins-table {
@@ -483,7 +511,7 @@ color: var(--main-color);/* light green */
     border-spacing: 0;
     margin: 1rem 0;
     width: 100%;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   
   .coins-table th, .coins-table td {
@@ -610,6 +638,8 @@ color: var(--main-color);/* light green */
     margin: 10px;
     margin-right: 20px;
     border-radius: 20px;
+        transition: background-color 0.2s;
+
 
 }
 
@@ -778,6 +808,19 @@ color: var(--main-color);/* light green */
 
 }
 
+.back-button{
+    font-family: var(--main-font);
+    border: var(--third-color) 1px solid;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 17px;
+    color:var(--second-color);
+    background-color:var(--main-color);
+    border-radius: 10px;
+    padding: 5px;
+}
+
 .summary{
     display: flex;
     justify-content: space-between;
@@ -790,7 +833,46 @@ color: var(--main-color);/* light green */
     font-weight: bold;
     font-size: larger;
     width: 90vw;
-    margin-left: 200px;
+    margin-left: 150px;
+}
+
+.summary-general{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 2px solid var(--second-color);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    background-color: var(--sixth-color);
+    box-shadow: 10px 5px 10px 0px var(--fifth-color);
+}
+
+.summary-title{
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.summary-tokens{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.summary-tokens-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    border: 2px solid var(--second-color);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    background-color: var(--sixth-color);
+    box-shadow: 10px 5px 10px 0px var(--fifth-color);
+
 }
 
 .policy-data{
@@ -970,14 +1052,7 @@ label{
   background-color: var(--third-color);
 }
 
-.fts{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 80px;
 
-}
 
 .assetData{
     display: flex;
@@ -1020,7 +1095,7 @@ label{
     flex-wrap: wrap;
     align-items: center;
     padding: 10px 10px 10px 10px;
-    width: 80%;
+    width: 100%;
     font-size: 20px;
 
 }
@@ -1052,7 +1127,7 @@ label{
     border: var(--fifth-color) 2px solid;
     box-shadow: 10px 10px 5px var(--fifth-color);
     text-align: center;
-    width: 80%;
+    width: 100%;
 }
 
 a:hover {

@@ -1,9 +1,6 @@
-import Image from "next/image";
 import { useEffect, useState } from "react"
 
 export default function Summary(props){
-
-    const [walletData, setWalletData] = useState({balance: null, total_rewards: null,  available_rewards: null, projects: null, tokens: null, nfts: null, fts:null});
 
     // current selected currency
     const [currency, setCurrency] = useState({name: 'ADA', value: {price: 1, change24hr: 0}, symbol: '₳'})
@@ -13,10 +10,6 @@ export default function Summary(props){
 
     const [ftValue, setFtValue] = useState(0);
     const [nftValue, setNftValue] = useState(0);
-
-
-    const [stakeInfo, setStakeInfo] = useState('Summary');
-    const [value, setValue] = useState(0);
 
     useEffect(() => {
         const getSummaryInfo = async () => {
@@ -100,13 +93,28 @@ export default function Summary(props){
 
     return (
         <div className="summary">
-            <h1 className = 'summary-title'>Your Wallet</h1>
-            <div>ADA Balance: <span style={{color: 'green'}}> {adaBalance} ADA </span></div>
-            <div>NFT Value: <span className="currency">{currency.symbol}</span> {nftValue}</div>
-            <div>Fungible Token Value:<span className="currency">{currency.symbol}</span><span style={{color: 'red'}}>{(ftValue)}</span></div>
-            <div>NFTs:<span style={{color: 'yellow'}}>{props.data.nfts.length}</span></div>
-            <div>Coins:<span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></div>
-            <div className="total-value">Total Value: <span className="currency">{currency.symbol}</span> {nftValue + ftValue}</div>
+            <div className = 'summary-title'>Your Wallet</div>
+            <div className="summary-general">
+                <div>ADA Balance: <span style={{color: 'green'}}> {adaBalance} ADA </span></div>
+                <div className="total-value">Total Value: <span className="currency">{currency.symbol}</span> {nftValue + ftValue}</div>
+            </div>
+            <div className="summary-tokens">
+                <div className="summary-tokens-item">
+                    <div>NFTs:<span style={{color: 'yellow'}}>{props.data.nfts.length}</span></div>
+                    <div>NFT Value: <span className="currency">{currency.symbol}</span> {nftValue}</div>
+                </div>
+                <div className="summary-tokens-item">
+                    <div>Coins:<span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></div>
+                    <div>Fungible Token Value:<span className="currency">{currency.symbol}</span><span style={{color: 'red'}}>{(ftValue)}</span></div>
+                </div>
+            </div>
+
+
+
+
+
+
+
         </div>
     )
 }
