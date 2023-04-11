@@ -9,10 +9,7 @@ import { useEffect, useState } from "react";
 export default function WalletButton(props){
 
     const [buttonText, setButtonText] = useState('Wallet') ;
-    const [colors, setColors] = useState();
     const [isVisable, setIsVisable] = useState(false);
-    const [stake, setStake] = useState();
-    const [toggle, setToggle] = useState(false);
 
     const router = useRouter();
 

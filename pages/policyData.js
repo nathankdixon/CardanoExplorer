@@ -62,8 +62,8 @@ function PolicyData (props) {
                   tokens = JSON.parse(sessionStorage.getItem(policy));
                 }
                 else{
-                  tokens = await getPolicyTokens(policy);
-                  sessionStorage.setItem(policy, JSON.stringify(tokens));
+                  //tokens = await getPolicyTokens(policy);
+                  //sessionStorage.setItem(policy, JSON.stringify(tokens));
                 }
                 showTokens(0,25, tokens);
                 setTokens(tokens);
@@ -200,7 +200,6 @@ function PolicyData (props) {
         return null;
       }
       return ipfs;
-    
     }
       // fetch token metadata from blockfrost
       async function loadTokenData(policy, page){
@@ -274,29 +273,23 @@ function PolicyData (props) {
 
     return(<div>
             <header className="home-header">
-              <h1>Cardano Explorer</h1>
-              <SearchBar />
-              <button onClick={deleteLocalStorage} className="refresh-button"><Image src={'/refresh.png'} className='arrow'width = {30} height={30} alt='refresh wallet'/></button>
-              <button className="currency-button">Currency: USD</button>
-              <WalletButton />
+              <div className="main-title">Cardano Explorer</div>
+              <SearchBar/>
+              <div className="wallet-section"><button onClick={deleteLocalStorage} className="refresh-button">Refresh Wallet Data</button>
+              <WalletButton/></div>
             </header>
-            <div className="policy-info">
-              <h1>Policy Information</h1>
-              <div className="policy-data">
-              <Image alt='thumb' className = 'policy-item' src = {policyData.thumbnail} width = {150} height = {150}/>
-                <div className="policy-item-data">
-                  <div className="policy-item-policy">Policy:<Link href = {'/'+props.policy}>{props.policy}</Link></div>
-                  <div className="policy-item-container">
-                    <div className="policy-item-stat">Floor Price: {policyData.floor_price/1000000} ADA</div>
-                    <div className="policy-item-stat">Volume: {policyData.total_volume/1000000} ADA</div>
-                    <div className="policy-item-stat">Supply: {policyData.asset_minted}</div>
-                    <div className="policy-item-stat">Number of Holders: {policyData.asset_holders}</div>
-                  </div>
-                  </div>
-              </div>
+            <div className="policy-data">
+                <Image alt='thumb' className = 'policy-item' src = {policyData.thumbnail} width = {200} height = {200}/>
+                <div className="policy-item-stat">Policy:<span className="policy-id">{props.policy}</span></div>
+                <div className="policy-stat-container">
+                  <div className="policy-item-stat">Floor Price: <span className="policy-value">{policyData.floor_price/1000000} ADA</span></div>
+                  <div className="policy-item-stat">Trading Volume: <span className="policy-value">{(policyData.total_volume/1000000).toFixed(2)} ADA</span></div>
+                  <div className="policy-item-stat">Supply: <span className="policy-value">{policyData.asset_minted}</span></div>
+                  <div className="policy-item-stat">Number of Holders: <span className="policy-value">{policyData.asset_holders}</span></div>
+                </div>
             </div>
             <div className="policy-grid">
-              <nav className="policy-nav"><h1>Explore Collection</h1>
+              <nav className="policy-nav"><div>Explore Collection</div>
               <input
                 type="search"
                 placeholder="Search by asset name"

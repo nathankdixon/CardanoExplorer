@@ -210,20 +210,12 @@ function AssetData(props) {
       </table>
     );
   }
-
-  
-  function clearLocalStorage(){
-    localStorage.clear();
-    window.location.reload();
-    router.reload();
-  }
   
   return (
     <div className="assetData">
       <header className="home-header">
         <div className="main-title">Cardano Explorer</div>
         <SearchBar />
-        <button className="currency-button">Currency: USD</button>
         <WalletButton />
       </header>
       <div className="asset-display">

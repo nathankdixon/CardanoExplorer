@@ -19,9 +19,58 @@ function WalletData (props) {
   const [currency, setCurrency] = useState({name: 'USD', value: {price : 1, change24hr: 0}, symbol: '$'});
   const [prices, setPrices] = useState({usd: 1, gbp: 1, btc: 1, eth:1, eur: 1});
 
+  const [koiosStatus, setKoiosStatus] = useState('loading');
+  const [coinGeckoStatus, setCoinGeckoStatus] = useState('loading');
+  const [openCnftStatus, setOpenCnftStatus] = useState('loading');
+
 
 
   const router = useRouter();
+
+
+  async function checkKoiosStatus(){
+    let response = await fetch('https://api.koios.rest/api/v0/tip');
+
+    if(response.ok){
+      setKoiosStatus('ok');
+      return true;
+
+    }
+    else{
+      console.log(response);
+      setKoiosStatus('error code: '+response.status);
+      return false;
+    }
+  }
+
+  async function checkCoinGeckoStatus(){
+    let response = await fetch('https://api.coingecko.com/api/v3/ping');
+
+    if(response.ok){
+      setCoinGeckoStatus('ok');
+      return true;
+    }
+    else{
+      console.log(response);
+      setCoinGeckoStatus('error code: '+response.status);
+      return false;
+    }
+  }
+
+  async function checkOpenCnftStatus(){
+    let response = await fetch('https://api.opencnft.io/2/market/metrics',
+    {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
+
+    if(response.ok){
+      setOpenCnftStatus('ok');
+      return true;
+    }
+    else{
+      console.log(response);
+      setOpenCnftStatus('error code: '+response.status);
+      return false;
+    }
+  }
 
   useEffect(() => {
     setCurrency({name: 'USD', value: prices.usd, symbol: '$'});
@@ -30,7 +79,6 @@ function WalletData (props) {
   useEffect(() => {
     if(props.stake != null){
       setStakeAddress(props.stake);
-
     }
   }, [props.stake]);
 
@@ -43,9 +91,12 @@ function WalletData (props) {
             walletData = JSON.parse(localStorage.getItem(stakeAddress));
           }
           else{
+            setLoadedTokens('loading wallet data')
             walletData = await createWalletDataFromStake(props.stake);
             try{
-              localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+              if(walletData != null && checkKoiosStatus() ){
+                localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+              }
             }
             catch(err){
               console.log(err);
@@ -73,7 +124,6 @@ function WalletData (props) {
     let walletData = '';
     // json list of assets in stake address
     let assets = await getAssetsFromKoios(stake);
-    console.log(assets);
     // no assets
     if(assets == null || assets.length == 0){
       walletData = {stake : stake, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
@@ -144,10 +194,17 @@ function WalletData (props) {
   async function createTokens(assets){
     const _tokens = [];
 
+    setLoadedTokens('checking koios api status');
+    let koiosStatus = await checkKoiosStatus();
+    setLoadedTokens('checking coingecko api status');
+    let coinGeckoStatus = await checkCoinGeckoStatus();
+    setLoadedTokens('checking opencnft api status');
+    let openCnftStatus = await checkOpenCnftStatus();
+
+
     for(let i =0; i<assets.length;i++){
       setLoadedTokens('loading '+i+'/'+assets.length);
       let quantity = 1; 
-
 
       if(assets[i].quantity != 1){
         quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
@@ -156,11 +213,18 @@ function WalletData (props) {
         quantity = assets[i].quantity;
       }
 
+
       let token = new Token(assets[i].asset_name, assets[i].policy_id, quantity);
 
-      await token.fetchTokenMetadata();
-      await token.getPrice();
-
+      if(koiosStatus == true){
+        await token.fetchTokenMetadata();
+      }
+      if(assets[i].quantity != 1 && coinGeckoStatus == true || assets[i].quantity == 1 && openCnftStatus == true){
+        await token.fetchTokenPrice();
+      }
+      else{
+        // do nothing
+      }
       _tokens.push(token);
     }
 
@@ -294,6 +358,9 @@ function WalletData (props) {
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
           <Home data={walletData} prices = {setPriceData} currency = {currency}/>
+          <div>Koios Status: {koiosStatus}</div>
+          <div>Coin Gecko Status: {coinGeckoStatus}</div>
+          <div>OpenCNFT Status: {openCnftStatus}</div>
           <div style={{fontSize: 'xx-large', color:"white"}}>{loadedTokens}</div>
         </section>
         {walletData.stake && (

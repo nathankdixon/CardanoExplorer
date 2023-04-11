@@ -105,12 +105,13 @@ export default function Fts (props){
       return "black";
     };
 
-    function getCardanoPrice(){
-      fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd')
-      .then(response => response.json())
-      .then(data => {
-        setCardanoPrice(data.cardano.usd);
-      });
+    async function getCardanoPrice(){
+
+      let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd');
+      let data = await response.json();
+      setCardanoPrice(data.cardano.usd);
+      console.log(data);
+
     }
 
     return (

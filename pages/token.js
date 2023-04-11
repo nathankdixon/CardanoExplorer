@@ -126,7 +126,7 @@ export default class Token {
   
 
 
-  async getPrice() {
+  async fetchTokenPrice() {
     if (this.quantity == 1) {
       try{
         let request = await fetch('https://api.opencnft.io/2/collection/'+this.policy_id+'/floor_price',
@@ -135,15 +135,16 @@ export default class Token {
         if(request.status == 429){
 
           //wait 5 seconds and try again
-          await new Promise(r => setTimeout(r, 5000));
+          await new Promise(r => setTimeout(r, 200));
           request = await fetch('https://api.opencnft.io/2/collection/'+this.policy_id+'/floor_price',
           {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
         }
-
-        let opencnftData = await request.json();
-        if(opencnftData.floor_price){
-          this.floor_price = (opencnftData.floor_price/1000000);
-          console.log("floor price: ", this.floor_price);
+        else if(request.status == 200){
+          let opencnftData = await request.json();
+          if(opencnftData.floor_price){
+            this.floor_price = (opencnftData.floor_price/1000000);
+            console.log("floor price: ", this.floor_price);
+          }
         }
         else{
           this.floor_price = 0;
@@ -151,6 +152,7 @@ export default class Token {
       }
       catch(error){
         this.floor_price = 0;
+        throw new Error('Error in OpenCNFT');
       }
     }
     else{
@@ -179,7 +181,7 @@ export default class Token {
           change1y: priceData.price_change_percentage_1y.toFixed(2),
         };
       } catch (error) {
-        console.error('Error fetching price data:', error);
+        throw new Error('coin gecko error');
       }
     }
     
