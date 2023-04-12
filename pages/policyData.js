@@ -78,16 +78,39 @@ function PolicyData (props) {
         if(assets.length == 0){
           return;
         }
-        let display = [];
-        setDisplay(<div>Loading</div>)
-        for(let i = index; i < index + itemsPerPage; i++){
-          let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
-          await token.fetchTokenMetadata();
-          if(i < assets.length){
-            display.push(<div className="grid-item-policy" key={i}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+        else{
+          let display = [];
+          setDisplay(<div>Loading</div>)
+          console.log(searchTerm);
+
+          if(searchTerm == ""){
+            for(let i = index; i < index + itemsPerPage; i++){
+              let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
+              await token.fetchTokenMetadata();
+              if(i < assets.length){
+                display.push(<div className="grid-item-policy" key={i}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+              }
+            }
+            setDisplay(display);
           }
+          else{
+            const filteredAssets = assets.filter(asset => asset.decoded_name.toLowerCase().includes(searchTerm.toLowerCase()));
+            console.log(filteredAssets);
+
+            if(filteredAssets.length == 0){
+              setDisplay(<div>No Assets Found</div>)
+            }
+            else if(filteredAssets.length == 1){
+              let token = new Token(filteredAssets[0].asset_name, filteredAssets[0].policy_id, filteredAssets[0].quantity);
+              await token.fetchTokenMetadata();
+              setDisplay(<div className="grid-item-policy"><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+            }
+            else {
+              setDisplay(<div>Results: {filteredAssets.length}</div>)
+            }
         }
-        setDisplay(display);
+        }
+
       }
       displayAssets();
 
