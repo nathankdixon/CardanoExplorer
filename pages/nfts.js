@@ -11,22 +11,24 @@ export default function Nfts (props){
     const [backButton, setBackButton] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [expanded, setExpanded] = useState(false);
-    const [sortByAssetName, setSortByAssetName] = useState(false);
+    const [collectionText, setCollectionText] = useState("Collections");
+    const [tokensText, setTokensText] = useState("Tokens");
+    const [sortByFloorPrice, setSortByFloorPrice] = useState(true);
 
-    const [info, setInfo] = useState();
-    const router = useRouter();
 
     useEffect(() => {
       setGrid();
-    }, [props.data, searchTerm, expanded, sortByAssetName]);
+    }, [props.data, searchTerm, expanded, props.currency, sortByFloorPrice]);
 
     function setGrid() {
       let collectionGrid = [];
       let singleGrid = [];
-      if (!props.data || !props.data.nfts) return;
+      if (!props.data || !props.data.nfts || !props.currency) return;
+      console.log(props.currency)
       let filteredNfts = filterNFTs(props.data.nfts);
       if (expanded) {
-        setInfo("NFTs: " + filteredNfts.length);
+        setCollectionText();
+        setTokensText("Tokens: " + filteredNfts.length);
         for (const nft of filteredNfts) {
           let policy = nft;
           if (!policy) continue;
@@ -50,14 +52,17 @@ export default function Nfts (props){
             width={170}
             alt={policy.asset_name}
           />
-          <label className="item-name">{(policy.decoded_name).substring(0,20)}</label>
+          <div className="item-text">
+            <label className="item-name">{(policy.decoded_name).substring(0,20)}</label>
+            <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy.floor_price)*props.currency.value.price).toFixed(2)}</label>
+          </div>
 
         </Link>);
           }
         }
       } else {
-        setInfo("Collections: " + filteredNfts.length);
-        
+        let tokenCount = 0;
+        let collectionCount = 0;
 
         for (const [index, element] of filteredNfts.entries()) {
           let policy = element;
@@ -85,6 +90,7 @@ export default function Nfts (props){
               );
             } else {
               if (policy.length > 1) {
+                collectionCount += 1;
                 collectionGrid.push(<div key={policy[0].asset_name} className="grid-item-collection" onClick={() => showCollection(policy)}>
                   <Image                    
                     className="grid-img"
@@ -93,11 +99,15 @@ export default function Nfts (props){
                     width={170}
                     alt={policy[0].asset_name}
                   />
-                  <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                  <div className="item-text">
+                    <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                    <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+                  </div>
                 </div>
 
                 );
               } else {
+                tokenCount += policy.length;
                 singleGrid.push(<Link href = {'/' + policy[0].policy_id + policy[0].asset_name} key={policy[0].asset_name} className="grid-item">
                   <Image
                     className="grid-img"
@@ -106,7 +116,10 @@ export default function Nfts (props){
                     width={170}
                     alt={policy[0].asset_name}
                   />
-                <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                <div className="item-text">
+                  <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                  <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+                  </div>
                 </Link>
 
                 );
@@ -114,6 +127,8 @@ export default function Nfts (props){
             }
           }
         }
+        setCollectionText("Collections: " + collectionCount);
+        setTokensText("Tokens: " + tokenCount);
       }
       setDisplay({ collections: collectionGrid, singles: singleGrid });
     }
@@ -125,7 +140,8 @@ export default function Nfts (props){
       let singleGrid = [];
 
       if(!expanded){
-      setInfo("Collections: " + props.data.nfts.length);
+      setCollectionText("Collections: " + props.data.nfts.length);
+      let tokenCount = 0;
 
       for(const element of props.data.nfts){
         let policy = element;
@@ -145,19 +161,27 @@ export default function Nfts (props){
               <Image className="grid-img" 
                 src={policy[0].ipfs} height={170} width={170} alt = {policy[0].asset_name} 
                 />
-              <label className="item-name">{(policy[0].decoded_name)}</label>
+                <div className="item-text">
+                  <label className="item-name">{(policy[0].decoded_name)}</label>
+                  <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+                </div>
 
             </div>  );
           }
           else{
+            tokenCount += policy.length;
             singleGrid.push(<Link className="grid-item" key = {policy[0].asset_name} href = {'/'+policy[0].policy_id + policy[0].asset_name}>
               <Image className="grid-img"  src={policy[0].ipfs} 
               height={170} width={170} alt = {policy[0].asset_name} />
-              <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+              <div className="item-text">
+                <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+              </div>
             </Link>);
           }
         }
       }
+      setTokensText("Tokens: " + tokenCount);
       setDisplay({ collections: collectionGrid, singles: singleGrid });
     }
 
@@ -167,7 +191,7 @@ export default function Nfts (props){
     function showCollection(policy) {
       scrollToSection("nfts");
       
-      setInfo("Showing Policy: " +policy[0].policy_id +" with " +policy.length +" NFTs");
+      setCollectionText(<div>Policy: <Link href={'/'+policy[0].policy_id}>{policy[0].policy_id}</Link> with {policy.length} NFTs</div>);
       setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
 
       let collectionGrid = [];
@@ -181,7 +205,10 @@ export default function Nfts (props){
             className="grid-img"
             src={"/black.jpeg"}
             />
-           <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
+            <div className="item-text">
+              <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
+              <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+            </div>
 
             </Link>
           );
@@ -194,7 +221,10 @@ export default function Nfts (props){
               width={170}
               height={170}
               />
-            <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
+              <div className="item-text">
+                <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
+                <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+              </div>
             </Link>
               );
           }
@@ -217,25 +247,35 @@ export default function Nfts (props){
           )
         );
       }
-    
-      if (sortByAssetName) {
-        filteredNfts = filteredNfts.map((policy) =>
-          policy.slice().sort((a, b) => a.decoded_name.localeCompare(b.decoded_name))
-        );
-      }
-    
       if (expanded) {
         filteredNfts = filteredNfts.flatMap((policy) => policy);
       }
     
+      // Sort by floor_price if sortByFloorPrice is true
+      if (!sortByFloorPrice) {
+        if (expanded) {
+          filteredNfts.sort((a, b) => a.floor_price - b.floor_price);
+        } else {
+          filteredNfts.sort((a, b) => a[0].floor_price - b[0].floor_price);
+        }
+      } else {
+        if (expanded) {
+          filteredNfts.sort((a, b) => b.floor_price - a.floor_price);
+        } else {
+          filteredNfts.sort((a, b) => b[0].floor_price - a[0].floor_price);
+        }
+      }
+    
       return filteredNfts;
     }
+    
+    
 
 
 return (
   <div className="nfts">
     <div style={{fontSize: '30px',fontWeight: 'bold'}}>NFTs</div>
-    <nav className="nft-nav">{backButton}{info}
+    <nav className="nft-nav">{backButton}
       <input
         type="search"
         placeholder="Search by asset name"
@@ -251,12 +291,20 @@ return (
       />
         Expand all collections
       </label>
+      <label>
+        <input
+          type="checkbox"
+          checked={sortByFloorPrice}
+          onChange={() => setSortByFloorPrice(!sortByFloorPrice)}
+        />
+        Sort by floor price
+      </label>
       </nav>
-        <div style={{fontSize: '25px'}}>NFT Collections</div>
+        <div style={{fontSize: '25px'}}>{collectionText}</div>
       <div className="grid-nft">
       {display.collections}
       </div>
-      <div style={{fontSize: '25px'}}>NFTs</div>
+      <div style={{fontSize: '25px'}}>{tokensText}</div>
       <div className="grid-nft">
         {display.singles}
       </div>

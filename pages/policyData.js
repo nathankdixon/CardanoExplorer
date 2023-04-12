@@ -1,10 +1,10 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SearchBar from "./searchbar";
 import Token from "./token";
 import WalletButton from "./walletButton";
+import Link from "next/link";
 
 // this component is used to display data for a policy id
 // it returns policy information, owned token from policy, and all nfts in collection which can be searched through
@@ -14,9 +14,10 @@ function PolicyData (props) {
 
       const [policy, setPolicy] = useState(null);
       const [display, setDisplay] = useState([]);
-      const [tokensPerPage, setTokensPerPage] = useState(25);
-      const [currentIndex, setCurrentIndex] = useState(0);
       const [tokens, setTokens] = useState([]);
+      const [index, setIndex] = useState(0);
+      const [itemsPerPage, setItemsPerPage] = useState(30);
+
 
 
       const [policyData, setPolicyData] = useState({
@@ -29,22 +30,8 @@ function PolicyData (props) {
                                                     asset_holders: 1});
       const [assets, setAssets] = useState([]);
       const [searchTerm, setSearchTerm] = useState("");
-      const router = useRouter();
 
-      useEffect(() => {
-        if(searchTerm == ""){
-          showTokens(0,25, tokens);
-        }
-        else{
-          let filteredTokens = tokens.filter(token => token.decoded_name.toLowerCase().includes(searchTerm.toLowerCase()));
-          if(filteredTokens.length == 0){
-            setDisplay(<h1>No results</h1>);
-          }
-          else{
-            showTokens(0,25, filteredTokens);
-          }
-        }
-      }, [searchTerm])
+
   
       useEffect(() => {
         async function getAssetPageFromBlockfrost(){
@@ -55,18 +42,26 @@ function PolicyData (props) {
                 let policy = props.policy;
                 let policyData = await getPolicyData(policy);
                 setPolicyData(policyData);
+                setDisplay(<div>Loading</div>)
 
-                let tokens = [];
-
-                if(sessionStorage.getItem(policy) != null){
-                  tokens = JSON.parse(sessionStorage.getItem(policy));
+                let assets = [];
+                if(policyData.asset_minted < 10000){
+                  assets = await loadAllTokenData(policy);
                 }
                 else{
-                  //tokens = await getPolicyTokens(policy);
-                  //sessionStorage.setItem(policy, JSON.stringify(tokens));
+                  assets = await loadTokenData(policy, 1);
                 }
-                showTokens(0,25, tokens);
-                setTokens(tokens);
+                let tokens = [];
+                for(const element of assets){
+                  let assetId = element.asset;
+                  let policyId = assetId.substring(0, 56);
+                  let assetName = assetId.substring(56);
+                  let token = new Token(assetName, policyId, element.quantity);
+                  tokens.push(token);
+                }
+                setAssets(tokens);
+                console.log(tokens);
+
             }
         }
         getAssetPageFromBlockfrost()
@@ -77,6 +72,28 @@ function PolicyData (props) {
         setPolicy(props.policy);
       }
     }, [props.policy])
+
+    useEffect(() => {
+      async function displayAssets(){
+        if(assets.length == 0){
+          return;
+        }
+        let display = [];
+        setDisplay(<div>Loading</div>)
+        for(let i = index; i < index + itemsPerPage; i++){
+          let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
+          await token.fetchTokenMetadata();
+          if(i < assets.length){
+            display.push(<div className="grid-item-policy" key={i}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+          }
+        }
+        setDisplay(display);
+      }
+      displayAssets();
+
+    }, [assets, index, itemsPerPage, searchTerm])
+
+
 
 
     async function getPolicyData(policy){
@@ -92,37 +109,6 @@ function PolicyData (props) {
       return data;
     }
 
-    async function getPolicyTokens(policy){
-      let assets = await loadAllTokenData(policy);
-      setAssets(assets);
-      console.log(assets);
-
-      let maxTokensToGenerate = 100;
-      if(assets.length < maxTokensToGenerate){
-        maxTokensToGenerate = assets.length;
-      }
-
-      let tokens = [];
-
-      for(let i = 0; i < maxTokensToGenerate; i++){
-        let asset = assets[i];
-        setDisplay(<h2>Loading tokens {i} of {maxTokensToGenerate}</h2>)
-
-        let assetName = asset.asset.substring(56);
-        let quantity = asset.quantity;
-        let token = new Token(assetName, props.policy, quantity);
-        await token.fetchTokenMetadata();
-        tokens.push(token);
-        if(tokens.length == 25){
-          showTokens(0,25, tokens);
-        } 
-
-
-      }
-      
-      return tokens;
-    }
-
       async function getCnftPolicyData(policy){
         try{
           const data = await fetch('https://api.opencnft.io/2/collection/'+policy,
@@ -134,6 +120,21 @@ function PolicyData (props) {
           return null;
         }
       }
+      
+      // fetch token metadata from blockfrost
+      async function loadTokenData(policy, page){
+        try{
+            const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/policy/'+policy+'?page='+page,
+            {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
+            const res = await data.json();
+            if(data.status != 200){
+                return null;
+            }
+            return res;
+        }catch(error){
+            return null;
+        }
+    }
   
       async function loadAllTokenData(policy) {
           let page = 1;
@@ -157,8 +158,7 @@ function PolicyData (props) {
           }
         
           return allData;
-        }
-        
+      }
 
     // if metadata has been fetched
     // find the ipfs link under 'image' metadata tag and store it
@@ -201,86 +201,17 @@ function PolicyData (props) {
       }
       return ipfs;
     }
-      // fetch token metadata from blockfrost
-      async function loadTokenData(policy, page){
-          try{
-              const data = await fetch('https://cardano-mainnet.blockfrost.io/api/v0/assets/policy/'+policy+'?page='+page,
-              {headers:{project_id: 'mainnetoW61YYSiOoLSaNQ6dzTrkAG4azXVIrvh', 'cache-control': 'max-age=31536000'}});
-              const res = await data.json();
-              if(data.status != 200){
-                  return null;
-              }
-              return res;
-          }catch(error){
-              return null;
-          }
-      }
 
-      function showTokens(index, tokensPerPage, tokens){
-        let display = [];
-
-        for(let i = index; i < tokensPerPage; i++){
-          let token = tokens[i];
-          if(token){
-            display.push(<Link key = {token.asset_name} className="grid-item-policy" href={'/'+token.policy_id + token.asset_name} >
-              <Image src={token.ipfs} width= {200} height = {200} alt = 'no-img' className="grid-img"/><label>{token.decoded_name}</label></Link>)
-
-          }
-        }
-        setDisplay(display);
-      }
-
-      function next(){
-
-        
-        let index = currentIndex + 25;
-
-        if(index >= tokens.length){
-          index = 0;
-          showTokens(index, tokens.length, tokens);
-          setCurrentIndex(0);
-        }
-        else{
-          showTokens(index, index+25, tokens);
-          setCurrentIndex(index);
-        }
-
-      }
-
-      function prev(){
-        let index = currentIndex - 25;
-
-        if(index < 0){
-          index = tokens.length - 25;
-          setCurrentIndex(index);
-        }
-
-        showTokens(index, index+25, tokens);
-        setCurrentIndex(index);
-      }
-
-      function deleteLocalStorage(){
-        localStorage.removeItem(props.policy);
-        router.reload();
-        window.location.reload();
-      }
-
-      function clearSessionStorage(){
-        sessionStorage.clear();
-        window.location.reload();
-        router.reload();
-      }
 
     return(<div>
             <header className="home-header">
               <div className="main-title">Cardano Explorer</div>
               <SearchBar/>
-              <div className="wallet-section"><button onClick={deleteLocalStorage} className="refresh-button">Refresh Wallet Data</button>
-              <WalletButton/></div>
+=              <WalletButton/>
             </header>
             <div className="policy-data">
+            <div className="policy-item-stat">Policy:<span className="policy-id">{props.policy}</span></div>
                 <Image alt='thumb' className = 'policy-item' src = {policyData.thumbnail} width = {200} height = {200}/>
-                <div className="policy-item-stat">Policy:<span className="policy-id">{props.policy}</span></div>
                 <div className="policy-stat-container">
                   <div className="policy-item-stat">Floor Price: <span className="policy-value">{policyData.floor_price/1000000} ADA</span></div>
                   <div className="policy-item-stat">Trading Volume: <span className="policy-value">{(policyData.total_volume/1000000).toFixed(2)} ADA</span></div>
@@ -290,14 +221,18 @@ function PolicyData (props) {
             </div>
             <div className="policy-grid">
               <nav className="policy-nav"><div>Explore Collection</div>
-              <input
-                type="search"
-                placeholder="Search by asset name"
-                value={searchTerm}
-                className='search-policy'
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <label>Showing items : {currentIndex+25} of {tokens.length}</label><button className = 'page-button' onClick = {() => prev()}>Prev</button><button className = 'page-button' onClick = {() => next()}>Next</button></nav>
+                <input
+                  type="search"
+                  placeholder="Search by asset name"
+                  value={searchTerm}
+                  className='search-policy'
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              <label>Showing items: {index} - {index +itemsPerPage}</label>
+              <button className = 'page-button' onClick = {() => {setIndex(index - itemsPerPage)}}>Previous</button>
+              <button className = 'page-button' onClick = {() => {setIndex(index + itemsPerPage)}}>Next</button>
+              </nav>
+
               <div className='grid-nft-policy'>{display}</div>
             </div>
           </div>)

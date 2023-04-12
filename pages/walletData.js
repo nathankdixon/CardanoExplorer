@@ -27,6 +27,12 @@ function WalletData (props) {
 
   const router = useRouter();
 
+  useEffect(() => {
+    checkKoiosStatus();
+    checkCoinGeckoStatus();
+    checkOpenCnftStatus();
+  }, [])
+
 
   async function checkKoiosStatus(){
     let response = await fetch('https://api.koios.rest/api/v0/tip');
@@ -206,7 +212,7 @@ function WalletData (props) {
       setLoadedTokens('loading '+i+'/'+assets.length);
       let quantity = 1; 
 
-      if(assets[i].quantity != 1){
+      if(assets[i].quantity !== 1){
         quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
       }
       else{
@@ -216,10 +222,10 @@ function WalletData (props) {
 
       let token = new Token(assets[i].asset_name, assets[i].policy_id, quantity);
 
-      if(koiosStatus == true){
+      if(koiosStatus){
         await token.fetchTokenMetadata();
       }
-      if(assets[i].quantity != 1 && coinGeckoStatus == true || assets[i].quantity == 1 && openCnftStatus == true){
+      if(assets[i].quantity != 1 && coinGeckoStatus || assets[i].quantity == 1 && openCnftStatus){
         await token.fetchTokenPrice();
       }
       else{
@@ -369,7 +375,7 @@ function WalletData (props) {
               <Summary data={walletData} currency = {currency}/>
             </section>
             <section className="wallet-data-content-item" id="nfts" >
-              <Nfts data={walletData} />
+              <Nfts data={walletData} currency = {currency}/>
             </section>
             <section className="wallet-data-content-item" id="fts">
               <Fts data={walletData} currency = {currency}/>
