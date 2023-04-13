@@ -207,16 +207,17 @@ function WalletData (props) {
     setLoadedTokens('checking opencnft api status');
     let openCnftStatus = await checkOpenCnftStatus();
 
+    console.log(assets)
 
     for(let i =0; i<assets.length;i++){
       setLoadedTokens('loading '+i+'/'+assets.length);
       let quantity = 1; 
 
-      if(assets[i].quantity !== 1){
-        quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
+      if(assets[i].decimals == 0){
+        quantity = assets[i].quantity 
       }
       else{
-        quantity = assets[i].quantity;
+        quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
       }
 
 

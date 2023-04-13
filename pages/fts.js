@@ -110,8 +110,6 @@ export default function Fts (props){
       let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd');
       let data = await response.json();
       setCardanoPrice(data.cardano.usd);
-      console.log(data);
-
     }
 
     return (

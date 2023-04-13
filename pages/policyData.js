@@ -16,7 +16,7 @@ function PolicyData (props) {
       const [display, setDisplay] = useState([]);
       const [tokens, setTokens] = useState([]);
       const [index, setIndex] = useState(0);
-      const [itemsPerPage, setItemsPerPage] = useState(30);
+      const [itemsPerPage, setItemsPerPage] = useState(20);
 
 
 
@@ -30,6 +30,7 @@ function PolicyData (props) {
                                                     asset_holders: 1});
       const [assets, setAssets] = useState([]);
       const [searchTerm, setSearchTerm] = useState("");
+      const router = useRouter();
 
 
   
@@ -42,25 +43,32 @@ function PolicyData (props) {
                 let policy = props.policy;
                 let policyData = await getPolicyData(policy);
                 setPolicyData(policyData);
-                setDisplay(<div>Loading</div>)
+                setDisplay(<div>Fetching Assets</div>)
 
-                let assets = [];
-                if(policyData.asset_minted < 10000){
-                  assets = await loadAllTokenData(policy);
+                if(sessionStorage.getItem(policy) != null){
+                  let assets = JSON.parse(sessionStorage.getItem(policy));
+                  setAssets(assets);
                 }
                 else{
-                  assets = await loadTokenData(policy, 1);
-                }
-                let tokens = [];
-                for(const element of assets){
-                  let assetId = element.asset;
-                  let policyId = assetId.substring(0, 56);
-                  let assetName = assetId.substring(56);
-                  let token = new Token(assetName, policyId, element.quantity);
-                  tokens.push(token);
-                }
-                setAssets(tokens);
-                console.log(tokens);
+                  let assets = [];
+                  if(policyData.asset_minted < 10000){
+                    assets = await loadAllTokenData(policy);
+                  }
+                  else{
+                    assets = await loadTokenData(policy, 1);
+                  }
+                  let tokens = [];
+                  for(const element of assets){
+                    let assetId = element.asset;
+                    let policyId = assetId.substring(0, 56);
+                    let assetName = assetId.substring(56);
+                    let token = new Token(assetName, policyId, element.quantity);
+                    tokens.push(token);
+                  }
+                  setAssets(tokens);
+                  console.log(tokens);
+                  sessionStorage.setItem(policy, JSON.stringify(tokens));
+              }
 
             }
         }
@@ -80,15 +88,15 @@ function PolicyData (props) {
         }
         else{
           let display = [];
-          setDisplay(<div>Loading</div>)
           console.log(searchTerm);
 
           if(searchTerm == ""){
             for(let i = index; i < index + itemsPerPage; i++){
               let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
+              setDisplay(<div>Fetching Token Metadata: {i} of {index +itemsPerPage}</div>)
               await token.fetchTokenMetadata();
               if(i < assets.length){
-                display.push(<div className="grid-item-policy" key={i}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+                display.push(<div className="grid-item-policy" key={i} onClick={() => router.push('/'+token.policy_id+token.asset_name)}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
               }
             }
             setDisplay(display);
@@ -103,7 +111,7 @@ function PolicyData (props) {
             else if(filteredAssets.length == 1){
               let token = new Token(filteredAssets[0].asset_name, filteredAssets[0].policy_id, filteredAssets[0].quantity);
               await token.fetchTokenMetadata();
-              setDisplay(<div className="grid-item-policy"><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+              setDisplay(<div className="grid-item-policy" onClick={() => router.push('/'+token.policy_id+token.asset_name)}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
             }
             else {
               setDisplay(<div>Results: {filteredAssets.length}</div>)
@@ -225,12 +233,25 @@ function PolicyData (props) {
       return ipfs;
     }
 
+    function prevPage(){
+      if(index > 0){
+        setIndex(index-itemsPerPage);
+      }
+    }
+
+    function nextPage(){
+      if(index < assets.length){
+        setIndex(index+itemsPerPage);
+      }
+    }
+
+
 
     return(<div>
             <header className="home-header">
               <div className="main-title">Cardano Explorer</div>
               <SearchBar/>
-=              <WalletButton/>
+              <WalletButton/>
             </header>
             <div className="policy-data">
             <div className="policy-item-stat">Policy:<span className="policy-id">{props.policy}</span></div>
@@ -252,8 +273,8 @@ function PolicyData (props) {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               <label>Showing items: {index} - {index +itemsPerPage}</label>
-              <button className = 'page-button' onClick = {() => {setIndex(index - itemsPerPage)}}>Previous</button>
-              <button className = 'page-button' onClick = {() => {setIndex(index + itemsPerPage)}}>Next</button>
+              <button className = 'page-button' onClick = {() => prevPage()}>Previous</button>
+              <button className = 'page-button' onClick = {() => nextPage()}>Next</button>
               </nav>
 
               <div className='grid-nft-policy'>{display}</div>

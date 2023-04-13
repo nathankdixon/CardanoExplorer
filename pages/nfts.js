@@ -13,7 +13,8 @@ export default function Nfts (props){
     const [expanded, setExpanded] = useState(false);
     const [collectionText, setCollectionText] = useState("Collections");
     const [tokensText, setTokensText] = useState("Tokens");
-    const [sortByFloorPrice, setSortByFloorPrice] = useState(true);
+    const [sortByFloorPrice, setSortByFloorPrice] = useState(false);
+    const [sortByAssetName, setSortByAssetName] = useState(false);
 
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export default function Nfts (props){
       let collectionGrid = [];
       let singleGrid = [];
       if (!props.data || !props.data.nfts || !props.currency) return;
-      console.log(props.currency)
+
       let filteredNfts = filterNFTs(props.data.nfts);
       if (expanded) {
         setCollectionText();
@@ -102,6 +103,7 @@ export default function Nfts (props){
                   <div className="item-text">
                     <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
                     <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+                    <label className="item-name">{policy.length} NFTs</label>
                   </div>
                 </div>
 
@@ -164,8 +166,8 @@ export default function Nfts (props){
                 <div className="item-text">
                   <label className="item-name">{(policy[0].decoded_name)}</label>
                   <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+                  <label className="item-name">{policy.length} NFTs</label>
                 </div>
-
             </div>  );
           }
           else{
@@ -254,9 +256,14 @@ export default function Nfts (props){
       // Sort by floor_price if sortByFloorPrice is true
       if (!sortByFloorPrice) {
         if (expanded) {
-          filteredNfts.sort((a, b) => a.floor_price - b.floor_price);
+          // Sort by asset_name
+          filteredNfts.sort((a, b) => a.decoded_name.localeCompare(b.decoded_name));
         } else {
-          filteredNfts.sort((a, b) => a[0].floor_price - b[0].floor_price);
+          // Sort by decoded_name
+          filteredNfts.sort((a, b) =>
+            a[0].decoded_name.localeCompare(b[0].decoded_name)
+          );
+          
         }
       } else {
         if (expanded) {
@@ -269,6 +276,17 @@ export default function Nfts (props){
       return filteredNfts;
     }
     
+
+    function sortAssetName(){
+      if(sortByFloorPrice){
+        setSortByFloorPrice(false);
+        setSortByAssetName(true);
+      }
+      else{
+        setSortByFloorPrice(true);
+        setSortByAssetName(false);
+      }
+    }
     
 
 
@@ -295,9 +313,17 @@ return (
         <input
           type="checkbox"
           checked={sortByFloorPrice}
-          onChange={() => setSortByFloorPrice(!sortByFloorPrice)}
+          onChange={() => sortAssetName(false)}
         />
         Sort by floor price
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          checked={sortByAssetName}
+          onChange={() => sortAssetName(true)}
+        />
+        Sort by assetName
       </label>
       </nav>
         <div style={{fontSize: '25px'}}>{collectionText}</div>

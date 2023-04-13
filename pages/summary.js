@@ -4,39 +4,152 @@ import { useEffect, useState } from "react"
 export default function Summary(props){
 
     // current selected currency
-    const [currency, setCurrency] = useState({name: 'ADA', value: {price: 1, change24hr: 0}, symbol: '₳'})
 
     // ada balance
     const [adaBalance, setAdaBalance] = useState(0);
     const [stakePool, setStakePool] = useState(null);
 
-    const [ftValue, setFtValue] = useState(0);
-    const [nftValue, setNftValue] = useState(0);
     const [totalValue, setTotalValue] = useState(0);
-
-    const [displayedNft, setDisplayedNft] = useState({ipfs: '/black.jpeg', name: ''});
-
-    const [displayedFt, setDisplayedFt] = useState({ipfs: '/black.jpeg', name: ''});
-
-    const [nftDisplayText, setNftDisplayText] = useState('');
-    const [ftDisplayText, setFtDisplayText] = useState('');
+    const [nftValue, setNftValue] = useState(0);
+    const [tokenValue, setTokenValue] = useState(0);
+    const [nftsDisplay, setNftsDisplay] = useState([]);
+    const [ftsDisplay, setFtsDisplay] = useState([]);
 
     useEffect(() => {
         async function getSummaryInfo() {
-          if (props.data.stake && props.currency) {
+          if (props.data.stake && props.currency.value.price) {
             let stakeInfo = await getStakeInfo(props.data.stake);
             setAdaBalance(stakeInfo[0].total_balance / 1000000);
             let pool = await getPoolInfo(stakeInfo[0].delegated_pool);
             let poolTicker = pool[0].meta_json.ticker;
             setStakePool(poolTicker);
+            console.log(props.currency)
+
+            // get total value of fungible tokens
+            let tokenBalance = getTokenBalance(props.data.fts) * props.currency.value.price;
+            setTokenValue((tokenBalance).toFixed(2));
+
+            //get total value of nfts
+            let nftBalance = getNftValue(props.data.nfts) * props.currency.value.price;
+            setNftValue(nftBalance.toFixed(2));
+
+            let adaBalanceCurrency = adaBalance * props.currency.value.price;
+
+            let total = adaBalanceCurrency + tokenBalance + nftBalance;
+            setTotalValue(total.toFixed(2));
+
+
+            // get top 5 nfts by value
+            let sortedNfts = [...props.data.nfts].sort((a, b) => {
+              const aHasPrice = a[0].floor_price !== null;
+              const bHasPrice = b[0].floor_price !== null;
+
+              if (aHasPrice && bHasPrice) {
+                const aValue = a[0].floor_price;
+                const bValue = b[0].floor_price;
+                return bValue - aValue;
+              } else if (aHasPrice) {
+                return -1;
+              } else if (bHasPrice) {
+                return 1;
+              } else {
+                return 0;
+              }
+              
+            });
+
+            // get top 5 coins by value
+            let sortedFts = [...props.data.fts].sort((a, b) => {
+              const aHasPrice = a[0].prices !== null;
+              const bHasPrice = b[0].prices !== null;
+
+              if (aHasPrice && bHasPrice) {
+                const aValue = a[0].prices.current * a[0].quantity;
+                const bValue = b[0].prices.current * b[0].quantity;
+                return bValue - aValue;
+              }
+              else if (aHasPrice) {
+                return -1;
+              }
+            });
+
+            let topNfts = sortedNfts.slice(0, 5);
+            let topFts = sortedFts.slice(0, 5);
+
+            let top5Nfts = [];
+            let top5Fts = [];
+
+            for(const element of topNfts){
+              for(let i =0; i<element.length; i++){
+                top5Nfts.push(element[i]);
+              }
+            }
+
+            for(const element of topFts){
+              for(let i = 0; i<element.length; i++){
+                top5Fts.push(element[i]);
+              }
+            }
+
+            top5Nfts = top5Nfts.slice(0, 3);
+            top5Fts = top5Fts.slice(0, 3);
+
+            let nftsDisplay = [];
+            let ftsDisplay = [];
+
+
+            for(const nft of top5Nfts){
+              console.log(nft);
+              let value = nft.floor_price * props.currency.value.price;
+              if(nft.floor_price != null){
+                value = value.toFixed(2);
+                nftsDisplay.push(<div className="summary-display-item">
+                <Image src={nft.ipfs} width={200} height={200} alt={nft.decoded_name} className="display-item"/>
+                <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div></div>);
+              }
+            }
+
+            for(const ft of top5Fts){
+              let value = ft.prices?.current * ft.quantity * props.currency.value.price;
+              if(!isNaN(value)){
+                value = value.toFixed(2);
+                ftsDisplay.push(<div className="summary-display-item">
+                <Image src={ft.ipfs} width={200} height={200} alt={ft.decoded_name} className="display-item"/>
+                <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div>
+                </div>);
+              }
+
+            }
+
+            setNftsDisplay(nftsDisplay);
+            setFtsDisplay(ftsDisplay);
+
+            console.log(top5Nfts);
+            console.log(top5Fts);
+
+
+
 
           }
         }
       
         getSummaryInfo();
       }, [props.data, props.currency]);
-    
 
+    
+    
+    function getNftValue(nfts){
+      let total = 0;
+      for(const element of nfts){
+        for(const nft of element){
+          if(nft.floor_price != null){
+            total += nft.floor_price;
+          }
+        }
+      }
+      return total;
+    }
+    
     // returns estimated total value of fungible tokens from coingecko prices in ADA
     function getTokenBalance(fts){
         let total = 0;
@@ -79,9 +192,7 @@ export default function Summary(props){
           return null;
         }
       }
-
-
-          // requests account info from stake address from koios api -- ada balance used
+    // requests account info from stake address from koios api -- ada balance used
     async function getPoolInfo(pool){
       try{
         const req = await fetch('https://api.koios.rest/api/v0/pool_info', {
@@ -110,20 +221,26 @@ export default function Summary(props){
                 <div className="summary-general-item">Stake Address: {props.data.stake}</div>
                 <div className="summary-general-container">
                   <div className="summary-general-item">ADA Balance: <span style={{color: 'green'}}> {adaBalance} ADA </span></div>
+                  <div className="summary-general-item">Custom Tokens: {getTotalNfts(props.data.nfts) + props.data.fts.length}</div>
                   <div className="summary-general-item">Wallet Value: <span className="currency">{props.currency.symbol}</span><span style={{color: 'green'}}>{totalValue}</span></div>
                   <div className="summary-general-item">Delegated Stake Pool: <span style={{color: "orange"}}>{stakePool}</span></div>
                 </div>
-
             </div>
             <div className="summary-tokens">
                 <div className="summary-tokens-item">
                     <div className="summary-tokens-title">Non-Fungible Tokens</div>
-                    <div className="summary-tokens-text">Total NFTs:<span style={{color: 'red'}}>{getTotalNfts(props.data.nfts)}</span></div>
+                    <div className="summary-tokens-text">NFTs:<span style={{color: 'red'}}>{getTotalNfts(props.data.nfts)}</span></div>
                     <div className="summary-tokens-text">Unique Policy IDs:<span style={{color: 'yellow'}}>{props.data.nfts.length}</span></div>
+                    <div className="summary-tokens-text">Total Value of NFTs:<span className="currency">{props.currency.symbol}</span> {nftValue}</div>
+                    <div className="summary-tokens-text" style={{textAlign: "center"}}>Top 3 NFTs by Value</div>
+                    <div className="summary-display">{nftsDisplay}</div>
                 </div>
                 <div className="summary-tokens-item">
                     <div className="summary-tokens-title">Fungible Tokens</div>
                     <div className="summary-tokens-text">Coins:<span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></div>
+                    <div className="summary-tokens-text">Total Coin Value:<span className="currency">{props.currency.symbol}</span> {tokenValue}</div>
+                    <div className="summary-tokens-text" style={{textAlign: "center"}}>Top 3 Coins by Value</div>
+                    <div className="summary-display">{ftsDisplay}</div>
                 </div>
             </div>
         </div>

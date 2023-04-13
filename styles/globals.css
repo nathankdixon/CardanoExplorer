@@ -1,7 +1,7 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #0b344799;
-    --second-color:#a774ea;
+    --main-color: #6dc4ead8;
+    --second-color:#590ebc;
     --third-color: #ffffff;
     --fourth-color: #ffffff;
     --fifth-color: rgba(255, 255, 255, 0.433);
@@ -132,7 +132,7 @@ h3{
     justify-content: space-between;
     align-items: center;
     background-color: var(--main-color);
-    color: var(--second-color);
+    color: white;
     font-family: var(--main-font);
     font-weight: bold;
     font-size:18px;
@@ -148,13 +148,12 @@ h3{
     font-size: 18px;
     font-family: var(--main-font);
     background-color: var(--main-color);
-    color: var(--third-color);
+    color: white;
     border: 2px solid white;
     padding: 10px;
     margin: 10px;
     font-weight: bold;
     border-radius: 10px;
-    color: var(--second-color);
         transition: background-color 0.2s;
 
 }
@@ -170,9 +169,6 @@ h3{
     cursor: pointer;
 }
 
-.summary-title{
-    margin-top: 100px;
-}
 
 .preview-img-item{
     font-size: x-large;
@@ -301,8 +297,7 @@ p{
   
   #w{
     background-color: var(--main-color); /* light green */
-    color: var(--second-color);
-    font-weight: bold;
+    color: white;    font-weight: bold;
     font-size: 22px;
         transition: background-color 0.2s;
 
@@ -310,8 +305,7 @@ p{
 
 #n {
     background-color: var(--second-color);
-    color: var(--main-color); /* light red */
-    font-size: 23px;
+    color: white;    font-size: 23px;
     font-weight: bold;
         transition: background-color 0.2s;
 
@@ -319,8 +313,7 @@ p{
   
   #f {
     background-color: var(--main-color); 
-    color: var(--second-color);/* light green */
-    font-size: 22px;
+    color: white;    font-size: 22px;
     font-weight: bold;
         transition: background-color 0.2s;
 
@@ -328,8 +321,7 @@ p{
   
 #h{
     background-color: var(--second-color);
-    color: var(--main-color);/* light green */
-    font-size: 22px;
+    color: white;    font-size: 22px;
     font-weight: bold;
         transition: background-color 0.2s;
 
@@ -438,7 +430,7 @@ color: var(--main-color);/* light green */
 }
 
 .item-name{
-    color: var(--main-color);
+    color: white;
     font-size: 16px;
 }
 
@@ -480,12 +472,12 @@ color: var(--main-color);/* light green */
     margin: 5px;
     background-color: var(--fifth-color);
     width: 190px;
-    height: 210px;
+    height: 225px;
 }
 
 
 .grid-item:hover{
-    background-color:var(--fourth-color);
+    background-color:var(--sixth-color);
     cursor: pointer;
     transition: transform 0.3s;
     transform: scale(1.07);
@@ -495,7 +487,7 @@ color: var(--main-color);/* light green */
 }
     
 .grid-item-collection:hover{
-    background-color:var(--fourth-color);
+    background-color:var(--sixth-color);
     cursor: pointer;
     transition: transform 0.3s;
     transform: scale(1.05);
@@ -597,7 +589,7 @@ color: var(--main-color);/* light green */
     font-family:var(--main-font);
     margin: 10px 10px 10px 10px;
     background-color:var(--second-color);
-    color:var(--main-color);
+    color: white;
     font-size: large;
     font-weight: bold;
     border-color: white;
@@ -624,7 +616,7 @@ color: var(--main-color);/* light green */
     font-family: var(--main-font);
     font-size: 20px;
     font-weight: bold;
-    color: var(--main-color);
+    color: white;
     padding-left: 5px;
     text-align: center;
 }
@@ -694,7 +686,7 @@ color: var(--main-color);/* light green */
     font-size: 20px;
     font-weight: bold;
     background-color:var(--fifth-color);
-    color:var(--main-color);
+    color:white;
     font-family: var(--main-font);
     padding: 12px;
     margin-right: 5px;
@@ -724,7 +716,7 @@ color: var(--main-color);/* light green */
   .main-title{
     font-size: 30px;
     font-weight: bold;
-    color: var(--main-color);
+    color: white;    
     padding: 15px;
     text-align: center;
     text-shadow: 10px 10px 10px var(--sixth-color);
@@ -805,7 +797,7 @@ color: var(--main-color);/* light green */
     cursor: pointer;
     font-weight: bold;
     font-size: 17px;
-    color:var(--second-color);
+    color: white;
     background-color:var(--main-color);
     height: 50px;
     border-radius: 10px;
@@ -823,6 +815,37 @@ color: var(--main-color);/* light green */
     background-color:var(--main-color);
     border-radius: 10px;
     padding: 5px;
+}
+
+.top5-display{
+
+}
+
+.display-item{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.summary-display{
+    display: flex;
+    flex-direction :row;
+    padding: 10px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    border-radius: 10px;
+    background-color: var(--sixth-color);
+    box-shadow: 5px 5px 5px var(--second-color);
+
+}
+
+.summary-display-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .summary{
@@ -868,6 +891,7 @@ color: var(--main-color);/* light green */
     font-size: 25px;
     font-weight: bold;
     text-decoration: underline;
+    margin-top: 65px;
 }
 
 .summary-tokens-title{
@@ -1074,12 +1098,16 @@ label{
 
 }
 
+a {
+    color: var(--main-color);
+    transition: 0.2s;
+}
+
 
 /* Add a hover effect for the sort buttons */
 .setting-button:hover {
   background-color: var(--third-color);
 }
-
 
 
 .assetData{
@@ -1139,7 +1167,7 @@ label{
     font-size: 25px;
     font-weight: bold;
     padding: 5px;
-    color: var(--main-color);    
+    color: var(--main-color);  
   }
   
 
@@ -1165,7 +1193,7 @@ a:hover {
 }
 
 .key{
-    color:var(--seventh-color);
+    color:var(--main-color);
     font-weight: bold;
     padding: 5px;
 }
