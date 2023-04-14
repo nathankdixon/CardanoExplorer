@@ -659,7 +659,10 @@ color: var(--main-color);/* light green */
 }
 
 .dropdown{
-
+    position: absolute;
+    top: 67px;
+    right: 0;
+    width: 200px;
 }
 
 .options {
@@ -682,7 +685,7 @@ color: var(--main-color);/* light green */
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 90%;
+    width: 100%;
     font-size: 20px;
     font-weight: bold;
     background-color:var(--fifth-color);
@@ -1216,8 +1219,14 @@ a:hover {
 }
 
 .asset-title{
-    font-size: 30px;
+    font-size: 35px;
     font-weight: bold;
+    padding: 10px;
+    color: white;
+}
+
+.asset-stat{
+    font-size: 20px;
     padding: 5px;
-    color: var(--main-color);
+    color: white;
 }

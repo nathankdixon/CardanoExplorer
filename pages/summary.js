@@ -19,10 +19,16 @@ export default function Summary(props){
         async function getSummaryInfo() {
           if (props.data.stake && props.currency.value.price) {
             let stakeInfo = await getStakeInfo(props.data.stake);
-            setAdaBalance(stakeInfo[0].total_balance / 1000000);
+            if(stakeInfo[0].total_balance == null){
+              setAdaBalance(0);
+            }
+            else{
+              setAdaBalance(stakeInfo[0].total_balance / 1000000);
+
+            }
             let pool = await getPoolInfo(stakeInfo[0].delegated_pool);
-            let poolTicker = pool[0].meta_json.ticker;
-            setStakePool(poolTicker);
+            
+            setStakePool(pool);
             console.log(props.currency)
 
             // get total value of fungible tokens
@@ -99,11 +105,10 @@ export default function Summary(props){
 
 
             for(const nft of top5Nfts){
-              console.log(nft);
               let value = nft.floor_price * props.currency.value.price;
               if(nft.floor_price != null){
                 value = value.toFixed(2);
-                nftsDisplay.push(<div className="summary-display-item">
+                nftsDisplay.push(<div className="summary-display-item" key={nft.asset_name+'nfts'}>
                 <Image src={nft.ipfs} width={200} height={200} alt={nft.decoded_name} className="display-item"/>
                 <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div></div>);
               }
@@ -113,7 +118,7 @@ export default function Summary(props){
               let value = ft.prices?.current * ft.quantity * props.currency.value.price;
               if(!isNaN(value)){
                 value = value.toFixed(2);
-                ftsDisplay.push(<div className="summary-display-item">
+                ftsDisplay.push(<div className="summary-display-item" key={ft.asset_name + 'fts'}>
                 <Image src={ft.ipfs} width={200} height={200} alt={ft.decoded_name} className="display-item"/>
                 <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div>
                 </div>);
@@ -123,11 +128,6 @@ export default function Summary(props){
 
             setNftsDisplay(nftsDisplay);
             setFtsDisplay(ftsDisplay);
-
-            console.log(top5Nfts);
-            console.log(top5Fts);
-
-
 
 
           }
@@ -208,9 +208,10 @@ export default function Summary(props){
         });
     
         const res = await req.json();
-        return res;
+        let ticker = res[0].meta_json.ticker;
+        return ticker;
       }catch(error){
-        return null;
+        return '-';
       }
     }
 

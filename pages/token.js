@@ -143,7 +143,6 @@ export default class Token {
           let opencnftData = await request.json();
           if(opencnftData.floor_price){
             this.floor_price = (opencnftData.floor_price/1000000);
-            console.log("floor price: ", this.floor_price);
           }
         }
         else{
@@ -174,14 +173,14 @@ export default class Token {
         let res = await req.json();
         let priceData = res.market_data;
         this.prices = {
-          current: priceData.current_price.usd.toFixed(2),
-          change24h: priceData.price_change_percentage_24h.toFixed(2),
-          change7d: priceData.price_change_percentage_7d.toFixed(2),
-          change30d: priceData.price_change_percentage_30d.toFixed(2),
-          change1y: priceData.price_change_percentage_1y.toFixed(2),
+          current: priceData.current_price.usd,
+          change24h: priceData.price_change_percentage_24h,
+          change7d: priceData.price_change_percentage_7d,
+          change30d: priceData.price_change_percentage_30d,
+          change1y: priceData.price_change_percentage_1y,
         };
       } catch (error) {
-        throw new Error('coin gecko error');
+        throw new Error(error);
       }
     }
     

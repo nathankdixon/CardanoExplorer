@@ -9,7 +9,7 @@ export default function Prices (props) {
     const [priceColors, setPriceColors] = useState({usd: 'black', gbp: 'black', btc: 'black', eth: 'black', eur: 'black'});
 
 
-    const [top5, setTop5] = useState([{name: null, price: null, priceChange:null, color: null}, {name: null, price: null, priceChange:null, color: null},{name: null, price: null,priceChange:null, color: null},{name: null, price: null,priceChange:null, color: null},{name: null, price: null,priceChange:null, color: null}]);
+    const [top5, setTop5] = useState([{name: 'Bitcoin', price: '-', priceChange:'-', color: 'green'}, {name: 'Ethereum', price: '-', priceChange:'-', color: 'green'},{name: 'Cardano', price: '-',priceChange:'-', color: 'green'},{name: 'USD Coin', price: '-',priceChange:'-', color: 'green'},{name: 'Tether USD', price: '-',priceChange:'-', color: '-'}]);
     const [adaPrice, setAdaPrice] = useState({usd: {price: null, change24hr: null}, gbp: {price: null, change24hr: null}, btc: {price: null, change24hr: null}, eth: {price: null, change24hr: null}, eur: {price: null, change24hr: null}});
     // json request of ADA market data
 
@@ -37,7 +37,7 @@ export default function Prices (props) {
                 }
 
             } catch (error) {
-                console.error('Error fetching Cardano prices:', error);
+                console.error('Error fetching Cardano prices:');
             }
             };
             getCardanoPrices();
@@ -74,7 +74,7 @@ export default function Prices (props) {
                 }
 
             } catch (error) {
-              console.error(error);
+              console.error('Error fetching top 5 crypto prices:');
               return null;
             }
           }
@@ -109,7 +109,7 @@ export default function Prices (props) {
         }
 
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching Cardano prices:');
         return null;
     }
     }

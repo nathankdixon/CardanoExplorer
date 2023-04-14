@@ -66,6 +66,24 @@ export default function Fts (props){
               value = (price * coin.quantity).toFixed(2);
               totalPrice += (price * coin.quantity);
             }
+
+            let hour24 = coin.prices?.change24h;
+            let day7 = coin.prices?.change7d;
+            let day30 = coin.prices?.change30d;
+            let year1 = coin.prices?.change1y;
+
+            if (hour24 == null) {
+              hour24 = 0;
+            }
+            if (day7 == null) {
+              day7 = 0;
+            }
+            if (day30 == null) {
+              day30 = 0;
+            }
+            if (year1 == null) {
+              year1 = 0;
+            }
     
             combinedRows.push(
               <tr key={coin.asset_name + (priceExists ? 'priced' : 'unpriced')} onClick={() => router.push('/'+coin.policy_id+coin.asset_name)}>
@@ -73,10 +91,10 @@ export default function Fts (props){
                 <td>{ticker}</td>
                 <td>{coin.quantity}</td>
                 <td>{priceExists ? <span className="currency">{props.currency.symbol}</span> : ''}{priceExists ? price : ''}</td>
-                <td style={{ color: priceExists ? getColor(coin.prices.change24h) : '' }}>{priceExists ? `${coin.prices.change24h}%` : ''}</td>
-                <td style={{ color: priceExists ? getColor(coin.prices.change7d) : '' }}>{priceExists ? `${coin.prices.change7d}%` : ''}</td>
-                <td style={{ color: priceExists ? getColor(coin.prices.change30d) : '' }}>{priceExists ? `${coin.prices.change30d}%` : ''}</td>
-                <td style={{ color: priceExists ? getColor(coin.prices.change1y) : '' }}>{priceExists ? `${coin.prices.change1y}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change24h) : '' }}>{priceExists ? `${hour24.toFixed(2)}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change7d) : '' }}>{priceExists ? `${day7.toFixed(2)}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change30d) : '' }}>{priceExists ? `${day30.toFixed(2)}%` : ''}</td>
+                <td style={{ color: priceExists ? getColor(coin.prices.change1y) : '' }}>{priceExists ? `${year1.toFixed(2)}%` : ''}</td>
                 <td style={{ fontWeight: priceExists ? "bold" : "" }}>{priceExists ? <span className="currency">{props.currency.symbol}</span> : ''}{priceExists ? value : ''}</td>
               </tr>
             );

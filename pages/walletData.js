@@ -78,14 +78,90 @@ function WalletData (props) {
     }
   }
 
+              // no asset limit on how many assets gets returned on one request
+  // koios, blockfrost is limited by 100 results per page
+  async function getAddressFromHandle(handle){
+    let assetName = Buffer.from(handle).toString('hex');
+    let policyID = 'f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a';
+
+    try{
+      const req = await fetch('https://api.koios.rest/api/v0/asset_nft_address?_asset_policy='+policyID+'&_asset_name='+assetName);
+
+      const res = await req.json();
+      if(res[0].payment_address != null){
+        return res[0].payment_address;
+      }
+      else{
+        return null;
+      }
+    }catch(error){
+      return null;
+    }
+  }
+
+      // no asset limit on how many assets gets returned on one request
+  // koios, blockfrost is limited by 100 results per page
+  async function getStakeFromAddress(address){
+    try{
+      const req = await fetch('https://api.koios.rest/api/v0/address_info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "_addresses": [
+            address
+          ]
+        })
+      });
+
+      const res = await req.json();
+      if(res[0].stake_address != null){
+        return res[0].stake_address;
+      }
+      else{
+        return null;
+      }
+    }catch(error){
+      return null;
+    }
+  }
+
   useEffect(() => {
     setCurrency({name: 'USD', value: prices.usd, symbol: '$'});
   },[prices]);
 
   useEffect(() => {
-    if(props.stake != null){
-      setStakeAddress(props.stake);
+    async function handleQuery(){
+      if(props.stake != null){
+        let query = props.stake;
+        console.log(query);
+        setLoadedTokens('loading wallet data for stake: '+query.substring(0,10)+'...');
+        if(query.startsWith('$')){
+          setLoadedTokens('fetching address for handle: '+query);
+          query = query.substring(1);
+          let address = await getAddressFromHandle(query);
+          if(address != null){
+            setLoadedTokens('fetching stake for address: '+address.substring(0,10)+'...');
+            let stake = await getStakeFromAddress(address);
+            if(stake != null){
+              setStakeAddress(stake);
+            }
+            else{
+              setStakeAddress(address);
+            }
+          }
+        }
+        else if(query.startsWith('addr')){
+          let stake = await getStakeFromAddress(query);
+          setStakeAddress(stake);
+        }
+        else if(query.startsWith('stake')){
+          setStakeAddress(query);
+        }
+        }
     }
+    handleQuery();
   }, [props.stake]);
 
   useEffect(() => {
@@ -94,17 +170,32 @@ function WalletData (props) {
         let walletData = '';
         try{
           if(localStorage.getItem(stakeAddress) != null){
+
+            // if wallet data is already in local storage, load it
             walletData = JSON.parse(localStorage.getItem(stakeAddress));
+            setWalletData(walletData);
+            setLoadedTokens('scroll to view wallet')
           }
           else{
+
+            // if wallet data is not in local storage, fetch it from koios
             setLoadedTokens('loading wallet data')
-            walletData = await createWalletDataFromStake(props.stake);
+            walletData = await createWalletDataFromStake(stakeAddress);
             try{
-              if(walletData != null && checkKoiosStatus() ){
+
+              // if wallet data is fetched, save it to local storage
+              if(walletData != null){
+                setWalletData(walletData);
+                setLoadedTokens('scroll to view wallet')
                 localStorage.setItem(stakeAddress, JSON.stringify(walletData));
+              }
+              else{
+                console.log(walletData);
+                setLoadedTokens('error loading wallet data')
               }
             }
             catch(err){
+
               console.log(err);
             }
           }
@@ -112,8 +203,7 @@ function WalletData (props) {
         catch(err){
           console.log(err);
         }
-        setWalletData(walletData);
-        setLoadedTokens('scroll to view wallet')
+
       }
     }
     getWalletData();
@@ -130,8 +220,12 @@ function WalletData (props) {
     let walletData = '';
     // json list of assets in stake address
     let assets = await getAssetsFromKoios(stake);
+    console.log(assets);
     // no assets
-    if(assets == null || assets.length == 0){
+    if(assets == null){
+      return null;
+    }
+    else if(assets.length == 0){
       walletData = {stake : stake, tokenNumber: 0, projectNumber:0, nfts: [], fts : []};
     }
     else{
@@ -159,7 +253,6 @@ function WalletData (props) {
 
       }catch(error){
         console.log(error);
-        deleteLocalStorage();
         return null;
       }
     }
@@ -170,29 +263,68 @@ function WalletData (props) {
   // no asset limit on how many assets gets returned on one request
   // koios, blockfrost is limited by 100 results per page
   async function getAssetsFromKoios(stakeAddress){
-    try{
-      const req = await fetch('https://api.koios.rest/api/v0/account_assets', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "_stake_addresses": [
-            stakeAddress
-          ]
-        })
-      });
 
-      const res = await req.json();
-      if(res[0].asset_list != null){
-        return res[0].asset_list;
-      }
-      else{
+    console.log(stakeAddress);
+    if(stakeAddress.startsWith('stake')){
+      try{
+        const req = await fetch('https://api.koios.rest/api/v0/account_assets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            '_stake_addresses': [
+              stakeAddress
+            ]
+          })
+        });
+  
+        const res = await req.json();
+        if(res[0].asset_list != null){
+          return res[0].asset_list;
+        }
+        else{
+          console.log(res);
+          return null;
+        }
+      }catch(error){
+        console.log(error);
         return null;
       }
-    }catch(error){
+    }
+
+    else if(stakeAddress.startsWith('addr')){
+      try{
+        const req = await fetch('https://api.koios.rest/api/v0/address_assets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            '_addresses': [
+              stakeAddress
+            ]
+          })
+        });
+  
+        const res = await req.json();
+        if(res[0].asset_list != null){
+          return res[0].asset_list;
+        }
+        else{
+          return null;
+        }
+      }catch(error){
+        return null;
+      }
+    }
+    else{
+      console.log('invalid stake address');
+      console.log(stakeAddress);
       return null;
     }
+
+
   }
 
   // creates a list of 'token' objects and sorts them by price
@@ -213,11 +345,16 @@ function WalletData (props) {
       setLoadedTokens('loading '+i+'/'+assets.length);
       let quantity = 1; 
 
-      if(assets[i].decimals == 0){
+      if(assets[i].quantity == 1){
         quantity = assets[i].quantity 
       }
       else{
-        quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
+        if(assets[i].decimals == 0){
+          quantity = assets[i].quantity / (Math.pow(10, 6));
+        }
+        else{
+          quantity = assets[i].quantity / (Math.pow(10, assets[i].decimals));
+        }
       }
 
 
@@ -303,7 +440,7 @@ function WalletData (props) {
   };
 
   function deleteLocalStorage(){
-    localStorage.removeItem(props.stake);
+    localStorage.removeItem(stakeAddress);
     window.location.reload();
     router.reload();
   }

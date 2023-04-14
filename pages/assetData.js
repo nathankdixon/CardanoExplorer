@@ -222,9 +222,7 @@ function AssetData(props) {
         <div className="asset-item">
           <div className="asset-text">
             <div className="asset-title">{name}</div>
-          </div>
-          <div className="asset-text">
-          <div>Policy ID: <Link href={"/"+ policy}>{policy}</Link></div>
+            <div className="asset-stat">Policy ID: <Link href={"/"+ policy}>{policy}</Link></div>
           </div>
         </div>
         <div className="asset-item">
@@ -238,10 +236,10 @@ function AssetData(props) {
           />
         </div>
         <div className="asset-text">
-            <div>
+            <div className="asset-stat">
               Current Owner: <Link href={"/" + owner}>{owner.substring(0,20)+'...'}</Link>
             </div>
-            <div>
+            <div className="asset-stat">
               Floor Price: {floorPrice} ADA
             </div>
           </div>
