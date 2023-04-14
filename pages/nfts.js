@@ -15,6 +15,8 @@ export default function Nfts (props){
     const [tokensText, setTokensText] = useState("Tokens");
     const [sortByFloorPrice, setSortByFloorPrice] = useState(false);
     const [sortByAssetName, setSortByAssetName] = useState(false);
+    const [sortByQuantity, setSortByQuantity] = useState(false);
+
 
 
     useEffect(() => {
@@ -277,14 +279,21 @@ export default function Nfts (props){
     }
     
 
-    function sortAssetName(){
-      if(sortByFloorPrice){
+    function handleSort(option){
+      if(option == "floor_price"){
+        setSortByFloorPrice(true);
+        setSortByQuantity(false);
+        setSortByAssetName(false);
+      }
+      else if(option == "asset_name"){
         setSortByFloorPrice(false);
         setSortByAssetName(true);
+        setSortByQuantity(false);
       }
       else{
-        setSortByFloorPrice(true);
+        setSortByFloorPrice(false);
         setSortByAssetName(false);
+        setSortByQuantity(true);
       }
     }
     
@@ -313,7 +322,7 @@ return (
         <input
           type="checkbox"
           checked={sortByFloorPrice}
-          onChange={() => sortAssetName(false)}
+          onChange={() => handleSort("floor_price")}
         />
         Sort by floor price
       </label>
@@ -321,9 +330,17 @@ return (
         <input
           type="checkbox"
           checked={sortByAssetName}
-          onChange={() => sortAssetName(true)}
+          onChange={() => handleSort("asset_name")}
         />
         Sort by assetName
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          checked={sortByQuantity}
+          onChange={() => handleSort("quantity")}
+        />
+        Sort by Quantity
       </label>
       </nav>
         <div style={{fontSize: '25px'}}>{collectionText}</div>
