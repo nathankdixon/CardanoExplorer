@@ -16,6 +16,7 @@ export default function Nfts (props){
     const [sortByFloorPrice, setSortByFloorPrice] = useState(false);
     const [sortByAssetName, setSortByAssetName] = useState(false);
     const [sortByQuantity, setSortByQuantity] = useState(false);
+    const originalNfts = props.data.nfts;
 
 
 
@@ -257,6 +258,14 @@ export default function Nfts (props){
     
       // Sort by floor_price if sortByFloorPrice is true
       if (!sortByFloorPrice) {
+
+          if (expanded) {
+            filteredNfts.sort((a, b) => b.floor_price - a.floor_price);
+          } else {
+            filteredNfts.sort((a, b) => b[0].floor_price - a[0].floor_price);
+          }
+        }
+      if(sortByAssetName){
         if (expanded) {
           // Sort by asset_name
           filteredNfts.sort((a, b) => a.decoded_name.localeCompare(b.decoded_name));
@@ -265,15 +274,19 @@ export default function Nfts (props){
           filteredNfts.sort((a, b) =>
             a[0].decoded_name.localeCompare(b[0].decoded_name)
           );
-          
-        }
-      } else {
-        if (expanded) {
-          filteredNfts.sort((a, b) => b.floor_price - a.floor_price);
-        } else {
-          filteredNfts.sort((a, b) => b[0].floor_price - a[0].floor_price);
         }
       }
+      if(sortByQuantity){
+        if(expanded){
+          filteredNfts = filteredNfts.flatMap((policy) => policy);
+        }
+        else{
+          filteredNfts = originalNfts;
+        }
+        
+      }
+          
+
     
       return filteredNfts;
     }
