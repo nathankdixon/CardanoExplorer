@@ -15,14 +15,14 @@ export default function Nfts (props){
     const [tokensText, setTokensText] = useState("Tokens");
     const [sortByFloorPrice, setSortByFloorPrice] = useState(false);
     const [sortByAssetName, setSortByAssetName] = useState(false);
-    const [sortByQuantity, setSortByQuantity] = useState(false);
+    const [sortByQuantity, setSortByQuantity] = useState(true);
     const originalNfts = props.data.nfts;
 
 
 
     useEffect(() => {
       setGrid();
-    }, [props.data, searchTerm, expanded, props.currency, sortByFloorPrice]);
+    }, [props.data, searchTerm, expanded, props.currency, sortByFloorPrice, sortByAssetName, sortByQuantity]);
 
     function setGrid() {
       let collectionGrid = [];
@@ -71,7 +71,7 @@ export default function Nfts (props){
         for (const [index, element] of filteredNfts.entries()) {
           let policy = element;
 
-          if (!policy) {
+          if (!policy || policy[0].ipfs == '') {
             singleGrid.push(<div key={"noimg-" + index} className="grid-item">
                 <Image
                 width={170}
@@ -81,54 +81,41 @@ export default function Nfts (props){
               />
             </div>);
           } else {
-            if (policy[0].ipfs == "") {
-              singleGrid.push(<div key={element.policy_id + "-noimg-" + index} className="grid-item">
-                  <Image
-                  width={170}
-                  height={170}
+            if (policy.length > 1) {
+              collectionCount += 1;
+              collectionGrid.push(<div key={policy[0].asset_name} className="grid-item-collection" onClick={() => showCollection(policy)}>
+                <Image                    
                   className="grid-img"
-                  src={"/black.jpeg"}
+                  src={policy[0].ipfs}
+                  height={170}
+                  width={170}
+                  alt={policy[0].asset_name}
                 />
+                <div className="item-text">
+                  <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                  <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
+                  <label className="item-name">{policy.length} NFTs</label>
+                </div>
               </div>
 
               );
             } else {
-              if (policy.length > 1) {
-                collectionCount += 1;
-                collectionGrid.push(<div key={policy[0].asset_name} className="grid-item-collection" onClick={() => showCollection(policy)}>
-                  <Image                    
-                    className="grid-img"
-                    src={policy[0].ipfs}
-                    height={170}
-                    width={170}
-                    alt={policy[0].asset_name}
-                  />
-                  <div className="item-text">
-                    <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
-                    <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
-                    <label className="item-name">{policy.length} NFTs</label>
-                  </div>
+              tokenCount += policy.length;
+              singleGrid.push(<Link href = {'/' + policy[0].policy_id + policy[0].asset_name} key={policy[0].asset_name} className="grid-item">
+                <Image
+                  className="grid-img"
+                  src={policy[0].ipfs}
+                  height={170}
+                  width={170}
+                  alt={policy[0].asset_name}
+                />
+              <div className="item-text">
+                <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
+                <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
                 </div>
+              </Link>
 
-                );
-              } else {
-                tokenCount += policy.length;
-                singleGrid.push(<Link href = {'/' + policy[0].policy_id + policy[0].asset_name} key={policy[0].asset_name} className="grid-item">
-                  <Image
-                    className="grid-img"
-                    src={policy[0].ipfs}
-                    height={170}
-                    width={170}
-                    alt={policy[0].asset_name}
-                  />
-                <div className="item-text">
-                  <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
-                  <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
-                  </div>
-                </Link>
-
-                );
-              }
+              );
             }
           }
         }
@@ -257,15 +244,14 @@ export default function Nfts (props){
       }
     
       // Sort by floor_price if sortByFloorPrice is true
-      if (!sortByFloorPrice) {
-
-          if (expanded) {
-            filteredNfts.sort((a, b) => b.floor_price - a.floor_price);
-          } else {
-            filteredNfts.sort((a, b) => b[0].floor_price - a[0].floor_price);
-          }
+      if (sortByFloorPrice) {
+        if (expanded) {
+          filteredNfts.sort((a, b) => b.floor_price - a.floor_price);
+        } else {
+          filteredNfts.sort((a, b) => b[0].floor_price - a[0].floor_price);
         }
-      if(sortByAssetName){
+      }
+      if (sortByAssetName) {
         if (expanded) {
           // Sort by asset_name
           filteredNfts.sort((a, b) => a.decoded_name.localeCompare(b.decoded_name));
@@ -276,42 +262,49 @@ export default function Nfts (props){
           );
         }
       }
-      if(sortByQuantity){
-        if(expanded){
-          filteredNfts = filteredNfts.flatMap((policy) => policy);
+      if (sortByQuantity) {
+        if (expanded) {
+          // Sort by quantity when expanded
+          filteredNfts.sort((a, b) => b.quantity - a.quantity);
+        } else {
+          // Sort by quantity when not expanded
+          filteredNfts.sort((a, b) => b.reduce((acc, curr) => acc + curr.quantity, 0) - a.reduce((acc, curr) => acc + curr.quantity, 0));
         }
-        else{
-          filteredNfts = originalNfts;
-        }
-        
       }
-          
-
     
       return filteredNfts;
     }
     
 
     function handleSort(option){
+      console.log('');
+      console.log('selected: '+option);
+
+
       if(option == "floor_price"){
+        console.log("floor");
         setSortByFloorPrice(true);
         setSortByQuantity(false);
         setSortByAssetName(false);
       }
       else if(option == "asset_name"){
-        setSortByFloorPrice(false);
+        console.log("assetname");
         setSortByAssetName(true);
+        setSortByFloorPrice(false);
         setSortByQuantity(false);
       }
-      else{
+      else if(option == "quantity"){
+        console.log("quantity");
+        setSortByQuantity(true);
         setSortByFloorPrice(false);
         setSortByAssetName(false);
-        setSortByQuantity(true);
       }
+
+      console.log("floor: "+sortByFloorPrice);
+      console.log("assetname: "+sortByAssetName);
+      console.log("quantity: "+sortByQuantity);
     }
     
-
-
 return (
   <div className="nfts">
     <div style={{fontSize: '30px',fontWeight: 'bold'}}>NFTs</div>
