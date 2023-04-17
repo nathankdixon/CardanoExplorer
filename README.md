@@ -1,29 +1,12 @@
-# Next.js + Jest
+This project is a Cardano Explorer, build by Southamnpton Student Nathan Dixon for his Computer Science BSC final project.
 
-This example shows how to configure Jest to work with Next.js.
+To run the application server, clone the repo and run the following command in the project directory:
 
-This includes Next.js' built-in support for Global CSS, CSS Modules and TypeScript.
+    npm run dev
 
-## How to Use
+This explorer can then be found at the following URL:
 
-Quickly get started using [Create Next App](https://github.com/vercel/next.js/tree/canary/packages/create-next-app#readme)!
+    http://localhost:3000
 
-In your terminal, run the following command:
 
-```bash
-npx create-next-app --example with-jest with-jest-app
-```
 
-```bash
-yarn create next-app --example with-jest with-jest-app
-```
-
-```bash
-pnpm create next-app --example with-jest with-jest-app
-```
-
-## Run Jest Tests
-
-```bash
-npm test
-```
