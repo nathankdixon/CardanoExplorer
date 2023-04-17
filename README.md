@@ -1,4 +1,4 @@
-This project is a Cardano Explorer, build by Southamnpton Student Nathan Dixon for his Computer Science BSC final project.
+This project is a Cardano Explorer, built by Nathan Dixon for his Computer Science BSC final project at the University of Southampton.
 
 To run the application server, clone the repo and run the following command in the project directory:
 
