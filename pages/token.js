@@ -151,7 +151,6 @@ export default class Token {
       }
       catch(error){
         this.floor_price = 0;
-        throw new Error('Error in OpenCNFT');
       }
     }
     else{
@@ -180,7 +179,7 @@ export default class Token {
           change1y: priceData.price_change_percentage_1y,
         };
       } catch (error) {
-        throw new Error(error);
+        this.prices = null;
       }
     }
     

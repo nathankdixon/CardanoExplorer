@@ -51,6 +51,15 @@ export default function Home(props){
         else if(wallet == 'Flint Wallet'){
           api = await window.cardano.flint.enable();
         }
+        else if(wallet == 'Yoroi'){
+          api = await window.cardano.yoroi.enable();
+        }
+        else if(wallet == 'Lace'){
+          api = await window.cardano.lace.enable();
+        }
+        else if(wallet = 'gero'){
+          api = await window.cardano.gero.enable();
+        }
         else{
           return null;
         }
@@ -98,11 +107,28 @@ export default function Home(props){
                     </div>
                     <Prices data={setPriceData}/>
                     <div className="home-body-wallets">
-                        <div className="arrow"><h2>Connect your Wallet</h2><Image src={'/arrow.png'} width={50} height={50} alt={'arrow'}/></div>
-                        <button className="home-wallet-button" onClick={() => handleSelect('Typhon Wallet')}><img className="wallet-img" src='/typhon.svg'></img></button>
-                        <button className="home-wallet-button" onClick={() => handleSelect('eternl')}><img className="wallet-img" src='/eternl.png'></img></button>
-                        <button className="home-wallet-button" onClick={() => handleSelect('Nami')}><img className="wallet-img" src='/nami.svg'></img></button>
-                        <button className="home-wallet-button" onClick={() => handleSelect('Flint Wallet')}><img className="wallet-img" src='/flint.png'></img></button><br/>
+                        <div className="arrow"><h2>Connect your Wallet</h2><Image src={'/arrow.png'} width={50} height={50} alt={'arrow'}/>
+                        </div>
+                        <button className="home-wallet-button" onClick={() => handleSelect('Typhon Wallet')}>
+                          <Image className="wallet-img" src='/typhon.svg' width={100} height={100} alt = 'typhon-wallet'/>
+                          <div className="wallet-text">Typhon</div>
+                        </button>
+                        <button className="home-wallet-button" onClick={() => handleSelect('eternl')}>
+                          <Image className="wallet-img" src='/eternl.png' height={100} width={100} alt="etnerl"/>
+                          <div className="wallet-text">Eternl</div>
+                          </button>
+                        <button className="home-wallet-button" onClick={() => handleSelect('Nami')}>
+                          <Image className="wallet-img" src='/nami.svg' width={100} height={100} alt="nami"/>
+                          <div className="wallet-text">Nami</div>
+                        </button>
+                        <button className="home-wallet-button" onClick={() => handleSelect('Flint Wallet')}>
+                          <Image className="wallet-img" src='/flint.png' width={100} height={100} alt="flint"/>
+                          <div className="wallet-text">Flint</div>
+                        </button>
+                        <button className="home-wallet-button" onClick={() => handleSelect('Lace')}>
+                          <Image className="wallet-img" src='/lacer.png' width={100} height={100} alt="flint"/>
+                          <div className="wallet-text">Lace</div>
+                        </button>
                     </div>
                 </div>
             </div>)

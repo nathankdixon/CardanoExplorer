@@ -43,7 +43,9 @@ export default function Nfts (props){
                 width={170}
                 height={170}
                 className="grid-img"
-                src={"/black.jpeg"}/>
+                src={"/black.jpeg"}
+                quality={20}
+                />
             </div>
 
             );
@@ -55,6 +57,8 @@ export default function Nfts (props){
             height={170}
             width={170}
             alt={policy.asset_name}
+            quality={20}
+
           />
           <div className="item-text">
             <label className="item-name">{(policy.decoded_name).substring(0,20)}</label>
@@ -78,6 +82,7 @@ export default function Nfts (props){
                 height={170}
                 className="grid-img"
                 src={"/black.jpeg"}
+                quality={20}
               />
             </div>);
           } else {
@@ -90,6 +95,7 @@ export default function Nfts (props){
                   height={170}
                   width={170}
                   alt={policy[0].asset_name}
+                  quality={20}
                 />
                 <div className="item-text">
                   <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
@@ -108,6 +114,7 @@ export default function Nfts (props){
                   height={170}
                   width={170}
                   alt={policy[0].asset_name}
+                  quality={20}
                 />
               <div className="item-text">
                 <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
@@ -144,6 +151,7 @@ export default function Nfts (props){
             height={170}
             className="grid-img"
             src={"/black.jpeg"}
+            quality={20}
             />
           </Link> )
         }
@@ -151,7 +159,11 @@ export default function Nfts (props){
           if(policy.length > 1){
             collectionGrid.push(<div className="grid-item-collection" onClick={() => showCollection(policy)} key = {policy[0].asset_name}>
               <Image className="grid-img" 
-                src={policy[0].ipfs} height={170} width={170} alt = {policy[0].asset_name} 
+                src={policy[0].ipfs} 
+                height={170} 
+                width={170} 
+                alt = {policy[0].asset_name}
+                quality={20}
                 />
                 <div className="item-text">
                   <label className="item-name">{(policy[0].decoded_name)}</label>
@@ -163,8 +175,11 @@ export default function Nfts (props){
           else{
             tokenCount += policy.length;
             singleGrid.push(<Link className="grid-item" key = {policy[0].asset_name} href = {'/'+policy[0].policy_id + policy[0].asset_name}>
-              <Image className="grid-img"  src={policy[0].ipfs} 
-              height={170} width={170} alt = {policy[0].asset_name} />
+              <Image className="grid-img"  
+              src={policy[0].ipfs} 
+              height={170}
+               width={170} 
+               alt = {policy[0].asset_name} />
               <div className="item-text">
                 <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
                 <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
@@ -182,6 +197,7 @@ export default function Nfts (props){
   
     function showCollection(policy) {
       scrollToSection("nfts");
+      setTokensText();
       
       setCollectionText(<div>Policy: <Link href={'/'+policy[0].policy_id}>{policy[0].policy_id}</Link> with {policy.length} NFTs</div>);
       setBackButton(<button className="back-button" onClick={() => showWallet()}>Back</button>);
@@ -196,6 +212,8 @@ export default function Nfts (props){
             height={170}
             className="grid-img"
             src={"/black.jpeg"}
+            quality={20}
+
             />
             <div className="item-text">
               <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
@@ -212,6 +230,8 @@ export default function Nfts (props){
               alt={element.asset_name}
               width={170}
               height={170}
+              quality={20}
+
               />
               <div className="item-text">
                 <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
@@ -338,7 +358,7 @@ return (
           checked={sortByAssetName}
           onChange={() => handleSort("asset_name")}
         />
-        Sort by assetName
+        Sort by Asset Name
       </label>
       <label>
         <input

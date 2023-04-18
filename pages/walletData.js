@@ -38,13 +38,13 @@ function WalletData (props) {
     let response = await fetch('https://api.koios.rest/api/v0/tip');
 
     if(response.ok){
-      setKoiosStatus('ok');
+      setKoiosStatus(<Image src={'/success.png'} height={20} width={20} alt="ok"/>);
       return true;
 
     }
     else{
       console.log(response);
-      setKoiosStatus('error code: '+response.status);
+      setKoiosStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok"/>);
       return false;
     }
   }
@@ -53,12 +53,12 @@ function WalletData (props) {
     let response = await fetch('https://api.coingecko.com/api/v3/ping');
 
     if(response.ok){
-      setCoinGeckoStatus('ok');
+      setCoinGeckoStatus(<Image src={'/success.png'} height={20} width={20} alt="ok"/>);
       return true;
     }
     else{
       console.log(response);
-      setCoinGeckoStatus('error code: '+response.status);
+      setCoinGeckoStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok"/>);
       return false;
     }
   }
@@ -68,12 +68,12 @@ function WalletData (props) {
     {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
 
     if(response.ok){
-      setOpenCnftStatus('ok');
+      setOpenCnftStatus(<Image src={'/success.png'} height={20} width={20} alt="ok"/>);
       return true;
     }
     else{
       console.log(response);
-      setOpenCnftStatus('error code: '+response.status);
+      setOpenCnftStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok"/>);
       return false;
     }
   }
@@ -143,13 +143,19 @@ function WalletData (props) {
           let address = await getAddressFromHandle(query);
           if(address != null){
             setLoadedTokens('fetching stake for address: '+address.substring(0,10)+'...');
-            let stake = await getStakeFromAddress(address);
-            if(stake != null){
-              setStakeAddress(stake);
+            try{
+              let stake = await getStakeFromAddress(address);
+              if(stake != null){
+                setStakeAddress(stake);
+              }
+              else{
+                setStakeAddress(address);
+              }
             }
-            else{
+            catch{
               setStakeAddress(address);
             }
+
           }
         }
         else if(query.startsWith('addr')){
@@ -502,10 +508,13 @@ function WalletData (props) {
       <div className="wallet-data-content">
         <section className="wallet-data-content-item" id="home" >
           <Home data={walletData} prices = {setPriceData} currency = {currency}/>
-          <div>Koios Status: {koiosStatus}</div>
-          <div>Coin Gecko Status: {coinGeckoStatus}</div>
-          <div>OpenCNFT Status: {openCnftStatus}</div>
-          <div style={{fontSize: 'xx-large', color:"white"}}>{loadedTokens}</div>
+          <div className="data-info">
+            <div className="api-status">Koios Status: {koiosStatus}</div>
+            <div className="api-status">Coin Gecko Status: {coinGeckoStatus}</div>
+            <div className="api-status">OpenCNFT Status: {openCnftStatus}</div>
+            <div style={{fontSize: 'xx-large', color:"white"}}>{loadedTokens}</div>
+          </div>
+
         </section>
         {walletData.stake && (
           <div>

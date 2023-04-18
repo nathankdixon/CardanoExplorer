@@ -109,7 +109,7 @@ export default function Summary(props){
               if(nft.floor_price != null){
                 value = value.toFixed(2);
                 nftsDisplay.push(<div className="summary-display-item" key={nft.asset_name+'nfts'}>
-                <Image src={nft.ipfs} width={200} height={200} alt={nft.decoded_name} className="display-item"/>
+                <Image src={nft.ipfs} width={150} height={150} alt={nft.decoded_name} className="display-item"/>
                 <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div></div>);
               }
             }
@@ -119,7 +119,7 @@ export default function Summary(props){
               if(!isNaN(value)){
                 value = value.toFixed(2);
                 ftsDisplay.push(<div className="summary-display-item" key={ft.asset_name + 'fts'}>
-                <Image src={ft.ipfs} width={200} height={200} alt={ft.decoded_name} className="display-item"/>
+                <Image src={ft.ipfs} width={150} height={150} alt={ft.decoded_name} className="display-item"/>
                 <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div>
                 </div>);
               }
@@ -219,28 +219,29 @@ export default function Summary(props){
         <div className="summary">
             <div className = 'summary-title'>Your Wallet</div>
             <div className="summary-general">
+            <div className="summary-general-title">Wallet Summary</div>
                 <div className="summary-general-item">Stake Address: {props.data.stake}</div>
                 <div className="summary-general-container">
-                  <div className="summary-general-item">ADA Balance: <span style={{color: 'green'}}> {adaBalance} ADA </span></div>
+                  <div className="summary-general-item">ADA Balance: <span style={{color: '#90EE90'}}> {adaBalance} ADA </span></div>
                   <div className="summary-general-item">Custom Tokens: {getTotalNfts(props.data.nfts) + props.data.fts.length}</div>
-                  <div className="summary-general-item">Wallet Value: <span className="currency">{props.currency.symbol}</span><span style={{color: 'green'}}>{totalValue}</span></div>
-                  <div className="summary-general-item">Delegated Stake Pool: <span style={{color: "orange"}}>{stakePool}</span></div>
+                  <div className="summary-general-item">Wallet Value: <span className="currency">{props.currency.symbol}</span><span style={{color: '#90EE90'}}>{totalValue}</span></div>
+                  <div className="summary-general-item">Delegated Stake Pool: <span style={{color: "yellow"}}>{stakePool}</span></div>
                 </div>
             </div>
             <div className="summary-tokens">
                 <div className="summary-tokens-item">
                     <div className="summary-tokens-title">Non-Fungible Tokens</div>
-                    <div className="summary-tokens-text">NFTs:<span style={{color: 'red'}}>{getTotalNfts(props.data.nfts)}</span></div>
-                    <div className="summary-tokens-text">Unique Policy IDs:<span style={{color: 'yellow'}}>{props.data.nfts.length}</span></div>
-                    <div className="summary-tokens-text">Total Value of NFTs:<span className="currency">{props.currency.symbol}</span> {nftValue}</div>
-                    <div className="summary-tokens-text" style={{textAlign: "center"}}>Top 3 NFTs by Value</div>
+                    <div className="summary-tokens-text"><div>NFTs:</div><div><span style={{color: 'yellow'}}>{getTotalNfts(props.data.nfts)}</span></div></div>
+                    <div className="summary-tokens-text"><div>Unique Policy IDs:</div><div><span style={{color: 'yellow'}}>{props.data.nfts.length}</span></div></div>
+                    <div className="summary-tokens-text"><div>Total Value of NFTs:</div><div><span className="currency">{props.currency.symbol}</span> <span style={{color: '#90EE90'}}>{nftValue}</span></div></div>
+                    <div className="summary-tokens-title" style={{textAlign: "center"}}>Top 3 NFTs by Value</div>
                     <div className="summary-display">{nftsDisplay}</div>
                 </div>
                 <div className="summary-tokens-item">
                     <div className="summary-tokens-title">Fungible Tokens</div>
-                    <div className="summary-tokens-text">Coins:<span style={{color: '#ccffcc'}}>{props.data.fts.length}</span></div>
-                    <div className="summary-tokens-text">Total Coin Value:<span className="currency">{props.currency.symbol}</span> {tokenValue}</div>
-                    <div className="summary-tokens-text" style={{textAlign: "center"}}>Top 3 Coins by Value</div>
+                    <div className="summary-tokens-text">Coins:<span style={{color: 'yellow'}}>{props.data.fts.length}</span></div>
+                    <div className="summary-tokens-text">Total Coin Value:<div><span className="currency">{props.currency.symbol}</span><span style={{color: '#90EE90'}}>{tokenValue}</span></div></div>
+                    <div className="summary-tokens-title" style={{textAlign: "center"}}>Top 3 Coins by Value</div>
                     <div className="summary-display">{ftsDisplay}</div>
                 </div>
             </div>
