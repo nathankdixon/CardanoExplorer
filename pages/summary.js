@@ -109,7 +109,7 @@ export default function Summary(props){
               if(nft.floor_price != null){
                 value = value.toFixed(2);
                 nftsDisplay.push(<div className="summary-display-item" key={nft.asset_name+'nfts'}>
-                <Image src={nft.ipfs} width={150} height={150} alt={nft.decoded_name} className="display-item"/>
+                <Image src={nft.ipfs} width={150} height={150} alt={nft.decoded_name} className="display-item" quality={10}   loading="eager"/>
                 <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div></div>);
               }
             }
@@ -119,7 +119,7 @@ export default function Summary(props){
               if(!isNaN(value)){
                 value = value.toFixed(2);
                 ftsDisplay.push(<div className="summary-display-item" key={ft.asset_name + 'fts'}>
-                <Image src={ft.ipfs} width={150} height={150} alt={ft.decoded_name} className="display-item"/>
+                <Image src={ft.ipfs} width={150} height={150} alt={ft.decoded_name} className="display-item" quality={10}   loading="eager"/>
                 <div className="display-item"><span className="currency">{props.currency.symbol}</span>{value}</div>
                 </div>);
               }

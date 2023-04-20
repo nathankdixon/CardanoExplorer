@@ -16,7 +16,6 @@ export default function Nfts (props){
     const [sortByFloorPrice, setSortByFloorPrice] = useState(false);
     const [sortByAssetName, setSortByAssetName] = useState(false);
     const [sortByQuantity, setSortByQuantity] = useState(true);
-    const originalNfts = props.data.nfts;
 
 
 
@@ -44,7 +43,7 @@ export default function Nfts (props){
                 height={170}
                 className="grid-img"
                 src={"/black.jpeg"}
-                quality={20}
+                quality={10}
                 />
             </div>
 
@@ -57,8 +56,7 @@ export default function Nfts (props){
             height={170}
             width={170}
             alt={policy.asset_name}
-            quality={20}
-
+            quality={10}
           />
           <div className="item-text">
             <label className="item-name">{(policy.decoded_name).substring(0,20)}</label>
@@ -82,7 +80,7 @@ export default function Nfts (props){
                 height={170}
                 className="grid-img"
                 src={"/black.jpeg"}
-                quality={20}
+                quality={10}
               />
             </div>);
           } else {
@@ -95,7 +93,7 @@ export default function Nfts (props){
                   height={170}
                   width={170}
                   alt={policy[0].asset_name}
-                  quality={20}
+                  quality={10}
                 />
                 <div className="item-text">
                   <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
@@ -114,7 +112,7 @@ export default function Nfts (props){
                   height={170}
                   width={170}
                   alt={policy[0].asset_name}
-                  quality={20}
+                  quality={10}
                 />
               <div className="item-text">
                 <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
@@ -151,7 +149,7 @@ export default function Nfts (props){
             height={170}
             className="grid-img"
             src={"/black.jpeg"}
-            quality={20}
+            quality={10}
             />
           </Link> )
         }
@@ -163,7 +161,7 @@ export default function Nfts (props){
                 height={170} 
                 width={170} 
                 alt = {policy[0].asset_name}
-                quality={20}
+                quality={10}
                 />
                 <div className="item-text">
                   <label className="item-name">{(policy[0].decoded_name)}</label>
@@ -179,7 +177,9 @@ export default function Nfts (props){
               src={policy[0].ipfs} 
               height={170}
                width={170} 
-               alt = {policy[0].asset_name} />
+               alt = {policy[0].asset_name}
+               quality={10}
+                />
               <div className="item-text">
                 <label className="item-name">{(policy[0].decoded_name).substring(0,20)}</label>
                 <label className="item-name"><span className="currency">{props.currency.symbol}</span>{((policy[0].floor_price)*props.currency.value.price).toFixed(2)}</label>
@@ -212,8 +212,7 @@ export default function Nfts (props){
             height={170}
             className="grid-img"
             src={"/black.jpeg"}
-            quality={20}
-
+            quality={10}
             />
             <div className="item-text">
               <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
@@ -230,8 +229,7 @@ export default function Nfts (props){
               alt={element.asset_name}
               width={170}
               height={170}
-              quality={20}
-
+              quality={10}
               />
               <div className="item-text">
                 <label className="item-name">{(element.decoded_name).substring(0,20)}</label>
@@ -297,9 +295,6 @@ export default function Nfts (props){
     
 
     function handleSort(option){
-      console.log('');
-      console.log('selected: '+option);
-
 
       if(option == "floor_price"){
         console.log("floor");
@@ -319,10 +314,6 @@ export default function Nfts (props){
         setSortByFloorPrice(false);
         setSortByAssetName(false);
       }
-
-      console.log("floor: "+sortByFloorPrice);
-      console.log("assetname: "+sortByAssetName);
-      console.log("quantity: "+sortByQuantity);
     }
     
 return (

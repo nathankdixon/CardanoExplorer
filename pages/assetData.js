@@ -225,29 +225,31 @@ function AssetData(props) {
             <div className="asset-stat">Policy ID: <Link href={"/"+ policy}>{policy}</Link></div>
           </div>
         </div>
-        <div className="asset-item">
+        <div className="asset-item-container">
           <Image
-            className="asset-img"
-            src={ipfs}
-            alt="failed to load image"
-            width={600}
-            height={600}
-            quality={100}
-          />
+              className="asset-img"
+              src={ipfs}
+              alt="failed to load image"
+              width={600}
+              height={600}
+              quality={100}
+            />
+          <div className="traits">
+            <div className="asset-text-header">Traits:</div>
+            {createAttributeTable(attributes)}
+          </div>
+
         </div>
         <div className="asset-text">
             <div className="asset-stat">
               Current Owner: <Link href={"/" + owner}>{owner.substring(0,20)+'...'}</Link>
             </div>
             <div className="asset-stat">
-              Floor Price: {floorPrice} ADA
+              Floor Price: <span className="currency">{floorPrice} ADA</span>
             </div>
           </div>
         <div className="asset-item-data">
-          <div className="asset-text">
-            <div className="asset-text-header">Traits:</div>
-            {createAttributeTable(attributes)}
-          </div>
+
           <div className="asset-text">
             <div className="asset-text-header">On-Chain Metadata:</div>
             {createNestedTable(onchainMetadata)}

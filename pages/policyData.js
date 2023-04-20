@@ -50,15 +50,15 @@ function PolicyData (props) {
                   setAssets(assets);
                 }
                 else{
-                  let assets = [];
+                  let assetsList = [];
                   if(policyData.asset_minted < 10000){
-                    assets = await loadAllTokenData(policy);
+                    assetsList = await loadAllTokenData(policy);
                   }
                   else{
-                    assets = await loadTokenData(policy, 1);
+                    assetsList = await loadTokenData(policy, 1);
                   }
                   let tokens = [];
-                  for(const element of assets){
+                  for(const element of assetsList){
                     let assetId = element.asset;
                     let policyId = assetId.substring(0, 56);
                     let assetName = assetId.substring(56);
@@ -67,7 +67,6 @@ function PolicyData (props) {
                   }
                   setAssets(tokens);
                   console.log(tokens);
-                  sessionStorage.setItem(policy, JSON.stringify(tokens));
               }
 
             }

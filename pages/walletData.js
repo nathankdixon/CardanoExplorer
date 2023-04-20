@@ -53,12 +53,12 @@ function WalletData (props) {
     let response = await fetch('https://api.coingecko.com/api/v3/ping');
 
     if(response.ok){
-      setCoinGeckoStatus(<Image src={'/success.png'} height={20} width={20} alt="ok"/>);
+      setCoinGeckoStatus(<Image src={'/success.png'} height={20} width={20} alt="ok" quality={10}/>);
       return true;
     }
     else{
       console.log(response);
-      setCoinGeckoStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok"/>);
+      setCoinGeckoStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok" quality={10}/>);
       return false;
     }
   }
@@ -68,12 +68,12 @@ function WalletData (props) {
     {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
 
     if(response.ok){
-      setOpenCnftStatus(<Image src={'/success.png'} height={20} width={20} alt="ok"/>);
+      setOpenCnftStatus(<Image src={'/success.png'} height={20} width={20} alt="ok" quality={10}/>);
       return true;
     }
     else{
       console.log(response);
-      setOpenCnftStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok"/>);
+      setOpenCnftStatus(<Image src={'/fail.png'} height={20} width={20} alt="ok" quality={10}/>);
       return false;
     }
   }

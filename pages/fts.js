@@ -87,7 +87,7 @@ export default function Fts (props){
     
             combinedRows.push(
               <tr key={coin.asset_name + (priceExists ? 'priced' : 'unpriced')} onClick={() => router.push('/'+coin.policy_id+coin.asset_name)}>
-                <td><Image src={ipfs} height={50} width={50} alt={coin.asset_name}/></td>
+                <td><Image src={ipfs} height={50} width={50} alt={coin.asset_name} quality={10}/></td>
                 <td>{ticker}</td>
                 <td>{coin.quantity}</td>
                 <td>{priceExists ? <span className="currency">{props.currency.symbol}</span> : ''}{priceExists ? price : ''}</td>
