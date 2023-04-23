@@ -27,6 +27,7 @@ function PolicyData (props) {
       const [itemLimit, setItemLimit] = useState(30);
       const [loadedItems, setLoadedItems] = useState([]);
 
+
       const router = useRouter();
 
       useEffect(() => {
@@ -79,26 +80,10 @@ function PolicyData (props) {
           return;
         } else {    
           if (searchTerm === "") {
-            const newItems = [];
+            setDisplay([]);
             for (let i = loadedItems.length; i < Math.min(assets.length, itemLimit); i++) {
-              let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
-              await token.fetchTokenMetadata();
-    
-              let newItem = (
-                <div
-                  className="grid-item-policy"
-                  key={i}
-                  onClick={() => router.push('/' + token.policy_id + token.asset_name)}
-                >
-                  <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
-                  <div>{token.decoded_name}</div>
-                </div>
-              );
-    
-              newItems.push(newItem);
-              console.log('loaded '+token.decoded_name);
+              await addItem(assets[i], i);
             }
-            setLoadedItems(prevItems => [...prevItems, ...newItems]);
           } else {
             const filteredAssets = assets.filter(asset =>
               asset.decoded_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -106,27 +91,48 @@ function PolicyData (props) {
             console.log(filteredAssets);
     
             if (filteredAssets.length === 0) {
-              setLoadedItems(<div>No Assets Found</div>);
+              setDisplay(<div>No Assets Found</div>);
             } else if (filteredAssets.length === 1) {
               let token = new Token(filteredAssets[0].asset_name, filteredAssets[0].policy_id, filteredAssets[0].quantity);
               await token.fetchTokenMetadata();
-              setLoadedItems(
-                <div
-                  className="grid-item-policy"
-                  onClick={() => router.push('/' + token.policy_id + token.asset_name)}
-                >
-                  <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
-                  <div>{token.decoded_name}</div>
-                </div>
+
+              let itemToAdd = (<div
+                className="grid-item-policy"
+                onClick={() => router.push('/' + token.policy_id + token.asset_name)}
+              >
+                <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
+                <div>{token.decoded_name}</div>
+              </div>)
+              setDisplay(<div>{itemToAdd}</div>
+
               );
             } else {
-              setLoadedItems(<div>Results: {filteredAssets.length}</div>);
+              setDisplay(<div>Results: {filteredAssets.length}</div>);
             }
           }
         }
       }
       displayAssets();
     }, [assets, searchTerm, itemLimit]);
+
+    async function addItem(asset, index) {
+      let token = new Token(asset.asset_name, asset.policy_id, asset.quantity);
+      await token.fetchTokenMetadata();
+  
+      let newItem = (
+        <div
+          className="grid-item-policy"
+          key={index}
+          onClick={() => router.push("/" + token.policy_id + token.asset_name)}
+        >
+          <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
+          <div>{token.decoded_name}</div>
+        </div>
+      );
+  
+      setLoadedItems((prevItems) => [...prevItems, newItem]);
+      console.log("loaded " + token.decoded_name);
+    }
 
     function loadMoreItems() {
       setItemLimit(prevLimit => prevLimit + 30);
@@ -265,9 +271,13 @@ function PolicyData (props) {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </nav>
-              <div className='grid-nft-policy'>{loadedItems}
+              <div className="policy-search-results">{display}</div>
+              <div className="grid-nft-policy">
+                {loadedItems}
                 {itemLimit < assets.length && (
-                  <button onClick={loadMoreItems} className="show-button">Load 30 more items</button>
+                  <button onClick={loadMoreItems} className="show-button">
+                    Load 30 more items
+                  </button>
                 )}
               </div>
             </div>

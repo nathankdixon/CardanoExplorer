@@ -600,6 +600,14 @@ color: var(--main-color);/* light green */
     border-radius: 4px;
 }
 
+.policy-search-results{
+    font-size: 20px;
+    padding: 6px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
 .search-ft{
     font-family: var(--main-font);
     width: 45%;
@@ -1149,7 +1157,8 @@ color: var(--main-color);/* light green */
     justify-content: center;
     align-items: center;
     padding: 1rem;
-    margin: 10px 10px 10px 10px;
+    margin-top: 0px;
+
     border-radius: 10px;
 
 }
