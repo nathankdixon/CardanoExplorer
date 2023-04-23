@@ -38,7 +38,7 @@ describe('createWalletDataFromStake', () => {
 
     // Mock Token class methods
     jest.spyOn(Token.prototype, 'fetchTokenMetadata').mockImplementation(() => {});
-    jest.spyOn(Token.prototype, 'getPrice').mockImplementation(() => {});
+    jest.spyOn(Token.prototype, 'fetchTokenPrice').mockImplementation(() => {});
 
     const walletData = await createWalletDataFromStake(testStakeAddress);
 
@@ -68,7 +68,7 @@ describe('createWalletDataFromStake', () => {
 
     // Mock Token class methods
     jest.spyOn(Token.prototype, 'fetchTokenMetadata').mockImplementation(() => {});
-    jest.spyOn(Token.prototype, 'getPrice').mockImplementation(() => {});
+    jest.spyOn(Token.prototype, 'fetchTokenPrice').mockImplementation(() => {});
 
     const walletData = await createWalletDataFromStake(testStakeAddress);
 
@@ -98,7 +98,7 @@ describe('createWalletDataFromStake', () => {
 
     // Mock Token class methods
     jest.spyOn(Token.prototype, 'fetchTokenMetadata').mockImplementation(() => {});
-    jest.spyOn(Token.prototype, 'getPrice').mockImplementation(() => {});
+    jest.spyOn(Token.prototype, 'fetchTokenPrice').mockImplementation(() => {});
 
     const walletData = await createWalletDataFromStake(testStakeAddress);
 

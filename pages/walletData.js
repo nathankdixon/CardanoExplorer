@@ -269,8 +269,6 @@ function WalletData (props) {
   // no asset limit on how many assets gets returned on one request
   // koios, blockfrost is limited by 100 results per page
   async function getAssetsFromKoios(stakeAddress){
-
-    console.log(stakeAddress);
     if(stakeAddress.startsWith('stake')){
       try{
         const req = await fetch('https://api.koios.rest/api/v0/account_assets', {

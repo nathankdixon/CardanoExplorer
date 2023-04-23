@@ -30,10 +30,8 @@ export async function createWalletDataFromStake(stake){
 
         // wallet data object which is stored in local storage for quick retrieval
         walletData = {stake: stake, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: sortedTokens.nfts, fts: sortedTokens.fts};
-        console.log(walletData);
 
       }catch(error){
-        console.log(error);
         return null;
       }
     }
@@ -84,7 +82,7 @@ export async function createWalletDataFromStake(stake){
       let token = new Token(element.asset_name, element.policy_id, quantity);
 
       await token.fetchTokenMetadata();
-      await token.getPrice();
+      await token.fetchTokenPrice();
 
       _tokens.push(token);
     }

@@ -23,7 +23,7 @@ export default function Summary(props){
               setAdaBalance(0);
             }
             else{
-              setAdaBalance(stakeInfo[0].total_balance / 1000000);
+              setAdaBalance((stakeInfo[0].total_balance / 1000000).toFixed(2));
 
             }
             let pool = await getPoolInfo(stakeInfo[0].delegated_pool);

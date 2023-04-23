@@ -9,8 +9,18 @@ export default function Fts (props){
     const [cardanoPrice, setCardanoPrice] = useState(0);
 
     const [combinedRows, setCombinedRows] = useState([]);
+    const [itemsToShow, setItemsToShow] = useState(30);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const router = useRouter();
+
+    function handleSearch(event) {
+      setSearchTerm(event.target.value);
+    }
+
+    const filteredRows = combinedRows.filter((row) =>
+    row.props.children[1].props.children.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
     useEffect(() => {
       const getData = async () => {
@@ -130,10 +140,33 @@ export default function Fts (props){
       setCardanoPrice(data.cardano.usd);
     }
 
+    function handleShowMore() {
+      setItemsToShow(itemsToShow + 30);
+    }
+    
+
     return (
       <div className="fts">
-        <div style={{ fontSize: '30px', fontWeight: 'bold' }}>Fungible Tokens (Coins)</div>
-        <div style={{ color: "white", fontSize: '25px', fontWeight: "bold"}}>Total Value:<span className="currency">{props.currency.symbol}</span>{totalValue}</div>
+        <div style={{ fontSize: "30px", fontWeight: "bold" }}>
+          Fungible Tokens (Coins)
+        </div>
+        <div
+          style={{
+            color: "white",
+            fontSize: "25px",
+            fontWeight: "bold",
+          }}
+        >
+          Total Value:<span className="currency">{props.currency.symbol}</span>
+          {totalValue}
+        </div>
+        <input
+          type="text"
+          placeholder="Search by coin ticker"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="search-ft"
+        />
         <table className="coins-table">
           <thead>
             <tr>
@@ -148,11 +181,13 @@ export default function Fts (props){
               <th>Value</th>
             </tr>
           </thead>
-          <tbody>
-            {combinedRows}
-          </tbody>
+          <tbody>{filteredRows.slice(0, itemsToShow)}</tbody>
         </table>
+        {itemsToShow < combinedRows.length && (
+          <button onClick={handleShowMore}>Show more</button>
+        )}
       </div>
     );
+  
     
 }

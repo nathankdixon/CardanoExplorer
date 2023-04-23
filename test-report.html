@@ -1,0 +1,232 @@
+<html><head><meta charset="utf-8"/><title>Test Report</title><style type="text/css">html,
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+body {
+  padding: 2rem 1rem;
+  font-size: 0.85rem;
+}
+.jesthtml-content {
+  margin: 0 auto;
+  max-width: 70rem;
+}
+header {
+  display: flex;
+  align-items: center;
+}
+#title {
+  margin: 0;
+  flex-grow: 1;
+}
+#logo {
+  height: 4rem;
+}
+#timestamp {
+  color: #777;
+  margin-top: 0.5rem;
+}
+
+/** SUMMARY */
+#summary {
+  color: #333;
+  margin: 2rem 0;
+  display: flex;
+  font-family: monospace;
+  font-size: 1rem;
+}
+#summary > div {
+  margin-right: 2rem;
+  background: #eee;
+  padding: 1rem;
+  min-width: 15rem;
+}
+#summary > div:last-child {
+  margin-right: 0;
+}
+@media only screen and (max-width: 720px) {
+  #summary {
+    flex-direction: column;
+  }
+  #summary > div {
+    margin-right: 0;
+    margin-top: 2rem;
+  }
+  #summary > div:first-child {
+    margin-top: 0;
+  }
+}
+
+.summary-total {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.summary-passed {
+  color: #4f8a10;
+  border-left: 0.4rem solid #4f8a10;
+  padding-left: 0.5rem;
+}
+.summary-failed,
+.summary-obsolete-snapshots {
+  color: #d8000c;
+  border-left: 0.4rem solid #d8000c;
+  padding-left: 0.5rem;
+}
+.summary-pending {
+  color: #9f6000;
+  border-left: 0.4rem solid #9f6000;
+  padding-left: 0.5rem;
+}
+.summary-empty {
+  color: #999;
+  border-left: 0.4rem solid #999;
+}
+
+.test-result {
+  padding: 1rem;
+  margin-bottom: 0.25rem;
+}
+.test-result:last-child {
+  border: 0;
+}
+.test-result.passed {
+  background-color: #dff2bf;
+  color: #4f8a10;
+}
+.test-result.failed {
+  background-color: #ffbaba;
+  color: #d8000c;
+}
+.test-result.pending {
+  background-color: #ffdf61;
+  color: #9f6000;
+}
+
+.test-info {
+  display: flex;
+  justify-content: space-between;
+}
+.test-suitename {
+  width: 20%;
+  text-align: left;
+  font-weight: bold;
+  word-break: break-word;
+}
+.test-title {
+  width: 40%;
+  text-align: left;
+  font-style: italic;
+}
+.test-status {
+  width: 20%;
+  text-align: right;
+}
+.test-duration {
+  width: 10%;
+  text-align: right;
+  font-size: 0.75rem;
+}
+
+.failureMessages {
+  padding: 0 1rem;
+  margin-top: 1rem;
+  border-top: 1px dashed #d8000c;
+}
+.failureMessages.suiteFailure {
+  border-top: none;
+}
+.failureMsg {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.suite-container {
+  margin-bottom: 2rem;
+}
+.suite-info {
+  padding: 1rem;
+  background-color: #eee;
+  color: #777;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.suite-info .suite-path {
+  word-break: break-all;
+  flex-grow: 1;
+  font-family: monospace;
+  font-size: 1rem;
+}
+.suite-info .suite-time {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.75rem;
+}
+.suite-info .suite-time.warn {
+  background-color: #d8000c;
+  color: #fff;
+}
+
+/* CONSOLE LOGS */
+.suite-consolelog {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: #efefef;
+}
+.suite-consolelog-header {
+  font-weight: bold;
+}
+.suite-consolelog-item {
+  padding: 0.5rem;
+}
+.suite-consolelog-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-consolelog-item-origin {
+  color: #777;
+  font-weight: bold;
+}
+.suite-consolelog-item-message {
+  color: #000;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+/* OBSOLETE SNAPSHOTS */
+.suite-obsolete-snapshots {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: #ffbaba;
+  color: #d8000c;
+}
+.suite-obsolete-snapshots-header {
+  font-weight: bold;
+}
+.suite-obsolete-snapshots-item {
+  padding: 0.5rem;
+}
+.suite-obsolete-snapshots-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-obsolete-snapshots-item-message {
+  color: #000;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+</style></head><body><div class="jesthtml-content"><header><h1 id="title">Test Report</h1></header><div id="metadata-container"><div id="timestamp">Started: 2023-04-21 13:00:56</div><div id="summary"><div id="suite-summary"><div class="summary-total">Suites (9)</div><div class="summary-passed">9 passed</div><div class="summary-failed summary-empty">0 failed</div><div class="summary-pending summary-empty">0 pending</div></div><div id="test-summary"><div class="summary-total">Tests (43)</div><div class="summary-passed">43 passed</div><div class="summary-failed summary-empty">0 failed</div><div class="summary-pending summary-empty">0 pending</div></div></div></div><div id="suite-1" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/parseUrlParameter.test.js</div><div class="suite-time">1.553s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletData when input is "stake123"</div><div class="test-status">passed</div><div class="test-duration">0.003s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletData when input is "stake1uy9mf6hjqfgug2n0r309knp8j4re9d8s7qrq7pt57hyqn4q9q63km"</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromHandle when input is "$handle123"</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromHandle when input is "$nath"</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromHandle when input is "$alex"</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromAddress when input is "addr1qypqdhr0t4r7as4crn6dla8hts7swl0u2jl0rudfyhmykcgtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82q0gwpgh"</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromAddress when input is "addr1q9f2fmdnsfc8fvte3wh7vgcuuasxk8qn07axca2mgzt7lqqtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qu3wmmk"</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromAddress when input is "addr1qyndypcnxuszyzuvmlyrac85vkh8tz9r4dvpkrrudg90n7qtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qceqc0p"</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromAddress when input is "addr1q9j7hln9wuu2fsf2luvc2c36ar4kdmh3ksmhdzvxac70txgtkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qmkuecv"</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns WalletDataFromAddress when input is "addr1qypr9jqy7es4tk05dpelgczq7cgl0zy7rg47fyd5qw9rcwstkn40yqj3cs4x78z7tdxz0928j260puqxpuzhfawgp82qzuc8lu"</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns PolicyData when input is "3bcc312ebe7cd9281ab3e3d641bf70f207012e539b0e6e7c3f1560d7"</div><div class="test-status">passed</div><div class="test-duration">0.003s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">parseUrlParameter</div><div class="test-title">returns PolicyData when input is "bddc4b369225979ed3cdda5949ba7ac05091024684c2cdeb097b0e31"</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div></div></div><div id="suite-2" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/createWalletData.test.js</div><div class="suite-time">1.558s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">createWalletDataFromStake</div><div class="test-title">should return wallet data with no assets</div><div class="test-status">passed</div><div class="test-duration">0.004s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">createWalletDataFromStake</div><div class="test-title">should return wallet data with 1 asset</div><div class="test-status">passed</div><div class="test-duration">0.005s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">createWalletDataFromStake</div><div class="test-title">should return wallet data with 2 assets of the same policy</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">createWalletDataFromStake</div><div class="test-title">should return wallet data with 2 assets with different policy Ids</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div></div></div><div id="suite-3" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/getStakeAddressFromWallet.test.js</div><div class="suite-time">1.568s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeAddressFromWallet</div><div class="test-title">should return the stake address for Typhon Wallet</div><div class="test-status">passed</div><div class="test-duration">0.003s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeAddressFromWallet</div><div class="test-title">should return the stake address for Eternl</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeAddressFromWallet</div><div class="test-title">should return the stake address for Nami</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeAddressFromWallet</div><div class="test-title">should return the stake address for Flint Wallet</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeAddressFromWallet</div><div class="test-title">should return null for an unknown wallet</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeAddressFromWallet</div><div class="test-title">should return null when an error is thrown</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div></div></div><div id="suite-4" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/getStakeFromAddress.test.js</div><div class="suite-time">1.582s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeFromAddress</div><div class="test-title">returns the stake address when API call is successful</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeFromAddress</div><div class="test-title">returns null when stake address is not found</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getStakeFromAddress</div><div class="test-title">returns null when an error occurs</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div></div></div><div id="suite-5" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/getIpfsFromMetadata.test.js</div><div class="suite-time">1.577s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should return the IPFS link for an "image" key</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should return the IPFS link for a "logo" key</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should handle IPFS link in an array</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should return default image for invalid metadata</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should handle "ba" prefix</div><div class="test-status">passed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should handle "Qm" prefix</div><div class="test-status">passed</div><div class="test-duration">0.004s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should handle "ipfs/" prefix</div><div class="test-status">passed</div><div class="test-duration">0s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should handle "ipfs://" prefix</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getIpfsFromMetadata</div><div class="test-title">should handle no image or logo key</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div></div></div><div id="suite-6" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/utils.test.js</div><div class="suite-time">1.815s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">isUrl</div><div class="test-title">returns the correct result based on the input string</div><div class="test-status">passed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">createAttributeTable</div><div class="test-title">renders an attribute table with the correct structure</div><div class="test-status">passed</div><div class="test-duration">0.05s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">createNestedTable</div><div class="test-title">renders a nested table with the correct structure</div><div class="test-status">passed</div><div class="test-duration">0.014s</div></div></div></div></div><div id="suite-7" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/sortFungibilities.test.js</div><div class="suite-time">0.373s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">sortTokenFungibilities</div><div class="test-title">correctly separates fungible and non-fungible tokens</div><div class="test-status">passed</div><div class="test-duration">0.005s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">sortTokenFungibilities</div><div class="test-title">returns empty arrays for empty input</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div></div></div><div id="suite-8" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/getAddressFromHandle.test.js</div><div class="suite-time">0.382s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">getAddressFromHandle</div><div class="test-title">returns the payment address when API call is successful</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getAddressFromHandle</div><div class="test-title">returns null when payment address is not found</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">getAddressFromHandle</div><div class="test-title">returns null when an error occurs</div><div class="test-status">passed</div><div class="test-duration">0.002s</div></div></div></div></div><div id="suite-9" class="suite-container"><div class="suite-info"><div class="suite-path">/Users/nathan/Desktop/explorer-new/__tests__/groupTokensByPolicyId.test.js</div><div class="suite-time">0.372s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">groupTokensByPolicyId</div><div class="test-title">groups token objects by policy Id</div><div class="test-status">passed</div><div class="test-duration">0.004s</div></div></div></div></div></div></body></html>

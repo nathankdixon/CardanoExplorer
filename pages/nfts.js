@@ -16,12 +16,13 @@ export default function Nfts (props){
     const [sortByFloorPrice, setSortByFloorPrice] = useState(false);
     const [sortByAssetName, setSortByAssetName] = useState(false);
     const [sortByQuantity, setSortByQuantity] = useState(true);
-
+    const [itemsToShow, setItemsToShow] = useState(30);
+    const [totalItems, setTotalItems] = useState(0);
 
 
     useEffect(() => {
       setGrid();
-    }, [props.data, searchTerm, expanded, props.currency, sortByFloorPrice, sortByAssetName, sortByQuantity]);
+    }, [props.data, searchTerm, expanded, props.currency, sortByFloorPrice, sortByAssetName, sortByQuantity, itemsToShow]);
 
     function setGrid() {
       let collectionGrid = [];
@@ -29,6 +30,10 @@ export default function Nfts (props){
       if (!props.data || !props.data.nfts || !props.currency) return;
 
       let filteredNfts = filterNFTs(props.data.nfts);
+      filteredNfts = filteredNfts.slice(0, itemsToShow);
+      setTotalItems(filteredNfts.length);
+
+
       if (expanded) {
         setCollectionText();
         setTokensText("Tokens: " + filteredNfts.length);
@@ -315,6 +320,16 @@ export default function Nfts (props){
         setSortByAssetName(false);
       }
     }
+
+    function showMoreItems() {
+      setItemsToShow(itemsToShow + 30);
+    }
+
+    function hasMoreItems() {
+      let filteredNfts = filterNFTs(props.data.nfts);
+      return itemsToShow < filteredNfts.length;
+    }
+    
     
 return (
   <div className="nfts">
@@ -367,6 +382,11 @@ return (
       <div style={{fontSize: '25px'}}>{tokensText}</div>
       <div className="grid-nft">
         {display.singles}
+        {hasMoreItems() && (
+        <button onClick={showMoreItems} className="show-button">
+          Show 30 more items
+        </button>
+      )}
       </div>
   </div>
 );
