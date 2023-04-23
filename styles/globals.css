@@ -602,7 +602,7 @@ color: var(--main-color);/* light green */
 
 .search-ft{
     font-family: var(--main-font);
-    width: 100%;
+    width: 45%;
     background-color: var(--fifth-color);
     color: white;
     padding: 12px 20px;

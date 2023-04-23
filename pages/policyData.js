@@ -14,12 +14,6 @@ function PolicyData (props) {
 
       const [policy, setPolicy] = useState(null);
       const [display, setDisplay] = useState([]);
-      const [tokens, setTokens] = useState([]);
-      const [index, setIndex] = useState(0);
-      const [itemsPerPage, setItemsPerPage] = useState(20);
-
-
-
       const [policyData, setPolicyData] = useState({
                                                     policy: '', 
                                                     thumbnail: '/black.jpeg', 
@@ -30,10 +24,11 @@ function PolicyData (props) {
                                                     asset_holders: 1});
       const [assets, setAssets] = useState([]);
       const [searchTerm, setSearchTerm] = useState("");
+      const [itemLimit, setItemLimit] = useState(30);
+      const [loadedItems, setLoadedItems] = useState([]);
+
       const router = useRouter();
 
-
-  
       useEffect(() => {
         async function getAssetPageFromBlockfrost(){
             if(props.policy == null || policy == null){
@@ -45,29 +40,22 @@ function PolicyData (props) {
                 setPolicyData(policyData);
                 setDisplay(<div>Fetching Assets</div>)
 
-                if(sessionStorage.getItem(policy) != null){
-                  let assets = JSON.parse(sessionStorage.getItem(policy));
-                  setAssets(assets);
+                let assetsList = [];
+                if(policyData.asset_minted < 10000){
+                  assetsList = await loadAllTokenData(policy);
                 }
                 else{
-                  let assetsList = [];
-                  if(policyData.asset_minted < 10000){
-                    assetsList = await loadAllTokenData(policy);
-                  }
-                  else{
-                    assetsList = await loadTokenData(policy, 1);
-                  }
-                  let tokens = [];
-                  for(const element of assetsList){
-                    let assetId = element.asset;
-                    let policyId = assetId.substring(0, 56);
-                    let assetName = assetId.substring(56);
-                    let token = new Token(assetName, policyId, element.quantity);
-                    tokens.push(token);
-                  }
-                  setAssets(tokens);
-                  console.log(tokens);
-              }
+                  assetsList = await loadTokenData(policy, 1);
+                }
+                let tokens = [];
+                for(const element of assetsList){
+                  let assetId = element.asset;
+                  let policyId = assetId.substring(0, 56);
+                  let assetName = assetId.substring(56);
+                  let token = new Token(assetName, policyId, element.quantity);
+                  tokens.push(token);
+                }
+                setAssets(tokens);
 
             }
         }
@@ -81,51 +69,70 @@ function PolicyData (props) {
     }, [props.policy])
 
     useEffect(() => {
-      async function displayAssets(){
-        if(assets.length == 0){
+      setItemLimit(30);
+    }, [searchTerm]);
+    
+
+    useEffect(() => {
+      async function displayAssets() {
+        if (assets.length === 0) {
           return;
-        }
-        else{
-          let display = [];
-          console.log(searchTerm);
-
-          if(searchTerm == ""){
-            for(let i = index; i < index + itemsPerPage; i++){
+        } else {    
+          if (searchTerm === "") {
+            const newItems = [];
+            for (let i = loadedItems.length; i < Math.min(assets.length, itemLimit); i++) {
               let token = new Token(assets[i].asset_name, assets[i].policy_id, assets[i].quantity);
-              setDisplay(<div>Fetching Token Metadata: {i} of {index +itemsPerPage}</div>)
               await token.fetchTokenMetadata();
-              if(i < assets.length){
-                display.push(<div className="grid-item-policy" key={i} onClick={() => router.push('/'+token.policy_id+token.asset_name)}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
-              }
+    
+              let newItem = (
+                <div
+                  className="grid-item-policy"
+                  key={i}
+                  onClick={() => router.push('/' + token.policy_id + token.asset_name)}
+                >
+                  <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
+                  <div>{token.decoded_name}</div>
+                </div>
+              );
+    
+              newItems.push(newItem);
+              console.log('loaded '+token.decoded_name);
             }
-            setDisplay(display);
-          }
-          else{
-            const filteredAssets = assets.filter(asset => asset.decoded_name.toLowerCase().includes(searchTerm.toLowerCase()));
+            setLoadedItems(prevItems => [...prevItems, ...newItems]);
+          } else {
+            const filteredAssets = assets.filter(asset =>
+              asset.decoded_name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
             console.log(filteredAssets);
-
-            if(filteredAssets.length == 0){
-              setDisplay(<div>No Assets Found</div>)
-            }
-            else if(filteredAssets.length == 1){
+    
+            if (filteredAssets.length === 0) {
+              setLoadedItems(<div>No Assets Found</div>);
+            } else if (filteredAssets.length === 1) {
               let token = new Token(filteredAssets[0].asset_name, filteredAssets[0].policy_id, filteredAssets[0].quantity);
               await token.fetchTokenMetadata();
-              setDisplay(<div className="grid-item-policy" onClick={() => router.push('/'+token.policy_id+token.asset_name)}><Image src={token.ipfs} height={200} width={200} alt={token.decoded_name}/><div>{token.decoded_name}</div></div>);
+              setLoadedItems(
+                <div
+                  className="grid-item-policy"
+                  onClick={() => router.push('/' + token.policy_id + token.asset_name)}
+                >
+                  <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
+                  <div>{token.decoded_name}</div>
+                </div>
+              );
+            } else {
+              setLoadedItems(<div>Results: {filteredAssets.length}</div>);
             }
-            else {
-              setDisplay(<div>Results: {filteredAssets.length}</div>)
-            }
+          }
         }
-        }
-
       }
       displayAssets();
+    }, [assets, searchTerm, itemLimit]);
 
-    }, [assets, index, itemsPerPage, searchTerm])
-
-
-
-
+    function loadMoreItems() {
+      setItemLimit(prevLimit => prevLimit + 30);
+    }
+    
+    
     async function getPolicyData(policy){
       let policyData = await getCnftPolicyData(policy);
       let thumbnail = policyData.thumbnail;
@@ -232,20 +239,6 @@ function PolicyData (props) {
       return ipfs;
     }
 
-    function prevPage(){
-      if(index > 0){
-        setIndex(index-itemsPerPage);
-      }
-    }
-
-    function nextPage(){
-      if(index < assets.length){
-        setIndex(index+itemsPerPage);
-      }
-    }
-
-
-
     return(<div>
             <header className="home-header">
               <div className="main-title">Cardano Explorer</div>
@@ -271,12 +264,12 @@ function PolicyData (props) {
                   className='search-policy'
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-              <label>Showing items: {index} - {index +itemsPerPage}</label>
-              <button className = 'page-button' onClick = {() => prevPage()}>Previous</button>
-              <button className = 'page-button' onClick = {() => nextPage()}>Next</button>
               </nav>
-
-              <div className='grid-nft-policy'>{display}</div>
+              <div className='grid-nft-policy'>{loadedItems}
+                {itemLimit < assets.length && (
+                  <button onClick={loadMoreItems} className="show-button">Load 30 more items</button>
+                )}
+              </div>
             </div>
           </div>)
 }
