@@ -29,7 +29,6 @@ export default function Summary(props){
             let pool = await getPoolInfo(stakeInfo[0].delegated_pool);
             
             setStakePool(pool);
-            console.log(props.currency)
 
             // get total value of fungible tokens
             let tokenBalance = getTokenBalance(props.data.fts) * props.currency.value.price;
@@ -134,7 +133,7 @@ export default function Summary(props){
         }
       
         getSummaryInfo();
-      }, [props.data, props.currency]);
+      }, [props.data, props.currency, adaBalance]);
 
     
     

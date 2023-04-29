@@ -23,6 +23,9 @@ function WalletData (props) {
   const [coinGeckoStatus, setCoinGeckoStatus] = useState('loading');
   const [openCnftStatus, setOpenCnftStatus] = useState('loading');
 
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+
 
 
   const router = useRouter();
@@ -135,7 +138,7 @@ function WalletData (props) {
     async function handleQuery(){
       if(props.stake != null){
         let query = props.stake;
-        console.log(query);
+        setStartTime(performance.now());
         setLoadedTokens('loading wallet data for stake: '+query.substring(0,10)+'...');
         if(query.startsWith('$')){
           setLoadedTokens('fetching address for handle: '+query);
@@ -176,33 +179,35 @@ function WalletData (props) {
         let walletData = '';
         try{
           if(localStorage.getItem(stakeAddress) != null){
+            let endTime = performance.now();
+            console.log('wallet data fetched in: '+(endTime - startTime)+'ms');
 
             // if wallet data is already in local storage, load it
             walletData = JSON.parse(localStorage.getItem(stakeAddress));
             setWalletData(walletData);
             setLoadedTokens('scroll to view wallet')
+
           }
           else{
 
             // if wallet data is not in local storage, fetch it from koios
             setLoadedTokens('loading wallet data')
             walletData = await createWalletDataFromStake(stakeAddress);
-            try{
-
-              // if wallet data is fetched, save it to local storage
-              if(walletData != null){
-                setWalletData(walletData);
-                setLoadedTokens('scroll to view wallet')
+            let endTime = performance.now();
+            console.log('wallet data fetched in: '+(endTime - startTime)+'ms');
+            if(walletData != null){
+              setLoadedTokens('scroll to view wallet')
+              setWalletData(walletData);
+              try{
                 localStorage.setItem(stakeAddress, JSON.stringify(walletData));
               }
-              else{
-                console.log(walletData);
-                setLoadedTokens('error loading wallet data')
+              catch(err){
+                console.log(err);
               }
             }
-            catch(err){
-
-              console.log(err);
+            else{
+              setLoadedTokens('error fetching wallet data');
+            
             }
           }
         }
@@ -226,7 +231,6 @@ function WalletData (props) {
     let walletData = '';
     // json list of assets in stake address
     let assets = await getAssetsFromKoios(stake);
-    console.log(assets);
     // no assets
     if(assets == null){
       return null;
@@ -255,10 +259,8 @@ function WalletData (props) {
 
         // wallet data object which is stored in local storage for quick retrieval
         walletData = {stake: stake, tokenNumber: _tokenNumber, projectNumber: _policyNumber, nfts: sortedTokens.nfts, fts: sortedTokens.fts};
-        console.log(walletData);
 
       }catch(error){
-        console.log(error);
         return null;
       }
     }
@@ -288,11 +290,9 @@ function WalletData (props) {
           return res[0].asset_list;
         }
         else{
-          console.log(res);
           return null;
         }
       }catch(error){
-        console.log(error);
         return null;
       }
     }
@@ -323,8 +323,7 @@ function WalletData (props) {
       }
     }
     else{
-      console.log('invalid stake address');
-      console.log(stakeAddress);
+
       return null;
     }
 
@@ -342,8 +341,6 @@ function WalletData (props) {
     let coinGeckoStatus = await checkCoinGeckoStatus();
     setLoadedTokens('checking opencnft api status');
     let openCnftStatus = await checkOpenCnftStatus();
-
-    console.log(assets)
 
     for(let i =0; i<assets.length;i++){
       setLoadedTokens('loading '+i+'/'+assets.length);
@@ -424,7 +421,7 @@ function WalletData (props) {
       if(p.quantity == 1){
         _nfts.push(policies[element]);
       }
-      else{
+      else if(p.quantity !=1){
         _fts.push(policies[element]);
       }
     }

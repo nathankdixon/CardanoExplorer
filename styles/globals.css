@@ -1,13 +1,13 @@
 /* Set the font and color scheme for the entire page */
 :root{
-    --main-color: #c18eff;
-    --second-color:#5d8bff;
+    --main-color: #ad7aea;
+    --second-color:#310962;
     --third-color: #cfa2fd;
     --fourth-color: #ffffff;
     --fifth-color: rgba(255, 255, 255, 0.179);
     --sixth-color: rgba(0, 0, 0, 0.184);
     --seventh-color: rgba(0, 0, 0, 0.677);
-    --eigth-color: white;
+    --eigth-color:#3109629b;
     --main-font: 'Lato', sans-serif;
     width: 100vw;
     
@@ -517,7 +517,7 @@ color: var(--main-color);/* light green */
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80vw;
+    width: 75%;
     margin-top: 80px;
   }
   
@@ -633,6 +633,10 @@ color: var(--main-color);/* light green */
     border-radius: 4px;
 }
 
+.search-policy::placeholder{
+    color: white;
+}
+
 
 .search-button{
     font-family:var(--main-font);
@@ -679,10 +683,10 @@ color: var(--main-color);/* light green */
     font-family: var(--main-font);
     font-weight: bold;
     border: 2px solid white;
-    padding: 8px;
+    padding: 6px;
     margin: 10px;
     margin-right: 20px;
-    border-radius: 20px;
+    border-radius: 15px;
         transition: background-color 0.2s;
 
 
@@ -889,7 +893,7 @@ color: var(--main-color);/* light green */
     border: 2px solid white;
     border-radius: 10px;
     box-shadow: 10px 5px 10px 0px black;
-    background-color: var(--sixth-color);
+    background-color: var(--eigth-color);
 
 }
 
@@ -913,8 +917,8 @@ color: var(--main-color);/* light green */
     font-size: larger;
     width: 85vw;
     height: 92vh;
-    margin-left: 150px;
-    margin-right: 100px;
+    margin-left: 130px;
+    margin-right: 70px;
 }
 .summary-general-title{
     font-size: 27px;
@@ -929,7 +933,7 @@ color: var(--main-color);/* light green */
     margin: 10px;
     box-shadow: 10px 5px 10px 0px black;
     text-align: center ;
-    background-color: #5d8bff8e;
+    background-color: var(--eigth-color);
     height: 35%;
 
 
@@ -983,7 +987,7 @@ color: var(--main-color);/* light green */
 
 
 .summary-tokens-item{
-    background-color: #5d8bff8e;
+    background-color: var(--eigth-color);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1246,7 +1250,7 @@ a {
     box-shadow: 10px 10px 5px var(--sixth-color);
     margin-left: 20px;
     border-radius: 10px;
-    width: 100%;
+    width:40%;
 
 }
 

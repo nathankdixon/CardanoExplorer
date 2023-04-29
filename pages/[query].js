@@ -9,7 +9,7 @@ function Query(){
 
     const router = useRouter();
 
-    const {query, stake} = router.query;
+    const {query} = router.query;
     const [display, setDisplay] = useState('Loading Data...');
 
     useEffect(() => {
@@ -31,7 +31,7 @@ function Query(){
         }
       }
       parseUrlParameter();
-    }, [query, stake]);
+    }, [query]);
 
 
 

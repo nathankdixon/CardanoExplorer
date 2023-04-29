@@ -262,7 +262,7 @@ function PolicyData (props) {
                 </div>
             </div>
             <div className="policy-grid">
-              <nav className="policy-nav"><div>Explore Collection</div>
+              <nav className="policy-nav"><div style={{fontSize: '25px'}}>Explore Collection</div>
                 <input
                   type="search"
                   placeholder="Search by asset name"
@@ -276,7 +276,7 @@ function PolicyData (props) {
                 {loadedItems}
                 {itemLimit < assets.length && (
                   <button onClick={loadMoreItems} className="show-button">
-                    Load 30 more items
+                    Show more
                   </button>
                 )}
               </div>

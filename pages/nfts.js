@@ -384,7 +384,7 @@ return (
         {display.singles}
         {hasMoreItems() && (
         <button onClick={showMoreItems} className="show-button">
-          Show 30 more items
+          Show more
         </button>
       )}
       </div>

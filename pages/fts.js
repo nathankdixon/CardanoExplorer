@@ -184,7 +184,7 @@ export default function Fts (props){
           <tbody>{filteredRows.slice(0, itemsToShow)}</tbody>
         </table>
         {itemsToShow < combinedRows.length && (
-          <button onClick={handleShowMore}>Show more</button>
+          <button onClick={handleShowMore} className="show-button">Show more</button>
         )}
       </div>
     );
