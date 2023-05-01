@@ -16,7 +16,7 @@ function WalletData (props) {
   const [walletData, setWalletData] = useState({stake: null, tokenNumber: 0, projectNumber: 0, nfts: [], fts: []});
   const [stakeAddress, setStakeAddress] = useState(null);
   const [loadedTokens, setLoadedTokens] = useState('Wallet not connected');
-  const [currency, setCurrency] = useState({name: 'USD', value: {price : 1, change24hr: 0}, symbol: '$'});
+  const [currency, setCurrency] = useState({name:'ADA', value: {price: 1, change24hr: 0}, symbol: '₳'});
   const [prices, setPrices] = useState({usd: 1, gbp: 1, btc: 1, eth:1, eur: 1});
 
   const [koiosStatus, setKoiosStatus] = useState('loading');
@@ -131,8 +131,8 @@ function WalletData (props) {
   }
 
   useEffect(() => {
-    setCurrency({name: 'USD', value: prices.usd, symbol: '$'});
-  },[prices]);
+    setCurrency({name:'ADA', value: {price: 1, change24hr: 0}, symbol: '₳'});
+    },[prices]);
 
   useEffect(() => {
     async function handleQuery(){

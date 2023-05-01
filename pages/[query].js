@@ -25,8 +25,11 @@ function Query(){
           else if(item.length == 56){
             setDisplay(<PolicyData policy={query}/>);
           }
-          else{
+          else if(item.length > 56){
             setDisplay(<AssetData assetId={query} />);
+          }
+          else{
+            setDisplay(<div>Invalid Query</div>);
           }
         }
       }

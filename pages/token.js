@@ -49,7 +49,7 @@ const getIpfsFromMetadata = (metadata) =>{
         return newipfs;
       }
       else{
-        return '/black.jpeg';
+        return newipfs;
       }
 
     }

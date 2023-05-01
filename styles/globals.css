@@ -116,7 +116,7 @@ h3{
     color: white;
     padding: 10px;
     border-radius: 10px;
-    background-color: var(--main-color);
+    background-color: rgb(117, 205, 255);
     width: 150px;
     height: 150px;
     display: flex;
@@ -437,7 +437,7 @@ color: var(--main-color);/* light green */
 }
 
 .grid-img {
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 5px;
 }
 
