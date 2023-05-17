@@ -16,12 +16,12 @@ function PolicyData (props) {
       const [display, setDisplay] = useState([]);
       const [policyData, setPolicyData] = useState({
                                                     policy: '', 
-                                                    thumbnail: '/black.jpeg', 
+                                                    ipfs: '/black.jpeg', 
                                                     floor_price: 1, 
                                                     highest_sale: {asset_name: '', name: '', price: 1}, 
                                                     total_volume: 1, 
-                                                    asset_minted: 1, 
-                                                    asset_holders: 1});
+                                                    minted: 1, 
+                                                    holders: 1});
       const [assets, setAssets] = useState([]);
       const [searchTerm, setSearchTerm] = useState("");
       const [itemLimit, setItemLimit] = useState(30);
@@ -39,10 +39,11 @@ function PolicyData (props) {
                 let policy = props.policy;
                 let policyData = await getPolicyData(policy);
                 setPolicyData(policyData);
+                console.log(policyData);
                 setDisplay(<div>Fetching Assets</div>)
 
                 let assetsList = [];
-                if(policyData.asset_minted < 10000){
+                if(policyData.minted < 10000){
                   assetsList = await loadAllTokenData(policy);
                 }
                 else{
@@ -126,12 +127,11 @@ function PolicyData (props) {
           onClick={() => router.push("/" + token.policy_id + token.asset_name)}
         >
           <Image src={token.ipfs} height={200} width={200} alt={token.decoded_name} />
-          <div>{token.decoded_name}</div>
+          <div className="item-name-policy">{token.decoded_name}</div>
         </div>
       );
   
       setLoadedItems((prevItems) => [...prevItems, newItem]);
-      console.log("loaded " + token.decoded_name);
     }
 
     function loadMoreItems() {
@@ -146,9 +146,9 @@ function PolicyData (props) {
       let floor = policyData.floor_price;
       let highestSale = policyData.highest_sale;
       let volume = policyData.total_volume;
-      let supply = policyData.asset_minted;
-      let holderCount = policyData.asset_holders;
-      let data = {thumbnail: ipfs, floor_price: floor, highest_sale: highestSale, total_volume: volume, asset_minted: supply, asset_holders: holderCount};
+      let supply = policyData.minted;
+      let holderCount = policyData.holders;
+      let data = {ipfs: ipfs, floor_price: floor, highest_sale: highestSale, total_volume: volume, minted: supply, holders: holderCount};
       return data;
     }
 
@@ -156,10 +156,13 @@ function PolicyData (props) {
         try{
           const data = await fetch('https://api.opencnft.io/2/collection/'+policy,
           {headers:{"x-Api-Key": 'ocnft_64230513320ac06596270a21'}});
+
           const res = await data.json();
-  
+          console.log(res);
+          
           return res;
         }catch(error){
+          console.log(error);
           return null;
         }
       }
@@ -253,12 +256,12 @@ function PolicyData (props) {
             </header>
             <div className="policy-data">
             <div className="policy-item-stat">Policy:<span className="policy-id">{props.policy}</span></div>
-                <Image alt='thumb' className = 'policy-item' src = {policyData.thumbnail} width = {200} height = {200}/>
+                <Image alt='thumb' className = 'policy-item' src = {policyData.ipfs} width = {200} height = {200}/>
                 <div className="policy-stat-container">
                   <div className="policy-item-stat">Floor Price: <span className="policy-value">{policyData.floor_price/1000000} ADA</span></div>
                   <div className="policy-item-stat">Trading Volume: <span className="policy-value">{(policyData.total_volume/1000000).toFixed(2)} ADA</span></div>
-                  <div className="policy-item-stat">Supply: <span className="policy-value">{policyData.asset_minted}</span></div>
-                  <div className="policy-item-stat">Number of Holders: <span className="policy-value">{policyData.asset_holders}</span></div>
+                  <div className="policy-item-stat">Supply: <span className="policy-value">{policyData.minted}</span></div>
+                  <div className="policy-item-stat">Number of Holders: <span className="policy-value">{policyData.holders}</span></div>
                 </div>
             </div>
             <div className="policy-grid">

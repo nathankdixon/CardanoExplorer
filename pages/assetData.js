@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Prices from "./prices";
 import SearchBar from "./searchbar";
 import Token from "./token";
 import WalletButton from "./walletButton";
@@ -17,7 +16,6 @@ function AssetData(props) {
   });
   const [asset, setAsset] = useState(null);
   const [ipfs, setIpfs] = useState("/black.jpeg");
-  const [prices, setPrices] = useState({});
   const [name, setName] = useState("");
   const [owner, setOwner] = useState("");
   const [attributes, setAttributes] = useState([]);
@@ -30,8 +28,9 @@ function AssetData(props) {
   useEffect(() => {
     if(props.assetId != null){
       setAsset(props.assetId);
+      console.log(props.assetId);
     }
-  })
+  }, [props.assetId])
 
   useEffect(() => {
     const getTokenData = async () => {
@@ -50,7 +49,6 @@ function AssetData(props) {
         if (token.ipfs != null && token.ipfs != "") {
           setIpfs(token.ipfs);
         }
-        let assetData = await fetchAssetData(assetId);
         let ownerData = await fetchOwner(assetId);
         if(ownerData.length == 0){
           setOwner("No owner");
@@ -60,12 +58,22 @@ function AssetData(props) {
         }
 
 
-
+        let assetData = await fetchAssetData(assetId);
         let policyData = await fetchPolicyData(policy);
-        setFloorPrice(policyData.floor_price/1000000);
-        setName(assetData.name);
-        setRank(assetData.rarity_rank);
-        setAttributes(assetData.traits);
+
+        if(assetData != null){
+          setName(assetData.name);
+          setRank(assetData.rarity_rank);
+          setAttributes(assetData.traits);
+        }
+        else{
+          setName(token.decoded_name);
+        }
+
+        if(policyData != null){
+          setFloorPrice(policyData.floor_price/1000000);
+        }
+
       }
     };
     getTokenData();
@@ -73,15 +81,38 @@ function AssetData(props) {
 
 
   async function fetchAssetData(asset) {
-    let req = await fetch("https://api.opencnft.io/1/asset/" + asset);
-    let data = await req.json();
-    return data;
+    try{
+      let request = await fetch('https://api.opencnft.io/2/nft/'+asset,
+      {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
+      let data = await request.json();
+      return data;
+    }
+    catch(er){
+      console.log(er);
+      return null;
+    }
+
   }
 
   async function fetchPolicyData(policy) {
-    let req = await fetch("https://api.opencnft.io/1/policy/" + policy);
-    let data = await req.json();
-    return data;
+    try{
+      let request = await fetch('https://api.opencnft.io/2/collection/'+policy,
+      {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
+      console.log(request)
+
+      if(request.status == 429){
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        request = await fetch('https://api.opencnft.io/2/collection/'+policy,
+        {headers: {"X-Api-Key": "ocnft_64230513320ac06596270a21"}});
+      }
+      
+      let data = await request.json();
+      return data;
+    }
+    catch{
+      return null;
+    }
+
   }
 
   async function fetchOwner(asset) {

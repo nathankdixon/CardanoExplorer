@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Fts from "./fts";
@@ -421,7 +420,7 @@ function WalletData (props) {
       if(p.quantity == 1){
         _nfts.push(policies[element]);
       }
-      else if(p.quantity !=1){
+      else{
         _fts.push(policies[element]);
       }
     }
