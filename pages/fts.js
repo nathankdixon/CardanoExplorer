@@ -126,7 +126,7 @@ export default function Fts (props){
       // Function to get the color based on the value
     const getColor = (value) => {
       if (value > 0) {
-        return "green";
+        return "#39d839";
       } else if (value < 0) {
         return "red";
       }
@@ -135,9 +135,15 @@ export default function Fts (props){
 
     async function getCardanoPrice(){
 
-      let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd');
-      let data = await response.json();
-      setCardanoPrice(data.cardano.usd);
+      try{  
+        let response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd');
+        let data = await response.json();
+        setCardanoPrice(data.cardano.usd);
+      }
+      catch(error){
+        console.log(error);
+      }
+
     }
 
     function handleShowMore() {
@@ -147,14 +153,13 @@ export default function Fts (props){
 
     return (
       <div className="fts">
-        <div style={{ fontSize: "30px", fontWeight: "bold" }}>
+        <div style={{ fontSize: "30px" }}>
           Fungible Tokens (Coins)
         </div>
         <div
           style={{
             color: "white",
             fontSize: "25px",
-            fontWeight: "bold",
           }}
         >
           Total Value:<span className="currency">{props.currency.symbol}</span>
